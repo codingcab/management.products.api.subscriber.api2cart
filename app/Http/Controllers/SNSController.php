@@ -15,7 +15,7 @@ class SNSController extends Controller
             return $this->subscribe($requestJSON);
         }
 
-        handleNotification($requestJSON);
+        $this->handleNotification($requestJSON);
 
     }
 
@@ -35,7 +35,7 @@ class SNSController extends Controller
 
     }
 
-    public function handleNotification($notification){
+    function handleNotification($notification){
         return true;
     }
 }
