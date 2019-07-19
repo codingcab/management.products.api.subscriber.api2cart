@@ -15,6 +15,8 @@ class SNSController extends Controller
             return $this->subscribe($requestJSON);
         }
 
+        handleNotification($requestJSON);
+
     }
 
     private function subscribe($notification) {
@@ -31,5 +33,9 @@ class SNSController extends Controller
 
         return app('Illuminate\Http\Response')->status();
 
+    }
+
+    public function handleNotification($notification){
+        return true;
     }
 }
