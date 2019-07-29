@@ -36,6 +36,20 @@ class SNSController extends Controller
     }
 
     function handleNotification($notification){
-        return true;
+
+        $body = $notification['Body'];
+
+        Log::info('Received message' , [$body]);
+
+        $guzzlePostClient = new \GuzzleHttp\Client();
+
+        $storekey = env('API2CART_STORE_KEY');
+        $apikey = env('API2CART_KEY');
+
+        $res = $guzzlePostClient->post("https://api.api2cart.com/v1.1/product.add.json?api_key=$apikey&store_key=$storekey&name=$body[ProductName]&model=$body[ProductModel]&description=$body[ProductDescription]&price=$body[Price]");
+
+        Log::info($res->getBody());
+        return $res->getBody();
+
     }
 }
