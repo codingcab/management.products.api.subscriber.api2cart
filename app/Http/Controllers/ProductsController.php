@@ -2,23 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class ProductsController extends SNSController
 {
-    public function handleRequest(Request $request, $storekey) {
 
-        $requestJSON = json_decode($request->getContent(), true);
-
-        if($requestJSON['Type'] == 'SubscriptionConfirmation') {
-            return $this->subscribe($requestJSON);
-        }
-
-        return $this->handleNotification($requestJSON, $storekey);
-
-    }
-
-    function handleNotification($notification, $storekey){
+    public function handleNotification($notification, $storekey){
 
         $body = $notification['Body'];
 
@@ -28,27 +15,35 @@ class ProductsController extends SNSController
 
         $res = $guzzlePostClient->post($url);
 
-        $jsonRes = json_decode($res->getBody(), true);
+        $responseJSON = json_decode($res->getBody(), true);
 
-        return response()->json($jsonRes['return_message'], $jsonRes['return_code']);
+        if($responseJSON["return_code"] == 0) {
+
+            return "Item added! Product ID: ".$responseJSON["result"]["product_id"];
+
+        }
+
+        return $responseJSON["return_message"];
+
 
     }
 
-    function urlBuilder($body, $storekey) {
+    public function urlBuilder($body, $storekey) {
 
         $apikey = env('API2CART_KEY');
 
         $baseUrl = "https://api.api2cart.com/v1.1/product.add.json?";
 
-        $storekey = env('API2CART_STORE_KEY');
+        $storekey = $storekey;
+
         $url = "$baseUrl"."api_key=$apikey"
                 ."&store_key=$storekey"
                 ."&name=$body[ProductName]"
                 ."&model=$body[ProductModel]"
                 ."&description=$body[ProductDescription]"
                 ."&price=$body[Price]";
-return "https://api.api2cart.com/v1.1/product.add.json?api_key=$apikey&store_key=$storekey&name=$body[ProductName]&model=$body[ProductModel]&description=$body[ProductDescription]&price=$body[Price]";
-        // return "https://api.api2cart.com/v1.1/product.add.json?api_key=$apikey&store_key=$storekey&name=$body[ProductName]&model=$body[ProductModel]&description=$body[ProductDescription]&price=$body[Price]";
 
+        return $url;
     }
+
 }
