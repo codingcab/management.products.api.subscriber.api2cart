@@ -2,48 +2,20 @@
 
 namespace App\Http\Controllers;
 
-class ProductsController extends SNSController
+use Illuminate\Support\Facades\Log;
+
+class ProductsController extends BaseSnsController
 {
+    public function handleNotification($notification, $store_key)
+    {
+        Log::debug('SNS Notification received', $notification);
 
-    public function handleNotification($notification, $storekey){
+        $api_key = env('API2CART_API_KEY', 'API_KEY_NOT_SET');
 
-        $body = $notification['Body'];
+        $api2cart = new \App\Http\Controllers\Api2Cart($api_key, $store_key);
 
-        $guzzlePostClient = new \GuzzleHttp\Client();
-
-        $url = $this->urlBuilder($body, $storekey);
-
-        $res = $guzzlePostClient->post($url);
-
-        $responseJSON = json_decode($res->getBody(), true);
-
-        if($responseJSON["return_code"] == 0) {
-
-            return "Item added! Product ID: ".$responseJSON["result"]["product_id"];
-
+        if($api2cart->productUpdateOrCreate($notification)) {
+            $this->respond_ok_200();
         }
-
-        return $responseJSON["return_message"];
-
-
     }
-
-    public function urlBuilder($body, $storekey) {
-
-        $apikey = env('API2CART_KEY');
-
-        $baseUrl = "https://api.api2cart.com/v1.1/product.add.json?";
-
-        $storekey = $storekey;
-
-        $url = "$baseUrl"."api_key=$apikey"
-                ."&store_key=$storekey"
-                ."&name=$body[ProductName]"
-                ."&model=$body[ProductModel]"
-                ."&description=$body[ProductDescription]"
-                ."&price=$body[Price]";
-
-        return $url;
-    }
-
 }
