@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 class NotImplementedException extends BadMethodCallException
 {}
 
-abstract class SNSController extends Controller
+abstract class BaseSnsController extends Controller
 {
     abstract public function handleNotification($notification, $store_key);
 
