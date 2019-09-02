@@ -8,15 +8,17 @@ class ProductsController extends BaseSnsController
 {
     public function handleNotification($notification, $store_key)
     {
-        Log::debug('SNS Notification received', $notification);
-
-        $api_key = env('API2CART_API_KEY', 'API_KEY_NOT_SET');
-
-        $api2cart = new \App\Http\Controllers\Api2Cart($api_key, $store_key);
-
-        if($api2cart->productUpdateOrCreate($notification)) {
-            $this->respond_ok_200();
-        }
+        $this->respond_ok_200();
+//
+//        Log::debug('SNS Notification received', $notification);
+//
+//        $api_key = env('API2CART_API_KEY', 'API_KEY_NOT_SET');
+//
+//        $api2cart = new \App\Http\Controllers\Api2Cart($api_key, $store_key);
+//
+//        if($api2cart->productUpdateOrCreate($notification)) {
+//            $this->respond_ok_200();
+//        }
 
     }
 }
