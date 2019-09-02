@@ -71,6 +71,16 @@ return [
             ],
         ],
 
+        'insightOps' => [
+            'driver' => 'monolog',
+            'level' => 'debug',
+            'handler' => \Monolog\Handler\InsightOpsHandler::class,
+            'handler_with' => [
+                'region' => env('INSIGHTOPS_REGION'),
+                'token' => env('INSIGHTOPS_TOKEN'),
+            ],
+        ],
+
         'stderr' => [
             'driver' => 'monolog',
             'handler' => StreamHandler::class,
