@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-class ProductsController extends SNSController
+class ProductsController extends BaseSnsController
 {
 
     public function handleNotification($notification, $storekey){

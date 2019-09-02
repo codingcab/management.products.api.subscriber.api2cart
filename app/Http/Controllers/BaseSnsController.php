@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class SNSController extends Controller
+class BaseSnsController extends Controller
 {
 
     public function handleRequest(Request $request, $storekey) {
