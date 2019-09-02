@@ -39,4 +39,9 @@ class Controller extends BaseController
         $this->setStatusCode(200)
             ->respond($message);
     }
+
+    public function respond_NoFound_404($message = 'Not Found') {
+        $this->setStatusCode(404)
+            ->respond($message);
+    }
 }
