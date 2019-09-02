@@ -73,7 +73,7 @@ return [
 
         'insightOps' => [
             'driver' => 'monolog',
-            'level' => 'debug',
+            'level' => env('INSIGHTOPS_LOG_LEVEL'),
             'handler' => \Monolog\Handler\InsightOpsHandler::class,
             'handler_with' => [
                 'region' => env('INSIGHTOPS_REGION'),
