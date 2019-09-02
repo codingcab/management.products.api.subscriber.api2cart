@@ -2,23 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use BadMethodCallException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
-class BaseSnsController extends Controller
+class NotImplementedException extends BadMethodCallException
+{}
+
+abstract class SNSController extends Controller
 {
+    abstract public function handleNotification($notification, $store_key);
 
-    public function handleRequest(Request $request, $storekey) {
+    public function store(Request $request, $store_key, $store_id =  null) {
+
+        Log::info('Received product update request');
 
         $requestJSON = json_decode($request->getContent(), true);
 
-        if($requestJSON['Type'] == 'SubscriptionConfirmation') {
-
+        if (array_has($requestJSON, 'Type') && ($requestJSON['Type'] == 'SubscriptionConfirmation') ) {
             return $this->subscribe($requestJSON);
-
         }
 
-        return $this->handleNotification($requestJSON, $storekey);
+        if (isset($store_id) && ($store_id != 0)) {
+            $requestJSON['store_id'] = $store_id;
+        }
 
+        return $this->handleNotification($requestJSON, $store_key);
     }
 
 
@@ -32,8 +41,4 @@ class BaseSnsController extends Controller
 
     }
 
-
-    function handleNotification($notification, $storekey){
-        //Handled in ProductsController.php
-    }
 }
