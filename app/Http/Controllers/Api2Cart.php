@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 class Api2Cart extends Controller
@@ -245,12 +246,17 @@ class Api2Cart extends Controller
         $newElement = $this->array_add_if_exists($data, $newElement, "sku");
         $newElement = $this->array_add_if_exists($data, $newElement, "store_id");
         $newElement = $this->array_add_if_exists($data, $newElement, "price");
-        $newElement = $this->array_add_if_exists($data, $newElement, "quantity");
+
+        if (Arr::has($data, "quantity")) {
+            $newElement["quantity"] = intval($data["quantity"]);
+        }
+
         $newElement = $this->array_add_if_exists($data, $newElement, "sale_price", "special_price");
         $newElement = $this->array_add_if_exists($data, $newElement, "sale_price_start_date","sprice_create");
         $newElement = $this->array_add_if_exists($data, $newElement, "sale_price_end_date", "sprice_expire");
         $newElement = $this->array_add_if_exists($data, $newElement, "in_stock");
         $newElement = $this->array_add_if_exists($data, $newElement, "weight");
+
 
         if ($this->shouldAddInStockField($data)) {
             $newElement["in_stock"] = true;
