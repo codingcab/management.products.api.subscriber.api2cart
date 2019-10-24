@@ -19,7 +19,7 @@ abstract class BaseSnsController extends Controller
 
         $content = $request->getContent();
 
-        logger("Notification", $content);
+        logger("Notification", ["content" => $content]);
 
         $requestJSON = json_decode($content, true);
 
