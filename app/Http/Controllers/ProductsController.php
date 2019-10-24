@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Log;
+use function Psy\debug;
 
 class ProductsController extends BaseSnsController
 {
     public function handleNotification($notification, $store_key)
     {
-        Log::debug('SNS Notification received', $notification);
+        logger('Product update request', $notification);
 
         $api_key = env('API2CART_API_KEY', 'API_KEY_NOT_SET');
 
