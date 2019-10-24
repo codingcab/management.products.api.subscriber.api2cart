@@ -15,7 +15,7 @@ abstract class BaseSnsController extends Controller
 
     public function store(Request $request, $store_key, $store_id =  null) {
 
-        Log::info('Received product update request');
+        Log::info('Received SNS notification');
 
         $requestJSON = json_decode($request->getContent(), true);
 
@@ -31,7 +31,9 @@ abstract class BaseSnsController extends Controller
     }
 
 
-    private function subscribe($notification) {
+    private function subscribe($notification)
+    {
+        info("Subscribing to topic");
 
         $guzzleClient = new \GuzzleHttp\Client();
 
