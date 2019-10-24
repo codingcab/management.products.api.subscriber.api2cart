@@ -14,7 +14,11 @@ class ProductsController extends BaseSnsController
 
         $api2cart = new \App\Http\Controllers\Api2Cart($api_key, $store_key);
 
-        if($api2cart->productUpdateOrCreate($notification)) {
+        $product_data = $notification;
+
+        $product_data["quantity"] = $notification["quantity_available"];
+
+        if($api2cart->productUpdateOrCreate($product_data)) {
             $this->respond_ok_200();
         }
     }
