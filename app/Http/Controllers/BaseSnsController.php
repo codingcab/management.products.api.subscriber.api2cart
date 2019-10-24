@@ -17,7 +17,11 @@ abstract class BaseSnsController extends Controller
 
         Log::info('Received SNS notification');
 
-        $requestJSON = json_decode($request->getContent(), true);
+        $content = $request->getContent();
+
+        logger("Notification", $content);
+
+        $requestJSON = json_decode($content, true);
 
         if (array_has($requestJSON, 'Type') && ($requestJSON['Type'] == 'SubscriptionConfirmation') ) {
             return $this->subscribe($requestJSON);
