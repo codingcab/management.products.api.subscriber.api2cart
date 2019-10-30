@@ -42,10 +42,9 @@ class Api2Cart extends Controller
         }
     }
 
-    public function __construct($api_key, $store_key)
+    public function __construct($store_key)
     {
-
-        $this->api_key = $api_key;
+        $this->api_key = env('API2CART_API_KEY', 'API_KEY_NOT_SET');;
         $this->store_key = $store_key;
 
         $this->resetParams();

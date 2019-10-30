@@ -13,9 +13,7 @@ class ProductsController extends BaseSnsController
     {
         logger('Product update request', $notification);
 
-        $api_key = env('API2CART_API_KEY', 'API_KEY_NOT_SET');
-
-        $api2cart = new \App\Http\Controllers\Api2Cart($api_key, $store_key);
+        $api2cart = new \App\Http\Controllers\Api2Cart($store_key);
 
         $product_data = $this->generateProductData($notification);
 
