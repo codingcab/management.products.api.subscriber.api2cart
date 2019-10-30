@@ -242,31 +242,11 @@ class Api2Cart extends Controller
      */
     public function updateProduct($data)
     {
-        $newElement = [];
-        $newElement = $this->array_add_if_exists($data, $newElement, "sku");
-        $newElement = $this->array_add_if_exists($data, $newElement, "store_id");
-        $newElement = $this->array_add_if_exists($data, $newElement, "price");
-
-        if (Arr::has($data, "quantity")) {
-            $newElement["quantity"] = intval($data["quantity"]);
-        }
-
-        $newElement = $this->array_add_if_exists($data, $newElement, "sale_price", "special_price");
-        $newElement = $this->array_add_if_exists($data, $newElement, "sale_price_start_date","sprice_create");
-        $newElement = $this->array_add_if_exists($data, $newElement, "sale_price_end_date", "sprice_expire");
-        $newElement = $this->array_add_if_exists($data, $newElement, "in_stock");
-        $newElement = $this->array_add_if_exists($data, $newElement, "weight");
-
-
-        if ($this->shouldAddInStockField($data)) {
-            $newElement["in_stock"] = true;
-        }
-
-        if($this->updateProductSimple($newElement)) {
+        if($this->updateProductSimple($data)) {
             return true;
         }
 
-        return $this->updateProductVariant($newElement);
+        return $this->updateProductVariant($data);
     }
 
 
