@@ -21,7 +21,7 @@ class ProductsController extends BaseSnsController
 
         $response = $api2cart->updateProduct($product_data);
 
-        logger("SKU updated with new method", $response);
+        logger("SKU updated with new method", ["response" => $response]);
 
         if($api2cart->productUpdateOrCreate($product_data)) {
             $this->respond_ok_200();
