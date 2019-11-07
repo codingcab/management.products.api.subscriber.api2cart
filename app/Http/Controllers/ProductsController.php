@@ -17,9 +17,9 @@ class ProductsController extends BaseSnsController
 
         $product_data = $this->generateProductData($notification);
 
-        $api2cart = new Api2cartController($store_key);
+        $api2cart_new = new Api2cartController($store_key);
 
-        $response = $api2cart->updateProduct($product_data);
+        $response = $api2cart_new->updateProduct($product_data);
 
         logger("SKU updated with new method", ["response" => $response]);
 
