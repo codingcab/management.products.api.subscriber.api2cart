@@ -165,7 +165,7 @@ class Api2cartController
             'json' => $data
         ]);
 
-        $this->lastResponse = json_decode($response->getBody()->getContents(), false);
+        $this->lastResponse = json_decode($response->getBody()->getContents(), true);
 
         return $this->lastResponse;
     }
