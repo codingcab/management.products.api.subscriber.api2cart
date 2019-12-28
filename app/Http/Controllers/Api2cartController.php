@@ -9,6 +9,9 @@ use Illuminate\Support\Arr;
 
 class Api2cartController
 {
+    const RETURN_CODE_OK = 0;
+    const RETURN_CODE_MODEL_NOT_FOUND = 112;
+
     private const PRODUCT_ALLOWED_KEYS = [
         "id",
         "model",
@@ -21,6 +24,11 @@ class Api2cartController
         "quantity",
         "in_stock",
         "store_id"
+    ];
+
+    private const PRODUCT_DONT_UPDATE_KEYS = [
+        "name",
+        "description"
     ];
 
     public $lastResponse;
@@ -117,9 +125,29 @@ class Api2cartController
      */
     public function updateProduct($product_data)
     {
-        $data = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
+        $data_create = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
-        return $this->post('product.update.json', $data);
+        $data_update = Arr::except($data_create, self::PRODUCT_DONT_UPDATE_KEYS);
+
+        $response = $this->post('product.update.json', $data_update);
+
+        if($response["return_code"] == self::RETURN_CODE_OK) {
+            return $response;
+        }
+
+        $response = $this->post('product.variant.update.json', $data_update);
+
+        if($response["return_code"] == self::RETURN_CODE_OK) {
+            return $response;
+        }
+
+        $response = $this->post('product.add.json', $data_create);
+
+        if($response["return_code"] == self::RETURN_CODE_OK) {
+            return $response;
+        }
+
+        return $response;
     }
 
     /**

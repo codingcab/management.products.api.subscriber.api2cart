@@ -9,11 +9,12 @@ use function Psy\debug;
 
 class ProductsController extends BaseSnsController
 {
+    const RETURN_CODE_OK = 0;
+    const RETURN_CODE_MODEL_NOT_FOUND = 112;
+
     public function handleNotification($notification, $store_key)
     {
         logger('Product update request', $notification);
-
-        $api2cart = new \App\Http\Controllers\Api2Cart($store_key);
 
         $product_data = $this->generateProductData($notification);
 
@@ -21,7 +22,11 @@ class ProductsController extends BaseSnsController
 
         $response = $api2cart_new->updateProduct($product_data);
 
-        logger("SKU updated with new method", ["response" => $response]);
+        if($response["return_code"] == self::RETURN_CODE_OK) {
+            return $this->respond_ok_200();
+        }
+
+        $api2cart = new \App\Http\Controllers\Api2Cart($store_key);
 
         if($api2cart->productUpdateOrCreate($product_data)) {
             $this->respond_ok_200();
@@ -38,6 +43,7 @@ class ProductsController extends BaseSnsController
 
         $product["sku"]             = $notification["sku"];
         $product["model"]           = $notification["sku"];
+        $product["name"]            = $notification["name"];
         $product["price"]           = $notification["price"];
         $product["special_price"]   = $notification["sale_price"];
         $product["sprice_create"]   = $notification["sale_price_start_date"];
