@@ -33,7 +33,7 @@ class Api2Cart_Base
      * @param $data
      * @return mixed
      */
-    private function post($uri, $data)
+    public function post($uri, $data)
     {
         $response = $this->guzzle->post($uri, [
             'query' => [
