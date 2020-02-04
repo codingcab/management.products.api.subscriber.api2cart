@@ -2,6 +2,7 @@
 
 namespace App\Api2cart;
 
+use Exception;
 use Illuminate\Support\Arr;
 
 class Api2Cart_Product extends Api2Cart_Base
@@ -128,7 +129,7 @@ class Api2Cart_Product extends Api2Cart_Base
     /**
      * @param $data
      * @return Api2CartResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function update($data)
     {
@@ -144,7 +145,7 @@ class Api2Cart_Product extends Api2Cart_Base
             return $this->updateVariant($data);
         }
 
-        throw new \Exception('SKU not updated!');
+        throw new Exception('SKU not updated!');
     }
 
 }
