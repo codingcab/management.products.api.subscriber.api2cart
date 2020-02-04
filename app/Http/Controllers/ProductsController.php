@@ -2,30 +2,28 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Api2cart\Api2Cart_Product;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
-use function Psy\debug;
 
 class ProductsController extends BaseSnsController
 {
-    const RETURN_CODE_OK = 0;
-    const RETURN_CODE_MODEL_NOT_FOUND = 112;
-
     public function handleNotification($notification, $store_key)
     {
         logger('Product update request', $notification);
 
         $product_data = $this->generateProductData($notification);
 
-        $api2cart_new = new Api2cartController($store_key);
+        $api2cart_new = new Api2Cart_Product($store_key);
 
-        $response = $api2cart_new->updateProduct($product_data);
+        $response = $api2cart_new->update($product_data);
 
-        if($response["return_code"] == self::RETURN_CODE_OK) {
+        if($response->isSuccess()) {
+            Log::info('Product updated', $product_data);
             return $this->respond_ok_200();
         }
 
+        Log::info('Product not updated, falling back to old method', $product_data);
         $api2cart = new \App\Http\Controllers\Api2Cart($store_key);
 
         if($api2cart->productUpdateOrCreate($product_data)) {

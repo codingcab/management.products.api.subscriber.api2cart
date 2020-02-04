@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Http\Controllers\Api2cartController;
+use App\Api2cart\Api2Cart_Product;
 use Exception;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -24,21 +24,21 @@ class Api2CartControllerTest extends TestCase
      */
     public function test_successfull_product_delete()
     {
-        $api2cart = new Api2cartController(self::API2CART_DEMO_STORE_KEY, false);
+        $api2cart = new Api2cart_Product(self::API2CART_DEMO_STORE_KEY, false);
 
         $product_id = $api2cart->findProductId(self::SAMPLE_PRODUCT['model']);
 
         if(empty($product_id)) {
             $response = $api2cart->createProduct(self::SAMPLE_PRODUCT);
 
-            $this->assertEquals(0, $response->return_code);
+            $this->assertEquals(0, $response->returnCode());
 
-            $product_id = $response->result->product_id;
+            $product_id = $response->jsonContent()->result->product_id;
         }
 
         $result = $api2cart->deleteProduct($product_id);
 
-        $this->assertEquals(0, $result->return_code);
+        $this->assertEquals(0, $result->returnCode());
     }
 
     /**
@@ -46,19 +46,19 @@ class Api2CartControllerTest extends TestCase
      */
     public function test_successfull_product_create()
     {
-        $api2cart = new Api2cartController(self::API2CART_DEMO_STORE_KEY, false);
+        $api2cart = new Api2cart_Product(self::API2CART_DEMO_STORE_KEY, false);
 
         $product_id = $api2cart->findProductId(self::SAMPLE_PRODUCT['model']);
 
         if (!empty($product_id)) {
             $response = $api2cart->deleteProduct($product_id);
 
-            $this->assertEquals(0, $response->return_code);
+            $this->assertEquals(0, $response->returnCode());
         }
 
         $product = $api2cart->createProduct(self::SAMPLE_PRODUCT);
 
-        $this->assertEquals(0, $product->return_code);
+        $this->assertEquals(0, $product->returnCode());
     }
 
     /**
@@ -66,16 +66,16 @@ class Api2CartControllerTest extends TestCase
      */
     public function test_successful_product_update()
     {
-        $api2cart = new Api2cartController(self::API2CART_DEMO_STORE_KEY, false);
+        $api2cart = new Api2cart_Product(self::API2CART_DEMO_STORE_KEY, false);
 
         $product_id = $api2cart->findProductId(self::SAMPLE_PRODUCT['model']);
 
         if(empty($product_id)) {
             $response = $api2cart->createProduct(self::SAMPLE_PRODUCT);
 
-            $this->assertEquals(0, $response->return_code);
+            $this->assertEquals(0, $response->returnCode());
 
-            $product_id = $response->result->product_id;
+            $product_id = $response->jsonContent()->result->product_id;
         }
 
 
