@@ -15,8 +15,6 @@ class Api2Cart_Base
     private $store_key = null;
     private $api_key = null;
 
-    public $lastResponse;
-
     /**
      * Api2Cart_Base constructor.
      * @param string $store_key
