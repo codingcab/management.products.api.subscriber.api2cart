@@ -39,17 +39,6 @@ class Api2cartController extends Api2Cart_Base
         return new Api2cartController($store_key);
     }
 
-    public function listVariants()
-    {
-        $response =  $this->get('product.variant.list.json', [
-                'api_key' => $this->api_key,
-                'store_key' => $this->store_key,
-            ]);
-
-        $this->lastResponse = json_decode($response->getBody()->getContents(), false);
-
-    }
-
     public function findProductId(String $sku)
     {
         $product = $this->findProduct($sku);
