@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
-use function Psy\debug;
 
 class ProductsController extends BaseSnsController
 {
