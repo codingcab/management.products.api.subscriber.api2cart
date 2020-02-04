@@ -50,7 +50,8 @@ class Api2Cart_Base
     }
 
     /**
-     * @param int $product_id
+     * @param $uri
+     * @param $params
      * @return mixed
      */
     public function delete($uri, $params)
