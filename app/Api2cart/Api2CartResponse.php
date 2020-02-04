@@ -8,7 +8,17 @@ use Psr\Http\Message\ResponseInterface;
 
 class Api2CartResponse
 {
+
+    const RETURN_CODE_OK = 0;
+    const RETURN_CODE_MODEL_NOT_FOUND = 112;
+
+    /**
+     * @var ResponseInterface
+     */
     private $response;
+    /**
+     * @var string
+     */
     private $response_content;
 
     /**
@@ -38,5 +48,21 @@ class Api2CartResponse
     public function returnCode()
     {
         return $this->jsonContent()->return_code;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReturnCode_OK()
+    {
+        return $this->returnCode() == self::RETURN_CODE_OK;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReturnCode_ModelNotFound()
+    {
+        return $this->returnCode() == self::RETURN_CODE_MODEL_NOT_FOUND;
     }
 }
