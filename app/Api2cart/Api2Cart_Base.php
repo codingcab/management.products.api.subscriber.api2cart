@@ -5,6 +5,7 @@ namespace App\Api2cart;
 
 
 use GuzzleHttp\Client;
+use Psr\Http\Message\ResponseInterface;
 
 class Api2Cart_Base
 {
@@ -27,6 +28,16 @@ class Api2Cart_Base
             'timeout' => 60,
             'exceptions' => true,
         ]);
+    }
+
+    /**
+     * @param string $uri
+     * @param array $params
+     * @return ResponseInterface
+     */
+    public function get(string $uri, array $params)
+    {
+        return $this->guzzle->get($uri, ['query' => $params]);
     }
 
     /**
