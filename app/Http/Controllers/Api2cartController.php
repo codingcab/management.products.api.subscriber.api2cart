@@ -32,7 +32,7 @@ class Api2cartController extends Api2Cart_Base
         "description"
     ];
 
-    public $lastResponse;
+
 
     public static function connect(String $store_key)
     {

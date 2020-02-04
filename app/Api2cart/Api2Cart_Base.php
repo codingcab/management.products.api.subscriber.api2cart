@@ -14,6 +14,8 @@ class Api2Cart_Base
     public $store_key = null;
     public $api_key = null;
 
+    public $lastResponse;
+
     public function __construct(String $store_key, bool $exceptions = true)
     {
         $this->exceptions = $exceptions;
