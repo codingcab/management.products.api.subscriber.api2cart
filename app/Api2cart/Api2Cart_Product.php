@@ -91,24 +91,20 @@ class Api2Cart_Product extends Api2Cart_Base
         $data_update = Arr::except($data_create, self::PRODUCT_DONT_UPDATE_KEYS);
 
         return $this->post('product.update.json', $data_update);
+    }
 
-        if($response->isSuccess()) {
-            return $response;
-        }
+    /**
+     * This will only update variant product, will not update simple product
+     * @param $data
+     * @return Api2CartResponse
+     */
+    public function updateVariant($data)
+    {
+        $properties = Arr::only($data, self::PRODUCT_ALLOWED_KEYS);
 
-        $response = $this->post('product.variant.update.json', $data_update);
+        $properties = Arr::except($properties, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        if($response->isSuccess()) {
-            return $response;
-        }
-
-        $response = $this->createProduct($product_data);
-
-        if($response->isSuccess()) {
-            return $response;
-        }
-
-        return $response;
+        return $this->post('product.variant.update.json', $properties);
     }
 
 }
