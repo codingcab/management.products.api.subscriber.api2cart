@@ -31,13 +31,6 @@ class Api2cartController extends Api2Cart_Base
         "description"
     ];
 
-
-
-    public static function connect(String $store_key)
-    {
-        return new Api2cartController($store_key);
-    }
-
     /**
      * @param String $sku
      * @return int|null
@@ -103,19 +96,19 @@ class Api2cartController extends Api2Cart_Base
 
         $response = $this->post('product.update.json', $data_update);
 
-        if($response->returnCode() == self::RETURN_CODE_OK) {
+        if($response->isSuccess()) {
             return $response;
         }
 
         $response = $this->post('product.variant.update.json', $data_update);
 
-        if($response->returnCode() == self::RETURN_CODE_OK) {
+        if($response->isSuccess()) {
             return $response;
         }
 
         $response = $this->post('product.add.json', $data_create);
 
-        if($response->returnCode() == self::RETURN_CODE_OK) {
+        if($response->isSuccess()) {
             return $response;
         }
 
