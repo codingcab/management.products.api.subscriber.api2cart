@@ -82,7 +82,7 @@ class Api2Cart_Product extends Api2Cart_Base
     /**
      * This will only update simple product, will not update variant
      * @param $product_data
-     * @return false|string
+     * @return Api2CartResponse
      */
     public function updateProduct($product_data)
     {
