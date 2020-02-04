@@ -7,9 +7,6 @@ use Illuminate\Support\Arr;
 
 class ProductsController extends BaseSnsController
 {
-    const RETURN_CODE_OK = 0;
-    const RETURN_CODE_MODEL_NOT_FOUND = 112;
-
     public function handleNotification($notification, $store_key)
     {
         logger('Product update request', $notification);
@@ -20,7 +17,7 @@ class ProductsController extends BaseSnsController
 
         $response = $api2cart_new->updateProduct($product_data);
 
-        if($response["return_code"] == self::RETURN_CODE_OK) {
+        if($response->isSuccess()) {
             return $this->respond_ok_200();
         }
 
