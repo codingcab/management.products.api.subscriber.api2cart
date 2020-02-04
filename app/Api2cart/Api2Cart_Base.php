@@ -12,8 +12,8 @@ class Api2Cart_Base
     public $guzzle;
 
     private $exceptions = true;
-    public $store_key = null;
-    public $api_key = null;
+    private $store_key = null;
+    private $api_key = null;
 
     public $lastResponse;
 
