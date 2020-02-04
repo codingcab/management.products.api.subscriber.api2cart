@@ -83,10 +83,8 @@ class Api2cartController extends Api2Cart_Base
     }
 
     /**
-     * @param $store_key
      * @param $product_data
      * @return false|string
-     * @throws Exception
      */
     public function updateProduct($product_data)
     {
