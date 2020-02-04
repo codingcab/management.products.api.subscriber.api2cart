@@ -90,7 +90,7 @@ class Api2Cart_Product extends Api2Cart_Base
 
         $data_update = Arr::except($data_create, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        $response = $this->post('product.update.json', $data_update);
+        return $this->post('product.update.json', $data_update);
 
         if($response->isSuccess()) {
             return $response;
