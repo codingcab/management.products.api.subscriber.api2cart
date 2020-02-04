@@ -57,10 +57,8 @@ class Api2cartController extends Api2Cart_Base
                 'find_where' => 'model'
             ]);
 
-        $this->lastResponse = json_decode($response->getBody()->getContents(), false);
-
-        if($this->lastResponse->return_code === 0) {
-            return $this->lastResponse->result->product[0];
+        if($response->jsonContent()->return_code === 0) {
+            return $response->jsonContent()->result->product[0];
         }
 
         return null;
