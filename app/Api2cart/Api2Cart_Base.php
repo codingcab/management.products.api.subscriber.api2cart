@@ -17,7 +17,7 @@ class Api2Cart_Base
 
     public $lastResponse;
 
-    public function __construct(String $store_key, bool $exceptions = true)
+    public function __construct(string $store_key, bool $exceptions = true)
     {
         $this->exceptions = $exceptions;
         $this->api_key = env('API2CART_API_KEY', '');
@@ -48,11 +48,11 @@ class Api2Cart_Base
     }
 
     /**
-     * @param $uri
-     * @param $data
+     * @param string $uri
+     * @param array $data
      * @return mixed
      */
-    public function post($uri, $data)
+    public function post(string $uri, array $data)
     {
         $query = [
             'api_key' => $this->api_key,
@@ -70,11 +70,11 @@ class Api2Cart_Base
     }
 
     /**
-     * @param $uri
-     * @param $params
+     * @param string $uri
+     * @param array $params
      * @return mixed
      */
-    public function delete($uri, $params)
+    public function delete(string $uri, array $params)
     {
         $query = [
             'api_key' => $this->api_key,
