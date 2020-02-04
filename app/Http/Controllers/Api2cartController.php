@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Api2cart\Api2Cart_Base;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
-class Api2cartController
+class Api2cartController extends Api2Cart_Base
 {
     const RETURN_CODE_OK = 0;
     const RETURN_CODE_MODEL_NOT_FOUND = 112;
