@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Api2cart\Api2Cart_Product;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class ProductsController extends BaseSnsController
 {
@@ -18,9 +19,11 @@ class ProductsController extends BaseSnsController
         $response = $api2cart_new->update($product_data);
 
         if($response->isSuccess()) {
+            Log::info('Product updated', $product_data);
             return $this->respond_ok_200();
         }
 
+        Log::info('Product not updated, falling back to old method', $product_data);
         $api2cart = new \App\Http\Controllers\Api2Cart($store_key);
 
         if($api2cart->productUpdateOrCreate($product_data)) {
