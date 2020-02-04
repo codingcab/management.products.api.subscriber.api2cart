@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 class Api2CartResponse
 {
     private $response;
+    private $response_content;
 
     /**
      * Api2CartResponse constructor.
@@ -17,6 +18,7 @@ class Api2CartResponse
     public function __construct(ResponseInterface $response)
     {
         $this->response = $response;
+        $this->response_content = $response->getBody()->getContents();
     }
 
     /**
@@ -24,7 +26,7 @@ class Api2CartResponse
      */
     public function jsonContent()
     {
-        return json_decode($this->response->getBody()->getContents(), false);
+        return json_decode($this->response_content, false);
     }
 
     /**
