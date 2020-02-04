@@ -60,6 +60,24 @@ class Api2Cart_Product extends Api2Cart_Base
     }
 
     /**
+     * @param string $sku
+     * @return mixed|null
+     */
+    public function findVariant(string $sku)
+    {
+        $response = $this->get('product.child_item.find', [
+            'find_where' => 'sku',
+            'find_value' => $sku
+        ]);
+
+        if($response->isSuccess()) {
+            return $response->jsonContent()->result->children[0];
+        }
+
+        return null;
+    }
+
+    /**
      * @param int $product_id
      * @return Api2CartResponse
      */
