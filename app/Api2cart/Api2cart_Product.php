@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Api2cart\Api2Cart_Base;
 use App\Api2cart\Api2CartResponse;
-use Exception;
-use GuzzleHttp\Client;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 class Api2cart_Product extends Api2Cart_Base
