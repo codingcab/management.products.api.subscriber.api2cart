@@ -15,8 +15,6 @@ abstract class BaseSnsController extends Controller
 
     public function store(Request $request, $store_key, $store_id =  null) {
 
-        Log::info('Received SNS notification');
-
         $content = $request->getContent();
 
         logger("Notification", ["content" => $content]);
