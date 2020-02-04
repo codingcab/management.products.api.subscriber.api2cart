@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Api2cart\Api2Cart_Base;
+use App\Api2cart\Api2CartResponse;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -39,6 +40,10 @@ class Api2cartController extends Api2Cart_Base
         return new Api2cartController($store_key);
     }
 
+    /**
+     * @param String $sku
+     * @return int|null
+     */
     public function findProductId(String $sku)
     {
         $product = $this->findProduct($sku);
@@ -50,6 +55,10 @@ class Api2cartController extends Api2Cart_Base
         return $product->id;
     }
 
+    /**
+     * @param String $sku
+     * @return mixed|null
+     */
     public function findProduct(String $sku)
     {
         $response =  $this->get('product.find.json', [
@@ -66,13 +75,17 @@ class Api2cartController extends Api2Cart_Base
 
     /**
      * @param int $product_id
-     * @return mixed
+     * @return Api2CartResponse
      */
     public function deleteProduct(int $product_id)
     {
         return $this->delete('product.delete.json', ['id' => $product_id]);
     }
 
+    /**
+     * @param array $product_data
+     * @return Api2CartResponse
+     */
     public function createProduct(array $product_data)
     {
         $data = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
