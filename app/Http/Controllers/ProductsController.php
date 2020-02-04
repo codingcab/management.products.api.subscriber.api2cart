@@ -44,6 +44,7 @@ class ProductsController extends BaseSnsController
         $product["sku"]             = $notification["sku"];
         $product["model"]           = $notification["sku"];
         $product["name"]            = $notification["name"];
+        $product["description"]     = $notification["name"];
         $product["price"]           = $notification["price"];
         $product["special_price"]   = $notification["sale_price"];
         $product["sprice_create"]   = $notification["sale_price_start_date"];
