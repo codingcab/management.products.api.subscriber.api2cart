@@ -29,7 +29,6 @@ class Api2Cart_Base
         ]);
     }
 
-
     /**
      * @param $uri
      * @param $data
@@ -49,8 +48,6 @@ class Api2Cart_Base
 
         return $this->lastResponse;
     }
-
-
 
     /**
      * @param int $product_id
