@@ -41,12 +41,10 @@ class Api2cartController extends Api2Cart_Base
 
     public function listVariants()
     {
-        $response =  $this->guzzle->get('product.variant.list.json', [
-            'query' => [
+        $response =  $this->get('product.variant.list.json', [
                 'api_key' => $this->api_key,
                 'store_key' => $this->store_key,
-            ]
-        ]);
+            ]);
 
         $this->lastResponse = json_decode($response->getBody()->getContents(), false);
 
