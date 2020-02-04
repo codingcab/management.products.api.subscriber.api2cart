@@ -31,14 +31,14 @@ class Api2CartControllerTest extends TestCase
         if(empty($product_id)) {
             $response = $api2cart->createProduct(self::SAMPLE_PRODUCT);
 
-            $this->assertEquals(0, $response->return_code);
+            $this->assertEquals(0, $response->returnCode());
 
-            $product_id = $response->result->product_id;
+            $product_id = $response->jsonContent()->result->product_id;
         }
 
         $result = $api2cart->deleteProduct($product_id);
 
-        $this->assertEquals(0, $result->return_code);
+        $this->assertEquals(0, $result->returnCode());
     }
 
     /**
@@ -53,12 +53,12 @@ class Api2CartControllerTest extends TestCase
         if (!empty($product_id)) {
             $response = $api2cart->deleteProduct($product_id);
 
-            $this->assertEquals(0, $response->return_code);
+            $this->assertEquals(0, $response->returnCode());
         }
 
         $product = $api2cart->createProduct(self::SAMPLE_PRODUCT);
 
-        $this->assertEquals(0, $product->return_code);
+        $this->assertEquals(0, $product->returnCode());
     }
 
     /**
@@ -73,9 +73,9 @@ class Api2CartControllerTest extends TestCase
         if(empty($product_id)) {
             $response = $api2cart->createProduct(self::SAMPLE_PRODUCT);
 
-            $this->assertEquals(0, $response->return_code);
+            $this->assertEquals(0, $response->returnCode());
 
-            $product_id = $response->result->product_id;
+            $product_id = $response->jsonContent()->result->product_id;
         }
 
 
