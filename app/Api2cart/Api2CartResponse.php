@@ -26,4 +26,12 @@ class Api2CartResponse
     {
         return json_decode($this->response->getBody()->getContents(), false);
     }
+
+    /**
+     * @return int
+     */
+    public function returnCode()
+    {
+        return $this->jsonContent()->return_code;
+    }
 }
