@@ -132,25 +132,4 @@ class Api2cartController extends Api2Cart_Base
         return $response;
     }
 
-
-    /**
-     * @param int $product_id
-     * @return mixed
-     */
-    public function delete($uri, $params)
-    {
-        $query = [
-            'api_key' => $this->api_key,
-            'store_key' => $this->store_key
-        ];
-
-        $query = array_merge($query, $params);
-
-        $response =  $this->guzzle->delete($uri, ['query' => $query]);
-
-        $this->lastResponse = json_decode($response->getBody()->getContents(), false);
-
-        return $this->lastResponse;
-    }
-
 }
