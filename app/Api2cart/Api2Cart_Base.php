@@ -37,7 +37,14 @@ class Api2Cart_Base
      */
     public function get(string $uri, array $params)
     {
-        return $this->guzzle->get($uri, ['query' => $params]);
+        $query = [
+            'api_key' => $this->api_key,
+            'store_key' => $this->store_key
+        ];
+
+        $query = array_merge($query, $params);
+
+        return $this->guzzle->get($uri, ['query' => $query]);
     }
 
     /**
@@ -47,11 +54,13 @@ class Api2Cart_Base
      */
     public function post($uri, $data)
     {
+        $query = [
+            'api_key' => $this->api_key,
+            'store_key' => $this->store_key
+        ];
+
         $response = $this->guzzle->post($uri, [
-            'query' => [
-                'api_key' => $this->api_key,
-                'store_key' => $this->store_key,
-            ],
+            'query' => $query,
             'json' => $data
         ]);
 
