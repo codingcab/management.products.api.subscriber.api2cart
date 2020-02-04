@@ -3,9 +3,7 @@
 
 namespace App\Api2cart;
 
-
 use GuzzleHttp\Client;
-use Psr\Http\Message\ResponseInterface;
 
 class Api2Cart_Base
 {
