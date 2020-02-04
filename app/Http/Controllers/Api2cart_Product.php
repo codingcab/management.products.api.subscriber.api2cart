@@ -9,7 +9,7 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
-class Api2cartController extends Api2Cart_Base
+class Api2cart_Product extends Api2Cart_Base
 {
 
     private const PRODUCT_ALLOWED_KEYS = [
