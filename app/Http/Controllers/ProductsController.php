@@ -16,14 +16,18 @@ class ProductsController extends BaseSnsController
 
         $api2cart_new = new Api2Cart_Product($store_key);
 
-        $response = $api2cart_new->update($product_data);
+        $response = $api2cart_new->updateOrCreate($product_data);
 
         if($response->isSuccess()) {
             Log::info('Product updated', $product_data);
             return $this->respond_ok_200();
         }
 
-        Log::info('Product not updated, falling back to old method', $product_data);
+        logger('Product not updated, falling back to old method', [
+            "sku" => $product_data["sku"],
+            "response" => $response->jsonContent()
+        ]);
+
         $api2cart = new \App\Http\Controllers\Api2Cart($store_key);
 
         if($api2cart->productUpdateOrCreate($product_data)) {

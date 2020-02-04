@@ -131,7 +131,7 @@ class Api2Cart_Product extends Api2Cart_Base
      * @return Api2CartResponse
      * @throws Exception
      */
-    public function update($data)
+    public function updateOrCreate($data)
     {
         $product = $this->findProduct($data['sku']);
 
@@ -145,7 +145,7 @@ class Api2Cart_Product extends Api2Cart_Base
             return $this->updateVariant($data);
         }
 
-        throw new Exception('SKU not updated!');
+        return $this->createProduct($data);
     }
 
 }
