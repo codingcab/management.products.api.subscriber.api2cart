@@ -1,12 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Api2cart;
 
-use App\Api2cart\Api2Cart_Base;
-use App\Api2cart\Api2CartResponse;
 use Illuminate\Support\Arr;
 
-class Api2cart_Product extends Api2Cart_Base
+class Api2Cart_Product extends Api2Cart_Base
 {
 
     private const PRODUCT_ALLOWED_KEYS = [

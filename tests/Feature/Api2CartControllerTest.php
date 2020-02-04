@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Api2cart\Api2cart_Product;
+use App\Api2cart\Api2Cart_Product;
 use Exception;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
