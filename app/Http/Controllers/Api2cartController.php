@@ -92,19 +92,19 @@ class Api2cartController extends Api2Cart_Base
 
         $response = $this->post('product.update.json', $data_update);
 
-        if($response["return_code"] == self::RETURN_CODE_OK) {
+        if($response->jsonContent()->return_code == self::RETURN_CODE_OK) {
             return $response;
         }
 
         $response = $this->post('product.variant.update.json', $data_update);
 
-        if($response["return_code"] == self::RETURN_CODE_OK) {
+        if($response->jsonContent()->return_code == self::RETURN_CODE_OK) {
             return $response;
         }
 
         $response = $this->post('product.add.json', $data_create);
 
-        if($response["return_code"] == self::RETURN_CODE_OK) {
+        if($response->jsonContent()->return_code == self::RETURN_CODE_OK) {
             return $response;
         }
 
