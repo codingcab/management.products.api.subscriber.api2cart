@@ -148,6 +148,4 @@ class Api2Cart_Product extends Api2Cart_Base
         return $this->createProduct($data);
     }
 
-
-
 }
