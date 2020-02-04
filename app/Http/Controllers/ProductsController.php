@@ -15,7 +15,7 @@ class ProductsController extends BaseSnsController
 
         $api2cart_new = new Api2Cart_Product($store_key);
 
-        $response = $api2cart_new->updateProduct($product_data);
+        $response = $api2cart_new->update($product_data);
 
         if($response->isSuccess()) {
             return $this->respond_ok_200();
