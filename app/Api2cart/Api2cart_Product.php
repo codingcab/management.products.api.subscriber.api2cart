@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App;
 
 use App\Api2cart\Api2Cart_Base;
 use App\Api2cart\Api2CartResponse;
