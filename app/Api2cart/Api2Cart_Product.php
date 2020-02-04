@@ -101,7 +101,7 @@ class Api2Cart_Product extends Api2Cart_Base
             return $response;
         }
 
-        $response = $this->post('product.add.json', $data_create);
+        $response = $this->createProduct($product_data);
 
         if($response->isSuccess()) {
             return $response;
