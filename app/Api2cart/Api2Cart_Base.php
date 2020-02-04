@@ -71,8 +71,6 @@ class Api2Cart_Base
             'json' => $data
         ]);
 
-        $this->lastResponse = json_decode($response->getBody()->getContents(), true);
-
         return new Api2CartResponse($response);
     }
 
@@ -91,8 +89,6 @@ class Api2Cart_Base
         $query = array_merge($query, $params);
 
         $response =  $this->guzzle->delete($uri, ['query' => $query]);
-
-        $this->lastResponse = json_decode($response->getBody()->getContents(), false);
 
         return new Api2CartResponse($response);
     }
