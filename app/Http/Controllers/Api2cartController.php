@@ -57,7 +57,7 @@ class Api2cartController extends Api2Cart_Base
                 'find_where' => 'model'
             ]);
 
-        if($response->jsonContent()->return_code === 0) {
+        if($response->returnCode() === 0) {
             return $response->jsonContent()->result->product[0];
         }
 
@@ -92,19 +92,19 @@ class Api2cartController extends Api2Cart_Base
 
         $response = $this->post('product.update.json', $data_update);
 
-        if($response->jsonContent()->return_code == self::RETURN_CODE_OK) {
+        if($response->returnCode() == self::RETURN_CODE_OK) {
             return $response;
         }
 
         $response = $this->post('product.variant.update.json', $data_update);
 
-        if($response->jsonContent()->return_code == self::RETURN_CODE_OK) {
+        if($response->returnCode() == self::RETURN_CODE_OK) {
             return $response;
         }
 
         $response = $this->post('product.add.json', $data_create);
 
-        if($response->jsonContent()->return_code == self::RETURN_CODE_OK) {
+        if($response->returnCode() == self::RETURN_CODE_OK) {
             return $response;
         }
 
