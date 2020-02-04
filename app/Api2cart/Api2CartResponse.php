@@ -18,6 +18,9 @@ class Api2CartResponse
     public function __construct(ResponseInterface $response)
     {
         $this->response = $response;
+
+        // used casting because PSR-7
+        // https://stackoverflow.com/questions/30549226/guzzlehttp-how-get-the-body-of-a-response-from-guzzle-6
         $this->response_content = $response->getBody()->getContents();
     }
 
