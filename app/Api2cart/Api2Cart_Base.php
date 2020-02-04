@@ -27,4 +27,25 @@ class Api2Cart_Base
         ]);
     }
 
+
+    /**
+     * @param $uri
+     * @param $data
+     * @return mixed
+     */
+    private function post($uri, $data)
+    {
+        $response = $this->guzzle->post($uri, [
+            'query' => [
+                'api_key' => $this->api_key,
+                'store_key' => $this->store_key,
+            ],
+            'json' => $data
+        ]);
+
+        $this->lastResponse = json_decode($response->getBody()->getContents(), true);
+
+        return $this->lastResponse;
+    }
+
 }
