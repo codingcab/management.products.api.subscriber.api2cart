@@ -52,14 +52,10 @@ class Api2cartController extends Api2Cart_Base
 
     public function findProduct(String $sku)
     {
-        $response =  $this->guzzle->post('product.find.json', [
-            'query' => [
-                'api_key' => $this->api_key,
-                'store_key' => $this->store_key,
+        $response =  $this->get('product.find.json', [
                 'find_value' => $sku,
                 'find_where' => 'model'
-            ]
-        ]);
+            ]);
 
         $this->lastResponse = json_decode($response->getBody()->getContents(), false);
 
