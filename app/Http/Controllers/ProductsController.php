@@ -17,7 +17,7 @@ class ProductsController extends BaseSnsController
         $response = $api2cart_new->updateOrCreate($product_data);
 
         if($response->isSuccess()) {
-            Log::info('Product updated', $product_data);
+            Log::info('Product synced', $product_data);
             return $this->respond_ok_200();
         }
 
