@@ -18,4 +18,12 @@ class Api2CartResponse
     {
         $this->response = $response;
     }
+
+    /**
+     * @return mixed
+     */
+    public function jsonContent()
+    {
+        return json_decode($this->response->getBody()->getContents(), false);
+    }
 }
