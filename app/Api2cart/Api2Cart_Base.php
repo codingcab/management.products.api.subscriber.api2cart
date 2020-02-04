@@ -17,6 +17,11 @@ class Api2Cart_Base
 
     public $lastResponse;
 
+    /**
+     * Api2Cart_Base constructor.
+     * @param string $store_key
+     * @param bool $exceptions
+     */
     public function __construct(string $store_key, bool $exceptions = true)
     {
         $this->exceptions = $exceptions;
