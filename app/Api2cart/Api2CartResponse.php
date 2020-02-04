@@ -35,6 +35,14 @@ class Api2CartResponse
     }
 
     /**
+     * @return bool
+     */
+    public function isSuccess()
+    {
+        return ($this->response->getStatusCode() == 200) && ($this->isReturnCode_OK());
+    }
+
+    /**
      * @return mixed
      */
     public function jsonContent()
