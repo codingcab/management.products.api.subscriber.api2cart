@@ -10,8 +10,6 @@ class ProductsController extends BaseSnsController
 {
     public function handleNotification($notification, $store_key)
     {
-        logger('Product update request', $notification);
-
         $product_data = $this->generateProductData($notification);
 
         $api2cart_new = new Api2Cart_Product($store_key);
@@ -23,7 +21,7 @@ class ProductsController extends BaseSnsController
             return $this->respond_ok_200();
         }
 
-        logger('Product not updated, falling back to old method', [
+        Log::info('Product not updated, falling back to old method', [
             "sku" => $product_data["sku"],
             "response" => $response->jsonContent()
         ]);
