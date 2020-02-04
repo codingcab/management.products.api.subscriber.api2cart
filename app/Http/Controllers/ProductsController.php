@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Api2cart\Api2Cart_Product;
 use Illuminate\Support\Arr;
 
 class ProductsController extends BaseSnsController
@@ -16,7 +16,7 @@ class ProductsController extends BaseSnsController
 
         $product_data = $this->generateProductData($notification);
 
-        $api2cart_new = new Api2cart_Product($store_key);
+        $api2cart_new = new Api2Cart_Product($store_key);
 
         $response = $api2cart_new->updateProduct($product_data);
 
