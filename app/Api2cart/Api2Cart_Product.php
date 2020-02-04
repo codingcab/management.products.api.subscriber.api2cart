@@ -125,19 +125,26 @@ class Api2Cart_Product extends Api2Cart_Base
         return $this->post('product.variant.update.json', $properties);
     }
 
+    /**
+     * @param $data
+     * @return Api2CartResponse
+     * @throws \Exception
+     */
     public function update($data)
     {
         $product = $this->findProduct($data['sku']);
 
         if(!empty($product)) {
-            $this->updateProduct($data);
+            return $this->updateProduct($data);
         }
 
         $variant = $this->findVariant($data['sku']);
 
         if(!empty($variant)) {
-            $this->updateVariant($data);
+            return $this->updateVariant($data);
         }
+
+        throw new \Exception('SKU not updated!');
     }
 
 }
