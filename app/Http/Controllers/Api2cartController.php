@@ -11,8 +11,6 @@ use Illuminate\Support\Arr;
 
 class Api2cartController extends Api2Cart_Base
 {
-    const RETURN_CODE_OK = 0;
-    const RETURN_CODE_MODEL_NOT_FOUND = 112;
 
     private const PRODUCT_ALLOWED_KEYS = [
         "id",
@@ -66,7 +64,7 @@ class Api2cartController extends Api2Cart_Base
                 'find_where' => 'model'
             ]);
 
-        if($response->returnCode() === 0) {
+        if($response->isSuccess()) {
             return $response->jsonContent()->result->product[0];
         }
 
