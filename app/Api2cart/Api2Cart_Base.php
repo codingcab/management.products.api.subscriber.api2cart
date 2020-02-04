@@ -38,7 +38,7 @@ class Api2Cart_Base
     /**
      * @param string $uri
      * @param array $params
-     * @return ResponseInterface
+     * @return Api2CartResponse
      */
     public function get(string $uri, array $params)
     {
@@ -49,13 +49,15 @@ class Api2Cart_Base
 
         $query = array_merge($query, $params);
 
-        return $this->guzzle->get($uri, ['query' => $query]);
+        $response = $this->guzzle->get($uri, ['query' => $query]);
+
+        return new Api2CartResponse($response);
     }
 
     /**
      * @param string $uri
      * @param array $data
-     * @return mixed
+     * @return Api2CartResponse
      */
     public function post(string $uri, array $data)
     {
@@ -71,13 +73,13 @@ class Api2Cart_Base
 
         $this->lastResponse = json_decode($response->getBody()->getContents(), true);
 
-        return $this->lastResponse;
+        return new Api2CartResponse($response);
     }
 
     /**
      * @param string $uri
      * @param array $params
-     * @return mixed
+     * @return Api2CartResponse
      */
     public function delete(string $uri, array $params)
     {
@@ -92,7 +94,7 @@ class Api2Cart_Base
 
         $this->lastResponse = json_decode($response->getBody()->getContents(), false);
 
-        return $this->lastResponse;
+        return new Api2CartResponse($response);
     }
 
 }
