@@ -5,7 +5,7 @@ namespace App\Api2cart;
 use Exception;
 use Illuminate\Support\Arr;
 
-class Api2Cart_Product extends Client
+class Products extends Client
 {
 
     private const PRODUCT_ALLOWED_KEYS = [
