@@ -186,7 +186,7 @@ class Products extends Entity
 
         if(!empty($variant)) {
             $variant_data = array_merge($data, ['id' => $variant->id]);
-            return $this->updateVariant($data);
+            return $this->updateVariant($variant_data);
         }
 
         return $this->createProduct($data);
