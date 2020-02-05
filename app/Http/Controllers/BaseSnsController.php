@@ -15,9 +15,9 @@ abstract class BaseSnsController extends Controller
 
     public function store(Request $request, $store_key, $store_id =  null) {
 
-        $content = $request->getContent();
+        $content = json_decode($request->getContent(), true);
 
-        logger("Notification", ["content" => $content]);
+        logger("SNS Notification Received", $content);
 
         $requestJSON = json_decode($content, true);
 
