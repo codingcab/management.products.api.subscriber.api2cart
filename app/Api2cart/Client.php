@@ -34,7 +34,7 @@ class Client
     /**
      * @param string $uri
      * @param array $params
-     * @return Api2CartResponse
+     * @return RequestResponse
      */
     public function get(string $uri, array $params)
     {
@@ -47,13 +47,13 @@ class Client
 
         $response = $this->guzzle->get($uri, ['query' => $query]);
 
-        return new Api2CartResponse($response);
+        return new RequestResponse($response);
     }
 
     /**
      * @param string $uri
      * @param array $data
-     * @return Api2CartResponse
+     * @return RequestResponse
      */
     public function post(string $uri, array $data)
     {
@@ -67,13 +67,13 @@ class Client
             'json' => $data
         ]);
 
-        return new Api2CartResponse($response);
+        return new RequestResponse($response);
     }
 
     /**
      * @param string $uri
      * @param array $params
-     * @return Api2CartResponse
+     * @return RequestResponse
      */
     public function delete(string $uri, array $params)
     {
@@ -86,7 +86,7 @@ class Client
 
         $response =  $this->guzzle->delete($uri, ['query' => $query]);
 
-        return new Api2CartResponse($response);
+        return new RequestResponse($response);
     }
 
 }

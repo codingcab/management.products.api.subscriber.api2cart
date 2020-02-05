@@ -80,7 +80,7 @@ class Products extends Client
 
     /**
      * @param int $product_id
-     * @return Api2CartResponse
+     * @return RequestResponse
      */
     public function deleteProduct(int $product_id)
     {
@@ -89,7 +89,7 @@ class Products extends Client
 
     /**
      * @param array $product_data
-     * @return Api2CartResponse
+     * @return RequestResponse
      */
     public function createProduct(array $product_data)
     {
@@ -101,7 +101,7 @@ class Products extends Client
     /**
      * This will only update simple product, will not update variant
      * @param $product_data
-     * @return Api2CartResponse
+     * @return RequestResponse
      */
     public function updateProduct($product_data)
     {
@@ -115,7 +115,7 @@ class Products extends Client
     /**
      * This will only update variant product, will not update simple product
      * @param $data
-     * @return Api2CartResponse
+     * @return RequestResponse
      */
     public function updateVariant($data)
     {
@@ -128,7 +128,7 @@ class Products extends Client
 
     /**
      * @param $data
-     * @return Api2CartResponse
+     * @return RequestResponse
      * @throws Exception
      */
     public function updateOrCreate($data)
