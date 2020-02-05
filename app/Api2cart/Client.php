@@ -3,9 +3,9 @@
 
 namespace App\Api2cart;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as GuzzleClient;
 
-class Api2Cart_Base
+class Client
 {
     public $guzzle;
 
@@ -14,7 +14,7 @@ class Api2Cart_Base
     private $api_key = null;
 
     /**
-     * Api2Cart_Base constructor.
+     * Client constructor.
      * @param string $store_key
      * @param bool $exceptions
      */
@@ -24,7 +24,7 @@ class Api2Cart_Base
         $this->api_key = env('API2CART_API_KEY', '');
         $this->store_key = $store_key;
 
-        $this->guzzle = new Client([
+        $this->guzzle = new GuzzleClient([
             'base_uri' =>  'https://api.api2cart.com/v1.1/',
             'timeout' => 60,
             'exceptions' => true,
