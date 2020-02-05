@@ -49,8 +49,10 @@ class PushToApi2CartJob implements ShouldQueue
 
         $response = $api2cart_new->updateOrCreate($this->_product_data);
 
-        if($response->isSuccess()) {
-            Log::info('Product synced', $this->_product_data);
+        if($response->isNotSuccess()) {
+            throw new Exception('Could not update Product');
         }
+
+        Log::info('Product synced', $this->_product_data);
     }
 }
