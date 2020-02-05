@@ -21,7 +21,7 @@ class PushToApi2CartJob implements ShouldQueue
     private $_store_key = null;
 
     /**
-     * @var string|null
+     * @var array|null
      */
     private $_product_data = null;
 
