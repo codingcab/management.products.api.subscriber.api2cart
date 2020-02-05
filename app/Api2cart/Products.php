@@ -31,6 +31,7 @@ class Products extends Entity
     /**
      * @param String $sku
      * @return int|null
+     * @throws Exception
      */
     public function findProductId(String $sku)
     {
@@ -46,9 +47,14 @@ class Products extends Entity
     /**
      * @param String $sku
      * @return mixed|null
+     * @throws Exception
      */
     public function findProduct(String $sku)
     {
+        if(empty($sku)) {
+            throw new Exception('SKU not specified');
+        }
+
         $response =  $this->client()->get('product.find.json', [
                 'find_value' => $sku,
                 'find_where' => 'model'
