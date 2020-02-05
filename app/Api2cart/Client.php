@@ -7,7 +7,7 @@ use GuzzleHttp\Client as GuzzleClient;
 
 class Client
 {
-    public $guzzle;
+    private $guzzle;
 
     private $exceptions = true;
     private $store_key = null;
