@@ -14,6 +14,12 @@ abstract class BaseSnsController extends Controller
 {
     abstract public function handleNotification($notification, $store_key, int $store_id);
 
+    /**
+     * @param Request $request
+     * @param $store_key
+     * @param null $store_id
+     * @return mixed
+     */
     public function store(Request $request, $store_key, $store_id =  null) {
 
         $content = json_decode($request->getContent(), true);
