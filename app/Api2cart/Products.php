@@ -70,9 +70,14 @@ class Products extends Entity
     /**
      * @param string $sku
      * @return mixed|null
+     * @throws Exception
      */
     public function findVariant(string $sku)
     {
+        if(empty($sku)) {
+            throw new Exception('SKU not specified');
+        }
+
         $response = $this->client()->get('product.child_item.find', [
             'find_where' => 'sku',
             'find_value' => $sku
