@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Api2cart\Products;
+use App\Jobs\PushToApi2CartJob;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
@@ -12,14 +13,7 @@ class ProductsController extends BaseSnsController
     {
         $product_data = $this->generateProductData($notification);
 
-        $api2cart_new = new Products($store_key);
-
-        $response = $api2cart_new->updateOrCreate($product_data);
-
-        if($response->isSuccess()) {
-            Log::info('Product synced', $product_data);
-            return $this->respond_ok_200();
-        }
+        PushToApi2CartJob::dispatch($store_key, $product_data);
 
         Log::info('Product not updated, falling back to old method', [
             "sku" => $product_data["sku"],
