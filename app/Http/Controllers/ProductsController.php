@@ -9,9 +9,13 @@ use Illuminate\Support\Facades\Log;
 
 class ProductsController extends BaseSnsController
 {
-    public function handleNotification($notification, $store_key)
+    public function handleNotification($notification, $store_key, int $store_id)
     {
         $product_data = $this->generateProductData($notification);
+
+        if (isset($store_id) && ($store_id != 0)) {
+            $product_data['store_id'] = $store_id;
+        }
 
         PushToApi2CartJob::dispatch($store_key, $product_data);
 
