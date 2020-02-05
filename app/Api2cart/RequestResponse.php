@@ -59,6 +59,14 @@ class RequestResponse
     }
 
     /**
+     * @return array
+     */
+    public function content()
+    {
+        return json_decode($this->response_content, true);
+    }
+
+    /**
      * @return int
      */
     public function returnCode()
