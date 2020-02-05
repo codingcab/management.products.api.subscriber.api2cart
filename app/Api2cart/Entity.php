@@ -4,7 +4,7 @@
 namespace App\API2CART;
 
 
-class Entity extends Client
+class Entity
 {
     /**
      * @var Client
@@ -18,8 +18,7 @@ class Entity extends Client
      */
     public function __construct(string $store_key, bool $exceptions = true)
     {
-        parent::__construct($store_key, $exceptions);
-        $this->client = new Client($store_key, $exceptions);
+        $this->_client = new Client($store_key, $exceptions);
     }
 
     /**
