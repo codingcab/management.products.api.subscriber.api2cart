@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Log;
 
 class Products extends Entity
 {
-
     private const PRODUCT_ALLOWED_KEYS = [
         "id",
+        "sku",
         "model",
         "name",
         "description",
