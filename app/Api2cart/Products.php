@@ -48,7 +48,7 @@ class Products extends Entity
      */
     public function findProduct(String $sku)
     {
-        $response =  $this->get('product.find.json', [
+        $response =  $this->client()->get('product.find.json', [
                 'find_value' => $sku,
                 'find_where' => 'model'
             ]);
@@ -66,7 +66,7 @@ class Products extends Entity
      */
     public function findVariant(string $sku)
     {
-        $response = $this->get('product.child_item.find', [
+        $response = $this->client()->get('product.child_item.find', [
             'find_where' => 'sku',
             'find_value' => $sku
         ]);
@@ -84,7 +84,7 @@ class Products extends Entity
      */
     public function deleteProduct(int $product_id)
     {
-        return $this->delete('product.delete.json', ['id' => $product_id]);
+        return $this->client()->delete('product.delete.json', ['id' => $product_id]);
     }
 
     /**
@@ -95,7 +95,7 @@ class Products extends Entity
     {
         $data = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
-        return $this->post('product.add.json', $data);
+        return $this->client()->post('product.add.json', $data);
     }
 
     /**
@@ -109,7 +109,7 @@ class Products extends Entity
 
         $data_update = Arr::except($data_create, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        return $this->post('product.update.json', $data_update);
+        return $this->client()->post('product.update.json', $data_update);
     }
 
     /**
@@ -123,7 +123,7 @@ class Products extends Entity
 
         $properties = Arr::except($properties, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        return $this->post('product.variant.update.json', $properties);
+        return $this->client()->post('product.variant.update.json', $properties);
     }
 
     /**
