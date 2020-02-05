@@ -7,11 +7,11 @@ use GuzzleHttp\Client as GuzzleClient;
 
 class Client
 {
-    private $guzzle;
+    private $_guzzle;
 
-    private $exceptions = true;
-    private $store_key = null;
-    private $api_key = null;
+    private $_exceptions = true;
+    private $_store_key = null;
+    private $_api_key = null;
 
     /**
      * Client constructor.
@@ -20,11 +20,11 @@ class Client
      */
     public function __construct(string $store_key, bool $exceptions = true)
     {
-        $this->exceptions = $exceptions;
-        $this->api_key = env('API2CART_API_KEY', '');
-        $this->store_key = $store_key;
+        $this->_exceptions = $exceptions;
+        $this->_api_key = env('API2CART_API_KEY', '');
+        $this->_store_key = $store_key;
 
-        $this->guzzle = new GuzzleClient([
+        $this->_guzzle = new GuzzleClient([
             'base_uri' =>  'https://api.api2cart.com/v1.1/',
             'timeout' => 60,
             'exceptions' => true,
@@ -39,13 +39,13 @@ class Client
     public function get(string $uri, array $params)
     {
         $query = [
-            'api_key' => $this->api_key,
-            'store_key' => $this->store_key
+            'api_key' => $this->_api_key,
+            'store_key' => $this->_store_key
         ];
 
         $query = array_merge($query, $params);
 
-        $response = $this->guzzle->get($uri, ['query' => $query]);
+        $response = $this->_guzzle->get($uri, ['query' => $query]);
 
         return new RequestResponse($response);
     }
@@ -58,11 +58,11 @@ class Client
     public function post(string $uri, array $data)
     {
         $query = [
-            'api_key' => $this->api_key,
-            'store_key' => $this->store_key
+            'api_key' => $this->_api_key,
+            'store_key' => $this->_store_key
         ];
 
-        $response = $this->guzzle->post($uri, [
+        $response = $this->_guzzle->post($uri, [
             'query' => $query,
             'json' => $data
         ]);
@@ -78,13 +78,13 @@ class Client
     public function delete(string $uri, array $params)
     {
         $query = [
-            'api_key' => $this->api_key,
-            'store_key' => $this->store_key
+            'api_key' => $this->_api_key,
+            'store_key' => $this->_store_key
         ];
 
         $query = array_merge($query, $params);
 
-        $response =  $this->guzzle->delete($uri, ['query' => $query]);
+        $response =  $this->_guzzle->delete($uri, ['query' => $query]);
 
         return new RequestResponse($response);
     }
