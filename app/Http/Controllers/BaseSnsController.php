@@ -28,6 +28,10 @@ abstract class BaseSnsController extends Controller
     }
 
 
+    /**
+     * @param $notification
+     * @return mixed
+     */
     private function subscribe($notification)
     {
         info("Subscribing to topic");
