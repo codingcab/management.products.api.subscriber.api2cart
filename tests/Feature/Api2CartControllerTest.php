@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Api2cart\Api2Cart_Product;
+use App\Api2cart\Products;
 use Exception;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -24,7 +24,7 @@ class Api2CartControllerTest extends TestCase
      */
     public function test_successfull_product_delete()
     {
-        $api2cart = new Api2cart_Product(self::API2CART_DEMO_STORE_KEY, false);
+        $api2cart = new Products(self::API2CART_DEMO_STORE_KEY, false);
 
         $product_id = $api2cart->findProductId(self::SAMPLE_PRODUCT['model']);
 
@@ -46,7 +46,7 @@ class Api2CartControllerTest extends TestCase
      */
     public function test_successfull_product_create()
     {
-        $api2cart = new Api2cart_Product(self::API2CART_DEMO_STORE_KEY, false);
+        $api2cart = new Products(self::API2CART_DEMO_STORE_KEY, false);
 
         $product_id = $api2cart->findProductId(self::SAMPLE_PRODUCT['model']);
 
@@ -66,7 +66,7 @@ class Api2CartControllerTest extends TestCase
      */
     public function test_successful_product_update()
     {
-        $api2cart = new Api2cart_Product(self::API2CART_DEMO_STORE_KEY, false);
+        $api2cart = new Products(self::API2CART_DEMO_STORE_KEY, false);
 
         $product_id = $api2cart->findProductId(self::SAMPLE_PRODUCT['model']);
 

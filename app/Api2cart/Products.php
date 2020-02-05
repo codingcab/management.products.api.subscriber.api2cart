@@ -5,7 +5,7 @@ namespace App\Api2cart;
 use Exception;
 use Illuminate\Support\Arr;
 
-class Api2Cart_Product extends Api2Cart_Base
+class Products extends Entity
 {
 
     private const PRODUCT_ALLOWED_KEYS = [
@@ -48,7 +48,7 @@ class Api2Cart_Product extends Api2Cart_Base
      */
     public function findProduct(String $sku)
     {
-        $response =  $this->get('product.find.json', [
+        $response =  $this->client()->get('product.find.json', [
                 'find_value' => $sku,
                 'find_where' => 'model'
             ]);
@@ -66,7 +66,7 @@ class Api2Cart_Product extends Api2Cart_Base
      */
     public function findVariant(string $sku)
     {
-        $response = $this->get('product.child_item.find', [
+        $response = $this->client()->get('product.child_item.find', [
             'find_where' => 'sku',
             'find_value' => $sku
         ]);
@@ -80,28 +80,28 @@ class Api2Cart_Product extends Api2Cart_Base
 
     /**
      * @param int $product_id
-     * @return Api2CartResponse
+     * @return RequestResponse
      */
     public function deleteProduct(int $product_id)
     {
-        return $this->delete('product.delete.json', ['id' => $product_id]);
+        return $this->client()->delete('product.delete.json', ['id' => $product_id]);
     }
 
     /**
      * @param array $product_data
-     * @return Api2CartResponse
+     * @return RequestResponse
      */
     public function createProduct(array $product_data)
     {
         $data = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
-        return $this->post('product.add.json', $data);
+        return $this->client()->post('product.add.json', $data);
     }
 
     /**
      * This will only update simple product, will not update variant
      * @param $product_data
-     * @return Api2CartResponse
+     * @return RequestResponse
      */
     public function updateProduct($product_data)
     {
@@ -109,13 +109,13 @@ class Api2Cart_Product extends Api2Cart_Base
 
         $data_update = Arr::except($data_create, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        return $this->post('product.update.json', $data_update);
+        return $this->client()->post('product.update.json', $data_update);
     }
 
     /**
      * This will only update variant product, will not update simple product
      * @param $data
-     * @return Api2CartResponse
+     * @return RequestResponse
      */
     public function updateVariant($data)
     {
@@ -123,12 +123,12 @@ class Api2Cart_Product extends Api2Cart_Base
 
         $properties = Arr::except($properties, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        return $this->post('product.variant.update.json', $properties);
+        return $this->client()->post('product.variant.update.json', $properties);
     }
 
     /**
      * @param $data
-     * @return Api2CartResponse
+     * @return RequestResponse
      * @throws Exception
      */
     public function updateOrCreate($data)

@@ -6,7 +6,7 @@ namespace App\Api2cart;
 
 use Psr\Http\Message\ResponseInterface;
 
-class Api2CartResponse
+class RequestResponse
 {
 
     const RETURN_CODE_OK = 0;
