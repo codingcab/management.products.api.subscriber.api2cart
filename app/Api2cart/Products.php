@@ -59,7 +59,8 @@ class Products extends Entity
 
         $response =  $this->client()->get('product.find.json', [
                 'find_value' => $sku,
-                'find_where' => 'model'
+                'find_where' => 'model',
+                'store_id' => 0
             ]);
 
         if($response->isSuccess()) {
@@ -82,7 +83,8 @@ class Products extends Entity
 
         $response = $this->client()->get('product.child_item.find.json', [
             'find_where' => 'sku',
-            'find_value' => $sku
+            'find_value' => $sku,
+            'store_id' => 0
         ]);
 
         if($response->isSuccess()) {
