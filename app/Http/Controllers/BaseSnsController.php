@@ -19,17 +19,15 @@ abstract class BaseSnsController extends Controller
 
         logger("SNS Notification Received", $content);
 
-        $requestJSON = json_decode($content, true);
-
-        if (array_has($requestJSON, 'Type') && ($requestJSON['Type'] == 'SubscriptionConfirmation') ) {
-            return $this->subscribe($requestJSON);
+        if (array_has($content, 'Type') && ($content['Type'] == 'SubscriptionConfirmation') ) {
+            return $this->subscribe($content);
         }
 
         if (isset($store_id) && ($store_id != 0)) {
-            $requestJSON['store_id'] = $store_id;
+            $content['store_id'] = $store_id;
         }
 
-        return $this->handleNotification($requestJSON, $store_key);
+        return $this->handleNotification($content, $store_key);
     }
 
 
