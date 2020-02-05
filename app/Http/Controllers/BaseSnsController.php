@@ -12,7 +12,7 @@ class NotImplementedException extends BadMethodCallException
 
 abstract class BaseSnsController extends Controller
 {
-    abstract public function handleNotification($notification, $store_key);
+    abstract public function handleNotification($notification, $store_key, int $store_id);
 
     public function store(Request $request, $store_key, $store_id =  null) {
 
@@ -28,7 +28,7 @@ abstract class BaseSnsController extends Controller
             $content['store_id'] = $store_id;
         }
 
-        return $this->handleNotification($content, $store_key);
+        return $this->handleNotification($content, $store_key, $store_id);
     }
 
 
