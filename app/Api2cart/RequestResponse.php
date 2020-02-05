@@ -11,6 +11,7 @@ class RequestResponse
 
     const RETURN_CODE_OK = 0;
     const RETURN_CODE_MODEL_NOT_FOUND = 112;
+    const RETURN_CODE_PRODUCT_SKU_MUST_BE_UNIQUE = 113;
 
     /**
      * @var ResponseInterface
@@ -88,5 +89,13 @@ class RequestResponse
     public function isReturnCode_ModelNotFound()
     {
         return $this->returnCode() == self::RETURN_CODE_MODEL_NOT_FOUND;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReturnCode_ProductSkuMustBeUnique()
+    {
+        return $this->returnCode() == self::RETURN_CODE_PRODUCT_SKU_MUST_BE_UNIQUE;
     }
 }
