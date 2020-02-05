@@ -84,7 +84,7 @@ class Products extends Entity
         $response = $this->client()->get('product.child_item.find.json', [
             'find_where' => 'sku',
             'find_value' => $sku,
-            'store_id' => 0
+//            'store_id' => 0
         ]);
 
         if($response->isSuccess()) {
