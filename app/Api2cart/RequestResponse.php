@@ -43,6 +43,14 @@ class RequestResponse
     }
 
     /**
+     * @return bool
+     */
+    public function isNotSuccess()
+    {
+        return !$this->isSuccess();
+    }
+
+    /**
      * @return mixed
      */
     public function jsonContent()
