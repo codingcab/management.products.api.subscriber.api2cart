@@ -90,4 +90,12 @@ class RequestResponse
     {
         return $this->returnCode() == self::RETURN_CODE_MODEL_NOT_FOUND;
     }
+
+    /**
+     * @return bool
+     */
+    public function isReturnCode_ProductSkuMustBeUnique()
+    {
+        return $this->returnCode() == self::RETURN_CODE_PRODUCT_SKU_MUST_BE_UNIQUE;
+    }
 }
