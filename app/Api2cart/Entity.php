@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\API2CART;
+namespace App\Api2cart;
 
 
 class Entity
