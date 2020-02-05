@@ -26,8 +26,8 @@ abstract class BaseSnsController extends Controller
      * @param null $store_id
      * @return mixed
      */
-    public function store(Request $request, $store_key, $store_id =  null) {
-
+    public function store(Request $request, $store_key, $store_id =  null)
+    {
         $content = json_decode($request->getContent(), true);
 
         logger("SNS Notification Received", $content);
@@ -53,7 +53,6 @@ abstract class BaseSnsController extends Controller
         $guzzleResponse = $guzzleClient->get($notification['SubscribeURL']);
 
         return app('Illuminate\Http\Response')->status();
-
     }
 
     /**
