@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use BadMethodCallException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 class NotImplementedException extends BadMethodCallException
@@ -49,7 +50,7 @@ abstract class BaseSnsController extends Controller
      */
     private function isSubscriptionConfirmation($content): bool
     {
-        return array_has($content, 'Type') && ($content['Type'] == 'SubscriptionConfirmation');
+        return Arr::has($content, 'Type') && ($content['Type'] == 'SubscriptionConfirmation');
     }
 
 }
