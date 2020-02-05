@@ -7,10 +7,24 @@ use GuzzleHttp\Client as GuzzleClient;
 
 class Client
 {
+    /**
+     * @var GuzzleClient
+     */
     private $_guzzle;
 
+    /**
+     * @var bool
+     */
     private $_exceptions = true;
+
+    /**
+     * @var string|null
+     */
     private $_store_key = null;
+
+    /**
+     * @var string|null
+     */
     private $_api_key = null;
 
     /**
