@@ -24,6 +24,8 @@ class Products extends Entity
     ];
 
     private const PRODUCT_DONT_UPDATE_KEYS = [
+        "model",
+        "sku",
         "name",
         "description"
     ];
@@ -179,7 +181,8 @@ class Products extends Entity
         $product = $this->findProduct($data['sku']);
 
         if(!empty($product)) {
-            return $this->updateProduct($data);
+            $product_data = array_merge($data, ['id' => $product->id]);
+            return $this->updateProduct($product_data);
         }
 
         $variant = $this->findVariant($data['sku']);
