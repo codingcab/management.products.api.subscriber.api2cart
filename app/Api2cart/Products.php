@@ -185,6 +185,7 @@ class Products extends Entity
         $variant = $this->findVariant($data['sku']);
 
         if(!empty($variant)) {
+            $variant_data = array_merge($data, ['id' => $variant->id]);
             return $this->updateVariant($data);
         }
 
