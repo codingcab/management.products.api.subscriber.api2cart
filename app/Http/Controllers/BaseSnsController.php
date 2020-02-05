@@ -19,7 +19,7 @@ abstract class BaseSnsController extends Controller
 
         logger("SNS Notification Received", $content);
 
-        if (array_has($content, 'Type') && ($content['Type'] == 'SubscriptionConfirmation') ) {
+        if ($this->isSubscriptionConfirmation($content)) {
             return $this->subscribe($content);
         }
 
@@ -41,6 +41,15 @@ abstract class BaseSnsController extends Controller
 
         return app('Illuminate\Http\Response')->status();
 
+    }
+
+    /**
+     * @param $content
+     * @return bool
+     */
+    private function isSubscriptionConfirmation($content): bool
+    {
+        return array_has($content, 'Type') && ($content['Type'] == 'SubscriptionConfirmation');
     }
 
 }
