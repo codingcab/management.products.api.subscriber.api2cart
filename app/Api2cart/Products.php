@@ -118,8 +118,8 @@ class Products extends Entity
         $response = $this->client()->post('product.add.json', $data);
 
         if($response->isNotSuccess()) {
-            Log::error('Product update failed', $response->content());
-            throw new Exception('Product update failed', $response->returnCode());
+            Log::error('Product create failed', $response->content());
+            throw new Exception('Product create failed', $response->returnCode());
         }
 
         return $response;
