@@ -26,7 +26,7 @@ abstract class BaseSnsController extends Controller
      * @param null $store_id
      * @return mixed
      */
-    public function store(Request $request, $store_key, $store_id =  null)
+    public function store(Request $request, $store_key, $store_id =  0)
     {
         $content = json_decode($request->getContent(), true);
 
