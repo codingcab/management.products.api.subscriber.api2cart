@@ -4,6 +4,7 @@ namespace App\Api2cart;
 
 use Exception;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class Products extends Entity
 {
@@ -90,18 +91,28 @@ class Products extends Entity
     /**
      * @param array $product_data
      * @return RequestResponse
+     * @throws Exception
      */
     public function createProduct(array $product_data)
     {
         $data = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
-        return $this->client()->post('product.add.json', $data);
+        $response = $this->client()->post('product.add.json', $data);
+
+        if($response->isNotSuccess()) {
+            Log::error('Product update failed', $response->content());
+            throw new Exception('Product update failed', $response->returnCode());
+        }
+
+        return $response;
+
     }
 
     /**
      * This will only update simple product, will not update variant
      * @param $product_data
      * @return RequestResponse
+     * @throws Exception
      */
     public function updateProduct($product_data)
     {
@@ -109,13 +120,21 @@ class Products extends Entity
 
         $data_update = Arr::except($data_create, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        return $this->client()->post('product.update.json', $data_update);
+        $response = $this->client()->post('product.update.json', $data_update);
+
+        if($response->isNotSuccess()) {
+            Log::error('Product update failed', $response->content());
+            throw new Exception('Product update failed', $response->returnCode());
+        }
+
+        return $response;
     }
 
     /**
      * This will only update variant product, will not update simple product
      * @param $data
      * @return RequestResponse
+     * @throws Exception
      */
     public function updateVariant($data)
     {
@@ -123,7 +142,15 @@ class Products extends Entity
 
         $properties = Arr::except($properties, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        return $this->client()->post('product.variant.update.json', $properties);
+        $response = $this->client()->post('product.variant.update.json', $properties);
+
+        if($response->isNotSuccess()) {
+            Log::error('Variant update failed', $response->content());
+            throw new Exception('Variant update failed', $response->returnCode());
+        }
+
+        return $response;
+
     }
 
     /**
