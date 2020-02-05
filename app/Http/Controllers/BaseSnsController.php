@@ -24,10 +24,6 @@ abstract class BaseSnsController extends Controller
             return $this->subscribe($content);
         }
 
-        if (isset($store_id) && ($store_id != 0)) {
-            $content['store_id'] = $store_id;
-        }
-
         return $this->handleNotification($content, $store_key, $store_id);
     }
 

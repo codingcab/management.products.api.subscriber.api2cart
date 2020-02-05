@@ -13,6 +13,10 @@ class ProductsController extends BaseSnsController
     {
         $product_data = $this->generateProductData($notification);
 
+        if (isset($store_id) && ($store_id != 0)) {
+            $product_data['store_id'] = $store_id;
+        }
+
         PushToApi2CartJob::dispatch($store_key, $product_data);
 
 //        Log::info('Product not updated, falling back to old method', [
