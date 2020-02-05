@@ -31,6 +31,7 @@ class Products extends Entity
     /**
      * @param String $sku
      * @return int|null
+     * @throws Exception
      */
     public function findProductId(String $sku)
     {
@@ -46,9 +47,14 @@ class Products extends Entity
     /**
      * @param String $sku
      * @return mixed|null
+     * @throws Exception
      */
     public function findProduct(String $sku)
     {
+        if(empty($sku)) {
+            throw new Exception('SKU not specified');
+        }
+
         $response =  $this->client()->get('product.find.json', [
                 'find_value' => $sku,
                 'find_where' => 'model'
@@ -64,9 +70,14 @@ class Products extends Entity
     /**
      * @param string $sku
      * @return mixed|null
+     * @throws Exception
      */
     public function findVariant(string $sku)
     {
+        if(empty($sku)) {
+            throw new Exception('SKU not specified');
+        }
+
         $response = $this->client()->get('product.child_item.find', [
             'find_where' => 'sku',
             'find_value' => $sku
@@ -82,9 +93,14 @@ class Products extends Entity
     /**
      * @param int $product_id
      * @return RequestResponse
+     * @throws Exception
      */
     public function deleteProduct(int $product_id)
     {
+        if(empty($product_id)) {
+            throw new Exception('Product_id not specified');
+        }
+
         return $this->client()->delete('product.delete.json', ['id' => $product_id]);
     }
 
