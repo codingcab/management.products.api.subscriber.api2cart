@@ -60,6 +60,6 @@ class PushToApi2CartJob implements ShouldQueue
 
     public function failed(Exception $exception)
     {
-        Log::error('Job failed', ['id' => $this->job->getJobId()]);
+        Log::error('Job failed', $this->_product_data);
     }
 }
