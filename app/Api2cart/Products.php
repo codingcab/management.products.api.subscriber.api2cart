@@ -132,12 +132,11 @@ class Products extends Entity
     }
 
     /**
-     * This will only update simple product, will not update variant
-     * @param $product_data
+     * @param array $product_data
      * @return RequestResponse
      * @throws Exception
      */
-    public function updateProduct($product_data)
+    public function updateProduct(array $product_data)
     {
         $data_create = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
