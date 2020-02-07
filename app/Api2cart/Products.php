@@ -154,13 +154,13 @@ class Products extends Entity
 
     /**
      * This will only update variant product, will not update simple product
-     * @param $data
+     * @param $variant_data
      * @return RequestResponse
      * @throws Exception
      */
-    public function updateVariant($data)
+    public function updateVariant($variant_data)
     {
-        $properties = Arr::only($data, self::PRODUCT_ALLOWED_KEYS);
+        $properties = Arr::only($variant_data, self::PRODUCT_ALLOWED_KEYS);
 
         $properties = Arr::except($properties, self::PRODUCT_DONT_UPDATE_KEYS);
 
