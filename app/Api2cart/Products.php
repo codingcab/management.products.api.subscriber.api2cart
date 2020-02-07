@@ -136,7 +136,7 @@ class Products extends Entity
      * @return RequestResponse
      * @throws Exception
      */
-    public function updateProduct(array $product_data)
+    public function updateSimpleProduct(array $product_data)
     {
         $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
@@ -186,7 +186,7 @@ class Products extends Entity
 
         if(!empty($product)) {
             $properties = array_merge($product_data, ['id' => $product->id]);
-            return $this->updateProduct($properties);
+            return $this->updateSimpleProduct($properties);
         }
 
         $variant = $this->findVariant($product_data['sku']);

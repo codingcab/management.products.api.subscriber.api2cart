@@ -86,7 +86,7 @@ class Api2CartControllerTest extends TestCase
             "price" => $product_before->price + 1,
         ];
 
-        $api2cart->updateProduct($update_params);
+        $api2cart->updateSimpleProduct($update_params);
 
         $product_after = $api2cart->findProduct(self::SAMPLE_PRODUCT['model']);
 
