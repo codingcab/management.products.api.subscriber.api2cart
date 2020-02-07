@@ -176,11 +176,11 @@ class Products extends Entity
     }
 
     /**
-     * @param $data
+     * @param array $data
      * @return RequestResponse
      * @throws Exception
      */
-    public function updateOrCreate($data)
+    public function updateOrCreate(array $data)
     {
         $product = $this->findProduct($data['sku']);
 
