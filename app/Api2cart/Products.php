@@ -117,6 +117,10 @@ class Products extends Entity
     {
         $data = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
+        // disable new products
+        $data["available_for_view"] = false;
+        $data["available_for_sale"] = false;
+
         $response = $this->client()->post('product.add.json', $data);
 
         if($response->isNotSuccess()) {
@@ -125,7 +129,6 @@ class Products extends Entity
         }
 
         return $response;
-
     }
 
     /**
