@@ -29,7 +29,7 @@ class Api2CartControllerTest extends TestCase
         $product_id = $api2cart->findProductId(self::SAMPLE_PRODUCT['model']);
 
         if(empty($product_id)) {
-            $response = $api2cart->createProduct(self::SAMPLE_PRODUCT);
+            $response = $api2cart->createSimpleProduct(self::SAMPLE_PRODUCT);
 
             $this->assertEquals(0, $response->returnCode());
 
@@ -56,7 +56,7 @@ class Api2CartControllerTest extends TestCase
             $this->assertEquals(0, $response->returnCode());
         }
 
-        $product = $api2cart->createProduct(self::SAMPLE_PRODUCT);
+        $product = $api2cart->createSimpleProduct(self::SAMPLE_PRODUCT);
 
         $this->assertEquals(0, $product->returnCode());
     }
@@ -71,7 +71,7 @@ class Api2CartControllerTest extends TestCase
         $product_id = $api2cart->findProductId(self::SAMPLE_PRODUCT['model']);
 
         if(empty($product_id)) {
-            $response = $api2cart->createProduct(self::SAMPLE_PRODUCT);
+            $response = $api2cart->createSimpleProduct(self::SAMPLE_PRODUCT);
 
             $this->assertEquals(0, $response->returnCode());
 
@@ -79,16 +79,16 @@ class Api2CartControllerTest extends TestCase
         }
 
 
-        $product_before = $api2cart->findProduct(self::SAMPLE_PRODUCT['model']);
+        $product_before = $api2cart->findSimpleProduct(self::SAMPLE_PRODUCT['model']);
 
         $update_params = [
             "id" => $product_before->id,
             "price" => $product_before->price + 1,
         ];
 
-        $api2cart->updateProduct($update_params);
+        $api2cart->updateSimpleProduct($update_params);
 
-        $product_after = $api2cart->findProduct(self::SAMPLE_PRODUCT['model']);
+        $product_after = $api2cart->findSimpleProduct(self::SAMPLE_PRODUCT['model']);
 
         $this->assertEquals($product_before->price + 1, $product_after->price);
 

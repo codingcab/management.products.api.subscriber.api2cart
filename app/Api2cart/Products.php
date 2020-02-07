@@ -31,13 +31,13 @@ class Products extends Entity
     ];
 
     /**
-     * @param String $sku
+     * @param string $sku
      * @return int|null
      * @throws Exception
      */
-    public function findProductId(String $sku)
+    public function findProductId(string $sku)
     {
-        $product = $this->findProduct($sku);
+        $product = $this->findSimpleProduct($sku);
 
         if(empty($product)) {
             return null;
@@ -47,11 +47,11 @@ class Products extends Entity
     }
 
     /**
-     * @param String $sku
+     * @param string $sku
      * @return mixed|null
      * @throws Exception
      */
-    public function findProduct(String $sku)
+    public function findSimpleProduct(string $sku)
     {
         if(empty($sku)) {
             throw new Exception('SKU not specified');
@@ -113,15 +113,15 @@ class Products extends Entity
      * @return RequestResponse
      * @throws Exception
      */
-    public function createProduct(array $product_data)
+    public function createSimpleProduct(array $product_data)
     {
-        $data = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
+        $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
         // disable new products
-        $data["available_for_view"] = false;
-        $data["available_for_sale"] = false;
+        $product["available_for_view"] = false;
+        $product["available_for_sale"] = false;
 
-        $response = $this->client()->post('product.add.json', $data);
+        $response = $this->client()->post('product.add.json', $product);
 
         if($response->isNotSuccess()) {
             Log::error('Product create failed', $response->content());
@@ -132,18 +132,17 @@ class Products extends Entity
     }
 
     /**
-     * This will only update simple product, will not update variant
-     * @param $product_data
+     * @param array $product_data
      * @return RequestResponse
      * @throws Exception
      */
-    public function updateProduct($product_data)
+    public function updateSimpleProduct(array $product_data)
     {
-        $data_create = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
+        $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
-        $data_update = Arr::except($data_create, self::PRODUCT_DONT_UPDATE_KEYS);
+        $product = Arr::except($product, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        $response = $this->client()->post('product.update.json', $data_update);
+        $response = $this->client()->post('product.update.json', $product);
 
         if($response->isNotSuccess()) {
             Log::error('Product update failed', $response->content());
@@ -155,13 +154,13 @@ class Products extends Entity
 
     /**
      * This will only update variant product, will not update simple product
-     * @param $data
+     * @param array $variant_data
      * @return RequestResponse
      * @throws Exception
      */
-    public function updateVariant($data)
+    public function updateVariant(array $variant_data)
     {
-        $properties = Arr::only($data, self::PRODUCT_ALLOWED_KEYS);
+        $properties = Arr::only($variant_data, self::PRODUCT_ALLOWED_KEYS);
 
         $properties = Arr::except($properties, self::PRODUCT_DONT_UPDATE_KEYS);
 
@@ -177,27 +176,27 @@ class Products extends Entity
     }
 
     /**
-     * @param $data
+     * @param array $product_data
      * @return RequestResponse
      * @throws Exception
      */
-    public function updateOrCreate($data)
+    public function updateOrCreate(array $product_data)
     {
-        $product = $this->findProduct($data['sku']);
+        $product = $this->findSimpleProduct($product_data['sku']);
 
         if(!empty($product)) {
-            $product_data = array_merge($data, ['id' => $product->id]);
-            return $this->updateProduct($product_data);
+            $properties = array_merge($product_data, ['id' => $product->id]);
+            return $this->updateSimpleProduct($properties);
         }
 
-        $variant = $this->findVariant($data['sku']);
+        $variant = $this->findVariant($product_data['sku']);
 
         if(!empty($variant)) {
-            $variant_data = array_merge($data, ['id' => $variant->id]);
-            return $this->updateVariant($variant_data);
+            $properties = array_merge($product_data, ['id' => $variant->id]);
+            return $this->updateVariant($properties);
         }
 
-        return $this->createProduct($data);
+        return $this->createSimpleProduct($product_data);
     }
 
 }
