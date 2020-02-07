@@ -176,27 +176,27 @@ class Products extends Entity
     }
 
     /**
-     * @param array $data
+     * @param array $product_data
      * @return RequestResponse
      * @throws Exception
      */
-    public function updateOrCreate(array $data)
+    public function updateOrCreate(array $product_data)
     {
-        $product = $this->findProduct($data['sku']);
+        $product = $this->findProduct($product_data['sku']);
 
         if(!empty($product)) {
-            $product_data = array_merge($data, ['id' => $product->id]);
-            return $this->updateProduct($product_data);
+            $properties = array_merge($product_data, ['id' => $product->id]);
+            return $this->updateProduct($properties);
         }
 
-        $variant = $this->findVariant($data['sku']);
+        $variant = $this->findVariant($product_data['sku']);
 
         if(!empty($variant)) {
-            $variant_data = array_merge($data, ['id' => $variant->id]);
-            return $this->updateVariant($variant_data);
+            $properties = array_merge($product_data, ['id' => $variant->id]);
+            return $this->updateVariant($properties);
         }
 
-        return $this->createProduct($data);
+        return $this->createProduct($product_data);
     }
 
 }
