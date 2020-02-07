@@ -138,11 +138,11 @@ class Products extends Entity
      */
     public function updateProduct(array $product_data)
     {
-        $data_create = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
+        $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
-        $data_update = Arr::except($data_create, self::PRODUCT_DONT_UPDATE_KEYS);
+        $product = Arr::except($product, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        $response = $this->client()->post('product.update.json', $data_update);
+        $response = $this->client()->post('product.update.json', $product);
 
         if($response->isNotSuccess()) {
             Log::error('Product update failed', $response->content());
