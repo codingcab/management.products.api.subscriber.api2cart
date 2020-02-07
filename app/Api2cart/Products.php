@@ -37,7 +37,7 @@ class Products extends Entity
      */
     public function findProductId(string $sku)
     {
-        $product = $this->findProduct($sku);
+        $product = $this->findSimpleProduct($sku);
 
         if(empty($product)) {
             return null;
@@ -51,7 +51,7 @@ class Products extends Entity
      * @return mixed|null
      * @throws Exception
      */
-    public function findProduct(string $sku)
+    public function findSimpleProduct(string $sku)
     {
         if(empty($sku)) {
             throw new Exception('SKU not specified');
@@ -182,7 +182,7 @@ class Products extends Entity
      */
     public function updateOrCreate(array $product_data)
     {
-        $product = $this->findProduct($product_data['sku']);
+        $product = $this->findSimpleProduct($product_data['sku']);
 
         if(!empty($product)) {
             $properties = array_merge($product_data, ['id' => $product->id]);
