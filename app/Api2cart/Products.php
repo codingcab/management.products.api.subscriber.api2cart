@@ -31,11 +31,11 @@ class Products extends Entity
     ];
 
     /**
-     * @param String $sku
+     * @param string $sku
      * @return int|null
      * @throws Exception
      */
-    public function findProductId(String $sku)
+    public function findProductId(string $sku)
     {
         $product = $this->findProduct($sku);
 
@@ -47,11 +47,11 @@ class Products extends Entity
     }
 
     /**
-     * @param String $sku
+     * @param string $sku
      * @return mixed|null
      * @throws Exception
      */
-    public function findProduct(String $sku)
+    public function findProduct(string $sku)
     {
         if(empty($sku)) {
             throw new Exception('SKU not specified');
