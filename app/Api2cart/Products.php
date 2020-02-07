@@ -115,13 +115,13 @@ class Products extends Entity
      */
     public function createProduct(array $product_data)
     {
-        $data = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
+        $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
         // disable new products
-        $data["available_for_view"] = false;
-        $data["available_for_sale"] = false;
+        $product["available_for_view"] = false;
+        $product["available_for_sale"] = false;
 
-        $response = $this->client()->post('product.add.json', $data);
+        $response = $this->client()->post('product.add.json', $product);
 
         if($response->isNotSuccess()) {
             Log::error('Product create failed', $response->content());
