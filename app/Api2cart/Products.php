@@ -113,7 +113,7 @@ class Products extends Entity
      * @return RequestResponse
      * @throws Exception
      */
-    public function createProduct(array $product_data)
+    public function createSimpleProduct(array $product_data)
     {
         $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
@@ -196,7 +196,7 @@ class Products extends Entity
             return $this->updateVariant($properties);
         }
 
-        return $this->createProduct($product_data);
+        return $this->createSimpleProduct($product_data);
     }
 
 }

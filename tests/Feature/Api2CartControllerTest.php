@@ -29,7 +29,7 @@ class Api2CartControllerTest extends TestCase
         $product_id = $api2cart->findProductId(self::SAMPLE_PRODUCT['model']);
 
         if(empty($product_id)) {
-            $response = $api2cart->createProduct(self::SAMPLE_PRODUCT);
+            $response = $api2cart->createSimpleProduct(self::SAMPLE_PRODUCT);
 
             $this->assertEquals(0, $response->returnCode());
 
@@ -56,7 +56,7 @@ class Api2CartControllerTest extends TestCase
             $this->assertEquals(0, $response->returnCode());
         }
 
-        $product = $api2cart->createProduct(self::SAMPLE_PRODUCT);
+        $product = $api2cart->createSimpleProduct(self::SAMPLE_PRODUCT);
 
         $this->assertEquals(0, $product->returnCode());
     }
@@ -71,7 +71,7 @@ class Api2CartControllerTest extends TestCase
         $product_id = $api2cart->findProductId(self::SAMPLE_PRODUCT['model']);
 
         if(empty($product_id)) {
-            $response = $api2cart->createProduct(self::SAMPLE_PRODUCT);
+            $response = $api2cart->createSimpleProduct(self::SAMPLE_PRODUCT);
 
             $this->assertEquals(0, $response->returnCode());
 
