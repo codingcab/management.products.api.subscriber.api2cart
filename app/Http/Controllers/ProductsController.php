@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Api2cart\Products;
 use App\Jobs\PushToApi2CartJob;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
@@ -13,7 +14,7 @@ class ProductsController extends SnsController
      * @param array $notification
      * @param string $store_key
      * @param int $store_id
-     * @return mixed|void
+     * @return JsonResponse
      */
     public function handleIncomingNotification(array $notification, string $store_key, int $store_id)
     {
@@ -24,6 +25,8 @@ class ProductsController extends SnsController
         }
 
         PushToApi2CartJob::dispatch($store_key, $product_data);
+
+        return $this->respond_200_OK();
     }
 
     /**
