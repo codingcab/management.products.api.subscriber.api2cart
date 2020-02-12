@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Api2cart\Products;
 use App\Jobs\SyncProductJob;
 use App\Jobs\VerifyProductSyncJob;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
@@ -16,6 +17,7 @@ class ProductsController extends SnsController
      * @param string $store_key
      * @param int $store_id
      * @return JsonResponse
+     * @throws Exception
      */
     public function handleIncomingNotification(array $notification, string $store_key, int $store_id)
     {
@@ -61,13 +63,27 @@ class ProductsController extends SnsController
     }
 
     /**
+     * This function will randomly dispatch VerifyProductSyncJob with chain
+     * idea is to verify some product updates
+     *
      * @param string $store_key
      * @param array $product_data
+     * @throws Exception
      */
     private function dispatchSyncProductJob(string $store_key, array $product_data): void
     {
-        SyncProductJob::withChain([
-            VerifyProductSyncJob::dispatch($store_key, $product_data)
-        ])->dispatch($store_key, $product_data);
+        // 1,100 will execute more less on 1% jobs
+        // 1,500 will execute more less on 0.2% jobs
+        // 1,1000 will execute more less on 0.1% jobs
+        $random_int = random_int(1,100);
+
+        if($random_int <> 1) {
+            SyncProductJob::dispatch($store_key, $product_data);
+        } else {
+            SyncProductJob::withChain([
+                VerifyProductSyncJob::dispatch($store_key, $product_data)
+            ])->dispatch($store_key, $product_data);
+        }
+
     }
 }
