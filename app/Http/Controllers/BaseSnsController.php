@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use BadMethodCallException;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 class NotImplementedException extends BadMethodCallException
 {}
 
-abstract class BaseSnsController extends Controller
+abstract class BaseSnsController extends BaseController
 {
     /**
      * @param array $notification
