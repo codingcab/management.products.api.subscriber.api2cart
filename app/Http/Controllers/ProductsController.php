@@ -15,7 +15,7 @@ class ProductsController extends SnsController
      * @param int $store_id
      * @return mixed|void
      */
-    public function handleNotification(array $notification, string $store_key, int $store_id)
+    public function handleIncomingNotification(array $notification, string $store_key, int $store_id)
     {
         $product_data = $this->generateProductData($notification);
 

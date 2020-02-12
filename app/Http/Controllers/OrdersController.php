@@ -36,7 +36,7 @@ class OrdersController extends SnsController
     /**
      * @inheritDoc
      */
-    public function handleNotification(array $notification, string $store_key, int $store_id)
+    public function handleIncomingNotification(array $notification, string $store_key, int $store_id)
     {
         // TODO: Implement handleNotification() method.
     }

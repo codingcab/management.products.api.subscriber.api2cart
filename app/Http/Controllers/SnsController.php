@@ -20,7 +20,7 @@ abstract class SnsController extends BaseController
      * @param int $store_id
      * @return mixed
      */
-    abstract public function handleNotification(array $notification, string $store_key, int $store_id);
+    abstract public function handleIncomingNotification(array $notification, string $store_key, int $store_id);
 
     /**
      * @param Request $request
@@ -38,7 +38,7 @@ abstract class SnsController extends BaseController
             return $this->subscribe($notification);
         }
 
-        return $this->handleNotification($notification, $store_key, $store_id);
+        return $this->handleIncomingNotification($notification, $store_key, $store_id);
     }
 
 
