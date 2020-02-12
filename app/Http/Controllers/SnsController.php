@@ -19,7 +19,7 @@ abstract class SnsController extends BaseController
      * @param array $notification
      * @param string $store_key
      * @param int $store_id
-     * @return mixed
+     * @return JsonResponse
      */
     abstract public function handleIncomingNotification(array $notification, string $store_key, int $store_id);
 
@@ -27,7 +27,7 @@ abstract class SnsController extends BaseController
      * @param Request $request
      * @param string $store_key
      * @param int $store_id
-     * @return mixed
+     * @return JsonResponse
      */
     public function store(Request $request, string $store_key, int $store_id =  0)
     {
