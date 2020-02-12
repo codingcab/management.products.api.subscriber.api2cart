@@ -64,4 +64,21 @@ abstract class BaseSnsController extends Controller
         return Arr::has($notification, 'Type') && ($notification['Type'] == 'SubscriptionConfirmation');
     }
 
+    /**
+     * @param string $message
+     * @param int $status_code
+     */
+    public function respond(string $message = '', int $status_code = 200) {
+        $response = response()->json(
+            [
+                'message' => $message,
+                'error_id' => null,
+            ],
+            $this->getStatusCode(),
+            []
+        );
+
+        $response->throwResponse();
+    }
+
 }

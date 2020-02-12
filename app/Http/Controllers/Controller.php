@@ -22,19 +22,6 @@ class Controller extends BaseController
         return $this->statusCode;
     }
 
-    public function respond($message = '') {
-        $response = response()->json(
-            [
-                'message' => $message,
-                'error_id' => null,
-            ],
-            $this->getStatusCode(),
-            []
-        );
-
-        $response->throwResponse();
-    }
-
     public function respond_ok_200($message = '') {
         $this->setStatusCode(200)
             ->respond($message);
