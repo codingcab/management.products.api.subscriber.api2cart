@@ -28,15 +28,15 @@ abstract class BaseSnsController extends Controller
      */
     public function store(Request $request, string $store_key, int $store_id =  0)
     {
-        $content = json_decode($request->getContent(), true);
+        $notification = json_decode($request->getContent(), true);
 
-        logger("SNS Notification Received", $content);
+        logger("SNS Notification Received", $notification);
 
-        if ($this->isSubscriptionConfirmation($content)) {
-            return $this->subscribe($content);
+        if ($this->isSubscriptionConfirmation($notification)) {
+            return $this->subscribe($notification);
         }
 
-        return $this->handleNotification($content, $store_key, $store_id);
+        return $this->handleNotification($notification, $store_key, $store_id);
     }
 
 
