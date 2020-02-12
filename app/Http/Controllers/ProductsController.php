@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Log;
 
 class ProductsController extends BaseSnsController
 {
+    /**
+     * @param array $notification
+     * @param string $store_key
+     * @param int $store_id
+     * @return mixed|void
+     */
     public function handleNotification(array $notification, string $store_key, int $store_id)
     {
         $product_data = $this->generateProductData($notification);
