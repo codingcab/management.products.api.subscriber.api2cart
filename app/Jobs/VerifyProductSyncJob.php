@@ -17,13 +17,25 @@ class VerifyProductSyncJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
+     * @var string|null
+     */
+    private $_store_key = null;
+
+    /**
+     * @var array|null
+     */
+    private $_product_data = null;
+
+    /**
      * Create a new job instance.
      *
-     * @return void
+     * @param string $store_key
+     * @param array $product_data
      */
-    public function __construct()
+    public function __construct(string $store_key, array $product_data)
     {
-        //
+        $this->_store_key = $store_key;
+        $this->_product_data = $product_data;
     }
 
     /**
