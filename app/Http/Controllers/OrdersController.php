@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
-class OrdersController extends Controller
+class OrdersController extends SnsController
 {
     //
     public function index($store_key) {
@@ -31,5 +31,13 @@ class OrdersController extends Controller
             $result->getBody()->getContents(),
             200
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function handleNotification(array $notification, string $store_key, int $store_id)
+    {
+        // TODO: Implement handleNotification() method.
     }
 }
