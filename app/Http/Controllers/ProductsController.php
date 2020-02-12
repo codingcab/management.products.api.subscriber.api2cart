@@ -30,10 +30,10 @@ class ProductsController extends SnsController
     }
 
     /**
-     * @param $notification
-     * @return mixed
+     * @param array $notification
+     * @return array
      */
-    private function generateProductData($notification)
+    private function generateProductData(array $notification)
     {
         $product = [];
 
