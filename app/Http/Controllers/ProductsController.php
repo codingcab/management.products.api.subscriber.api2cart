@@ -3,13 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Api2cart\Products;
-use App\Jobs\PushToApi2CartJob;
+use App\Jobs\SyncProductJob;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
-class ProductsController extends BaseSnsController
+class ProductsController extends SnsController
 {
-    public function handleNotification($notification, $store_key, int $store_id)
+    /**
+     * @param array $notification
+     * @param string $store_key
+     * @param int $store_id
+     * @return JsonResponse
+     */
+    public function handleIncomingNotification(array $notification, string $store_key, int $store_id)
     {
         $product_data = $this->generateProductData($notification);
 
@@ -17,25 +24,16 @@ class ProductsController extends BaseSnsController
             $product_data['store_id'] = $store_id;
         }
 
-        PushToApi2CartJob::dispatch($store_key, $product_data);
+        SyncProductJob::dispatch($store_key, $product_data);
 
-//        Log::info('Product not updated, falling back to old method', [
-//            "sku" => $product_data["sku"],
-//            "response" => $response->jsonContent()
-//        ]);
-//
-//        $api2cart = new \App\Http\Controllers\Api2Cart($store_key);
-//
-//        if($api2cart->productUpdateOrCreate($product_data)) {
-//            $this->respond_ok_200();
-//        }
+        return $this->respond_200_OK();
     }
 
     /**
-     * @param $notification
-     * @return mixed
+     * @param array $notification
+     * @return array
      */
-    private function generateProductData($notification)
+    private function generateProductData(array $notification)
     {
         $product = [];
 

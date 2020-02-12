@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class OrdersController extends Controller
+class OrdersController extends SnsController
 {
     //
-    public function index($store_key) {
+    /**
+     * @param $store_key
+     * @return JsonResponse
+     */
+    public function index(string $store_key) {
 
         $guzzle = new Client([
             'base_uri' =>  'https://api.api2cart.com/v1.1/',
@@ -31,5 +36,13 @@ class OrdersController extends Controller
             $result->getBody()->getContents(),
             200
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function handleIncomingNotification(array $notification, string $store_key, int $store_id)
+    {
+        // TODO: Implement handleNotification() method.
     }
 }
