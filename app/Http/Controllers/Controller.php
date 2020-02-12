@@ -11,15 +11,4 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    private $statusCode = 0;
-
-    public function setStatusCode($statusCode) {
-        $this->statusCode = $statusCode;
-        return $this;
-    }
-
-    public function getStatusCode() {
-        return $this->statusCode;
-    }
-
 }
