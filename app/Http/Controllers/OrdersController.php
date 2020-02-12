@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class OrdersController extends SnsController
 {
     //
-    public function index($store_key) {
+    /**
+     * @param $store_key
+     * @return JsonResponse
+     */
+    public function index(string $store_key) {
 
         $guzzle = new Client([
             'base_uri' =>  'https://api.api2cart.com/v1.1/',
