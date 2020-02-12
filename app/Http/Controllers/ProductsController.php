@@ -81,7 +81,7 @@ class ProductsController extends SnsController
             SyncProductJob::dispatch($store_key, $product_data);
         } else {
             SyncProductJob::withChain([
-                VerifyProductSyncJob::dispatch($store_key, $product_data)
+                new VerifyProductSyncJob($store_key, $product_data)
             ])->dispatch($store_key, $product_data);
         }
 
