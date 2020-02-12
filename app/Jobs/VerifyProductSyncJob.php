@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Api2cart\Products;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -46,5 +47,6 @@ class VerifyProductSyncJob implements ShouldQueue
     public function handle()
     {
         info('We should verify product update here', $this->_product_data);
+        $product = new Products::find($this->_product_data["sku"]);
     }
 }
