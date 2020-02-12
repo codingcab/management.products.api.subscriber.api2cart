@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Api2cart\Products;
 use App\Jobs\SyncProductJob;
+use App\Jobs\VerifyProductSyncJob;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
@@ -24,7 +25,7 @@ class ProductsController extends SnsController
             $product_data['store_id'] = $store_id;
         }
 
-        SyncProductJob::dispatch($store_key, $product_data);
+        SyncProductJob::withChain([])->dispatch($store_key, $product_data);
 
         return $this->respond_200_OK();
     }
