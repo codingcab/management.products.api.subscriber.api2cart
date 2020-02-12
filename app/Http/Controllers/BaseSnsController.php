@@ -81,4 +81,18 @@ abstract class BaseSnsController extends Controller
         $response->throwResponse();
     }
 
+    /**
+     * @param string $message
+     */
+    public function respond_200_OK(string $message = '') {
+        $this->respond($message, 200);
+    }
+
+    /**
+     * @param string $message
+     */
+    public function respond_404_NoFound(string $message = 'Not Found') {
+        $this->respond($message, 404);
+    }
+
 }
