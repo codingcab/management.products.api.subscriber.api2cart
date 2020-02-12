@@ -84,16 +84,18 @@ abstract class SnsController extends BaseController
 
     /**
      * @param string $message
+     * @return \Illuminate\Http\JsonResponse
      */
     public function respond_200_OK(string $message = '') {
-        $this->respond($message, 200);
+        return $this->respond($message, 200);
     }
 
     /**
      * @param string $message
+     * @return \Illuminate\Http\JsonResponse
      */
     public function respond_404_NoFound(string $message = 'Not Found') {
-        $this->respond($message, 404);
+        return $this->respond($message, 404);
     }
 
 }
