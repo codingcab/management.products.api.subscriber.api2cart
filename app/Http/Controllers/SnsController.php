@@ -44,7 +44,7 @@ abstract class SnsController extends BaseController
 
     /**
      * @param array $notification
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse
      */
     private function subscribe(array $notification)
     {
@@ -54,7 +54,7 @@ abstract class SnsController extends BaseController
 
         $guzzleResponse = $guzzleClient->get($notification['SubscribeURL']);
 
-        return app('Illuminate\Http\Response')->status();
+        return $this->respond_200_OK('Subscribed to topic successfully');
     }
 
     /**
