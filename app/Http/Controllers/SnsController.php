@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
@@ -44,7 +45,7 @@ abstract class SnsController extends BaseController
 
     /**
      * @param array $notification
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     private function subscribe(array $notification)
     {
@@ -69,7 +70,7 @@ abstract class SnsController extends BaseController
     /**
      * @param string $message
      * @param int $status_code
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function respond(string $message = '', int $status_code = 200) {
         return response()->json(
@@ -84,7 +85,7 @@ abstract class SnsController extends BaseController
 
     /**
      * @param string $message
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function respond_200_OK(string $message = '') {
         return $this->respond($message, 200);
@@ -92,7 +93,7 @@ abstract class SnsController extends BaseController
 
     /**
      * @param string $message
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function respond_404_NoFound(string $message = 'Not Found') {
         return $this->respond($message, 404);
