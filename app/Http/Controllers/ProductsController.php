@@ -7,7 +7,7 @@ use App\Jobs\PushToApi2CartJob;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
-class ProductsController extends BaseSnsController
+class ProductsController extends SnsController
 {
     /**
      * @param array $notification
