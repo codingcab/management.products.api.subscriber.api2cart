@@ -41,10 +41,10 @@ abstract class BaseSnsController extends Controller
 
 
     /**
-     * @param $notification
+     * @param array $notification
      * @return mixed
      */
-    private function subscribe($notification)
+    private function subscribe(array $notification)
     {
         info("Subscribing to topic");
 
