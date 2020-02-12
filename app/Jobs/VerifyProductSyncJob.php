@@ -45,6 +45,6 @@ class VerifyProductSyncJob implements ShouldQueue
      */
     public function handle()
     {
-        //
+        info('We should verify product update here', $this->_product_data);
     }
 }
