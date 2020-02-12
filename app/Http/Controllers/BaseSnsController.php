@@ -56,12 +56,12 @@ abstract class BaseSnsController extends Controller
     }
 
     /**
-     * @param $content
+     * @param $notification
      * @return bool
      */
-    private function isSubscriptionConfirmation($content): bool
+    private function isSubscriptionConfirmation($notification): bool
     {
-        return Arr::has($content, 'Type') && ($content['Type'] == 'SubscriptionConfirmation');
+        return Arr::has($notification, 'Type') && ($notification['Type'] == 'SubscriptionConfirmation');
     }
 
 }
