@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use BadMethodCallException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -10,9 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
-
-class NotImplementedException extends BadMethodCallException
-{}
 
 abstract class BaseSnsController extends BaseController
 {
