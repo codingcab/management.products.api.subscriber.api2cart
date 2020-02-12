@@ -69,9 +69,10 @@ abstract class SnsController extends BaseController
     /**
      * @param string $message
      * @param int $status_code
+     * @return \Illuminate\Http\JsonResponse
      */
     public function respond(string $message = '', int $status_code = 200) {
-        $response = response()->json(
+        return response()->json(
             [
                 'message' => $message,
                 'error_id' => null,
@@ -79,8 +80,6 @@ abstract class SnsController extends BaseController
             $status_code,
             []
         );
-
-        $response->throwResponse();
     }
 
     /**
