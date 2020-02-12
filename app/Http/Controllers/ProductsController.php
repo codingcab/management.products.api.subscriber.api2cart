@@ -25,7 +25,7 @@ class ProductsController extends SnsController
             $product_data['store_id'] = $store_id;
         }
 
-        SyncProductJob::withChain([])->dispatch($store_key, $product_data);
+        $this->dispatchSyncProductJob($store_key, $product_data);
 
         return $this->respond_200_OK();
     }
@@ -58,5 +58,16 @@ class ProductsController extends SnsController
         }
 
         return $product;
+    }
+
+    /**
+     * @param string $store_key
+     * @param array $product_data
+     */
+    private function dispatchSyncProductJob(string $store_key, array $product_data): void
+    {
+        SyncProductJob::withChain([
+            VerifyProductSyncJob::dispatch($store_key, $product_data)
+        ])->dispatch($store_key, $product_data);
     }
 }
