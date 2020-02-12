@@ -74,7 +74,7 @@ abstract class BaseSnsController extends Controller
                 'message' => $message,
                 'error_id' => null,
             ],
-            $this->getStatusCode(),
+            $status_code,
             []
         );
 
