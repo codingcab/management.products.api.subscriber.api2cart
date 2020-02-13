@@ -116,4 +116,13 @@ class Client
         return new RequestResponse($response);
     }
 
+    static function client()
+    {
+        return new GuzzleClient([
+            'base_uri' =>  'https://api.api2cart.com/v1.1/',
+            'timeout' => 60,
+            'exceptions' => true,
+        ]);
+    }
+
 }
