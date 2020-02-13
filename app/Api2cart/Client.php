@@ -35,14 +35,21 @@ class Client
      */
     public function __construct(string $store_key, bool $exceptions = true)
     {
-        if(empty($store_key))
+        $this->_store_key = $store_key;
+
+        if(empty($this->_store_key))
+        {
+            throw new Exception('API key not provided');
+        }
+
+        $this->_api_key = env('API2CART_API_KEY', '');
+
+        if(empty($this->_api_key))
         {
             throw new Exception('API key not provided');
         }
 
         $this->_exceptions = $exceptions;
-        $this->_api_key = env('API2CART_API_KEY', '');
-        $this->_store_key = $store_key;
 
         $this->_guzzle = new GuzzleClient([
             'base_uri' =>  'https://api.api2cart.com/v1.1/',
