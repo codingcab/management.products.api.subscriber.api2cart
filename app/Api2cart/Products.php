@@ -241,7 +241,7 @@ class Products extends Entity
      * @return RequestResponse
      * @throws Exception
      */
-    public function updateOrCreate(string $store_key, array $product_data)
+    static function updateOrCreate(string $store_key, array $product_data)
     {
         $product = Products::findSimpleProduct($store_key, $product_data['sku']);
 
