@@ -83,12 +83,13 @@ class Products extends Entity
         return $product;
 
     }
+
     /**
+     * @param string $store_key
      * @param string $sku
      * @return int|null
-     * @throws Exception
      */
-    public function getSimpleProductID(string $sku)
+    public function getSimpleProductID(string $store_key, string $sku)
     {
         $response =  $this->client()->get('product.find.json', [
             'find_where' => "model",
