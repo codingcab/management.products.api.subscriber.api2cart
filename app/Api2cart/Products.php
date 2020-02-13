@@ -91,7 +91,9 @@ class Products extends Entity
      */
     public function getSimpleProductID(string $store_key, string $sku)
     {
-        $response =  $this->client()->get('product.find.json', [
+        $client = new Client($store_key);
+
+        $response =  $client->get('product.find.json', [
             'find_where' => "model",
             'find_value' => $sku
         ]);
