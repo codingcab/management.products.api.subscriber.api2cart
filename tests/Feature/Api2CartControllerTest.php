@@ -73,7 +73,7 @@ class Api2CartControllerTest extends TestCase
         }
 
 
-        $product_before = Products::findSimpleProduct(self::API2CART_DEMO_STORE_KEY, self::SAMPLE_PRODUCT['model']);
+        $product_before = Products::getProductInfo(self::API2CART_DEMO_STORE_KEY, self::SAMPLE_PRODUCT['model']);
 
         $update_params = [
             "id" => $product_before["id"],
@@ -82,7 +82,7 @@ class Api2CartControllerTest extends TestCase
 
         Products::updateSimpleProduct(self::API2CART_DEMO_STORE_KEY, $update_params);
 
-        $product_after = Products::findSimpleProduct(self::API2CART_DEMO_STORE_KEY, self::SAMPLE_PRODUCT['model']);
+        $product_after = Products::getProductInfo(self::API2CART_DEMO_STORE_KEY, self::SAMPLE_PRODUCT['model']);
 
         $this->assertEquals($product_before["price"] + 1, $product_after["price"]);
 

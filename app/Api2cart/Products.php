@@ -55,16 +55,16 @@ class Products extends Entity
 
     static function getProductInfo(string $store_key, string $sku)
     {
-        $product = self::find($store_key, $sku);
+        $product_id = Products::getSimpleProductID($store_key, $sku);;
 
-        if(empty($product)) {
+        if(empty($product_id)) {
             return null;
         }
 
-        $manager = new static($store_key);
+        $client = new Client($store_key);
 
-        $response =  $manager->client()->get('product.info.json', [
-            'id' => $product["id"],
+        $response =  $client->get('product.info.json', [
+            'id' => $product_id,
             'params' => "force_all"
         ]);
 
@@ -243,10 +243,10 @@ class Products extends Entity
      */
     static function updateOrCreate(string $store_key, array $product_data)
     {
-        $product = Products::findSimpleProduct($store_key, $product_data['sku']);
+        $product_id = Products::getSimpleProductID($store_key, $product_data['sku']);
 
-        if(!empty($product)) {
-            $properties = array_merge($product_data, ['id' => $product["id"]]);
+        if(!empty($product_id)) {
+            $properties = array_merge($product_data, ['id' => $product_id]);
             return Products::updateSimpleProduct($store_key, $properties);
         }
 
