@@ -78,10 +78,6 @@ class Products extends Entity
      */
     public function findSimpleProduct(string $sku)
     {
-        if(empty($sku)) {
-            throw new Exception('SKU not specified');
-        }
-
         $response =  $this->client()->get('product.find.json', [
                 'find_value' => $sku,
                 'find_where' => 'model',
