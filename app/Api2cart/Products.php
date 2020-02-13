@@ -106,12 +106,15 @@ class Products extends Entity
     }
 
     /**
+     * @param string $store_key
      * @param string $sku
      * @return array|null
      */
-    public function findSimpleProduct(string $sku)
+    public function findSimpleProduct(string $store_key, string $sku)
     {
-        $response =  $this->client()->get('product.find.json', [
+        $client = new Client($store_key);
+
+        $response =  $client->get('product.find.json', [
                 'find_where' => "model",
                 'find_value' => $sku,
 //                'store_id' => 0
