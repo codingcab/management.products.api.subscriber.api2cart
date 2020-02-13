@@ -72,7 +72,7 @@ class RequestResponse
      */
     public function returnCode()
     {
-        return $this->jsonContent()->return_code;
+        return $this->content()["return_code"];
     }
 
     /**

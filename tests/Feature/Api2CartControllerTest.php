@@ -33,7 +33,7 @@ class Api2CartControllerTest extends TestCase
 
             $this->assertEquals(0, $response->returnCode());
 
-            $product_id = $response->jsonContent()->result->product_id;
+            $product_id = $response->content()["result"]["product_id"];
         }
 
         $result = $api2cart->deleteProduct($product_id);
@@ -75,7 +75,7 @@ class Api2CartControllerTest extends TestCase
 
             $this->assertEquals(0, $response->returnCode());
 
-            $product_id = $response->jsonContent()->result->product_id;
+            $product_id = $response->content()["result"]["product_id"];
         }
 
 
