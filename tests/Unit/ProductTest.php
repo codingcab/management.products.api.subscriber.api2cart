@@ -24,7 +24,7 @@ class ProductTest extends TestCase
     {
         $manager = new Products(self::API2CART_DEMO_STORE_KEY);
 
-        $product = $manager->findSimpleProduct("123456");
+        $product = $manager->findSimpleProduct(self::API2CART_DEMO_STORE_KEY, "123456");
 
         $this->assertIsArray($product);
     }

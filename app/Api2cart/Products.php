@@ -239,7 +239,7 @@ class Products extends Entity
      */
     public function updateOrCreate(array $product_data)
     {
-        $product = $this->findSimpleProduct($product_data['sku']);
+        $product = $this->findSimpleProduct($store_key, $product_data['sku']);
 
         if(!empty($product)) {
             $properties = array_merge($product_data, ['id' => $product["id"]]);
