@@ -9,44 +9,6 @@ use Mockery\Exception;
 class Client
 {
     /**
-     * @var GuzzleClient
-     */
-    private $_guzzle;
-
-    /**
-     * @var bool
-     */
-    private $_exceptions = true;
-
-    /**
-     * @var string|null
-     */
-    private $_store_key = null;
-
-    /**
-     * Client constructor.
-     * @param string $store_key
-     * @param bool $exceptions
-     */
-    public function __construct(string $store_key, bool $exceptions = true)
-    {
-        $this->_store_key = $store_key;
-
-        if(empty($this->_store_key))
-        {
-            throw new Exception('API key not provided');
-        }
-
-        $this->_exceptions = $exceptions;
-
-        $this->_guzzle = new GuzzleClient([
-            'base_uri' =>  'https://api.api2cart.com/v1.1/',
-            'timeout' => 60,
-            'exceptions' => true,
-        ]);
-    }
-
-    /**
      * @param string $store_key
      * @param string $uri
      * @param array $params
@@ -67,18 +29,19 @@ class Client
     }
 
     /**
+     * @param string $store_key
      * @param string $uri
      * @param array $data
      * @return RequestResponse
      */
-    public function post(string $uri, array $data)
+    static function POST(string $store_key, string $uri, array $data)
     {
         $query = [
             'api_key' => self::getApiKey(),
-            'store_key' => $this->_store_key
+            'store_key' => $store_key
         ];
 
-        $response = $this->_guzzle->post($uri, [
+        $response = self::client()->post($uri, [
             'query' => $query,
             'json' => $data
         ]);
@@ -87,20 +50,21 @@ class Client
     }
 
     /**
+     * @param string $store_key
      * @param string $uri
      * @param array $params
      * @return RequestResponse
      */
-    public function delete(string $uri, array $params)
+    static function DELETE(string $store_key, string $uri, array $params)
     {
         $query = [
             'api_key' => self::getApiKey(),
-            'store_key' => $this->_store_key
+            'store_key' => $store_key
         ];
 
         $query = array_merge($query, $params);
 
-        $response =  $this->_guzzle->delete($uri, ['query' => $query]);
+        $response =  self::client()->delete($uri, ['query' => $query]);
 
         return new RequestResponse($response);
     }

@@ -146,9 +146,7 @@ class Products extends Entity
      */
     static function deleteProduct(string $store_key, int $product_id)
     {
-        $client = new Client($store_key);
-
-        return $client->delete('product.delete.json', ['id' => $product_id]);
+        return Client::DELETE($store_key,'product.delete.json', ['id' => $product_id]);
     }
 
     /**
@@ -159,15 +157,13 @@ class Products extends Entity
      */
     static function createSimpleProduct(string $store_key, array $product_data)
     {
-        $client = new Client($store_key);
-
         $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
         // disable new products
         $product["available_for_view"] = false;
         $product["available_for_sale"] = false;
 
-        $response = $client->post('product.add.json', $product);
+        $response = Client::POST($store_key,'product.add.json', $product);
 
         if($response->isNotSuccess()) {
             Log::error('Product create failed', $response->content());
@@ -185,13 +181,11 @@ class Products extends Entity
      */
     static function updateSimpleProduct(string $store_key, array $product_data)
     {
-        $client = new Client($store_key);
-
         $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
         $product = Arr::except($product, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        $response = $client->post('product.update.json', $product);
+        $response = Client::POST($store_key, 'product.update.json', $product);
 
         if($response->isNotSuccess()) {
             Log::error('Product update failed', $response->content());
@@ -210,13 +204,11 @@ class Products extends Entity
      */
     static function updateVariant(string $store_key, array $variant_data)
     {
-        $client = new Client($store_key);
-
         $properties = Arr::only($variant_data, self::PRODUCT_ALLOWED_KEYS);
 
         $properties = Arr::except($properties, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        $response = $client->post('product.variant.update.json', $properties);
+        $response = Client::POST($store_key,'product.variant.update.json', $properties);
 
         if($response->isNotSuccess()) {
             Log::error('Variant update failed', $response->content());
