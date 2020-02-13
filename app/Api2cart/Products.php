@@ -40,7 +40,7 @@ class Products extends Entity
     {
         $productClient = new static($store_key);
 
-        $product = $productClient->findSimpleProduct($store_key, $sku);
+        $product = Products::findSimpleProduct($store_key, $sku);
 
         if($product) {
             return $product;
@@ -110,7 +110,7 @@ class Products extends Entity
      * @param string $sku
      * @return array|null
      */
-    public function findSimpleProduct(string $store_key, string $sku)
+    static function findSimpleProduct(string $store_key, string $sku)
     {
         $client = new Client($store_key);
 
@@ -240,7 +240,7 @@ class Products extends Entity
      */
     public function updateOrCreate(string $store_key, array $product_data)
     {
-        $product = $this->findSimpleProduct($store_key, $product_data['sku']);
+        $product = Products::findSimpleProduct($store_key, $product_data['sku']);
 
         if(!empty($product)) {
             $properties = array_merge($product_data, ['id' => $product["id"]]);

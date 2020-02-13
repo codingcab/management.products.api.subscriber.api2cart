@@ -22,9 +22,7 @@ class ProductTest extends TestCase
 
     public function test_if_findSimpleProduct_returns_array()
     {
-        $manager = new Products(self::API2CART_DEMO_STORE_KEY);
-
-        $product = $manager->findSimpleProduct(self::API2CART_DEMO_STORE_KEY, "123456");
+        $product = Products::findSimpleProduct(self::API2CART_DEMO_STORE_KEY, "123456");
 
         $this->assertIsArray($product);
     }
