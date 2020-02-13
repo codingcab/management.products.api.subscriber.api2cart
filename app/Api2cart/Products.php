@@ -89,7 +89,7 @@ class Products extends Entity
      * @param string $sku
      * @return int|null
      */
-    public function getSimpleProductID(string $store_key, string $sku)
+    static function getSimpleProductID(string $store_key, string $sku)
     {
         $client = new Client($store_key);
 
