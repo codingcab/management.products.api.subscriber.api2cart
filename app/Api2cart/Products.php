@@ -74,7 +74,6 @@ class Products extends Entity
     /**
      * @param string $sku
      * @return array|null
-     * @throws Exception
      */
     public function findSimpleProduct(string $sku)
     {
