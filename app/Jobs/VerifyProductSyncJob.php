@@ -64,6 +64,11 @@ class VerifyProductSyncJob implements ShouldQueue
 
         $product_now = Products::getProductInfo($this->_store_key, $this->_product_data["sku"]);
 
+        if(empty($product_now)) {
+            Log::alert("Verify Product Failed - could not find product", ["sku" => $this->_product_data["sku"]]);
+            return;
+        };
+
         $this->_results["expected"]    = Arr::only($this->_product_data, $keys_to_verify);
         $this->_results["actual"]      = Arr::only($product_now, $keys_to_verify);
         $this->_results["difference"]  = array_diff($this->_results["expected"], $this->_results["actual"]);
