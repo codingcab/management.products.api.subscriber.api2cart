@@ -148,17 +148,15 @@ class Products extends Entity
     }
 
     /**
+     * @param string $store_key
      * @param int $product_id
      * @return RequestResponse
-     * @throws Exception
      */
-    public function deleteProduct(int $product_id)
+    static function deleteProduct(string $store_key, int $product_id)
     {
-        if(empty($product_id)) {
-            throw new Exception('Product_id not specified');
-        }
+        $client = new Client($store_key);
 
-        return $this->client()->delete('product.delete.json', ['id' => $product_id]);
+        return $client->delete('product.delete.json', ['id' => $product_id]);
     }
 
     /**
