@@ -33,7 +33,7 @@ class Api2CartControllerTest extends TestCase
 
             $this->assertEquals(0, $response->returnCode());
 
-            $product_id = $response->jsonContent()->result->product_id;
+            $product_id = $response->content()["result"]["product_id"];
         }
 
         $result = $api2cart->deleteProduct($product_id);
@@ -75,22 +75,22 @@ class Api2CartControllerTest extends TestCase
 
             $this->assertEquals(0, $response->returnCode());
 
-            $product_id = $response->jsonContent()->result->product_id;
+            $product_id = $response->content()["result"]["product_id"];
         }
 
 
         $product_before = $api2cart->findSimpleProduct(self::SAMPLE_PRODUCT['model']);
 
         $update_params = [
-            "id" => $product_before->id,
-            "price" => $product_before->price + 1,
+            "id" => $product_before["id"],
+            "price" => $product_before["price"] + 1,
         ];
 
         $api2cart->updateSimpleProduct($update_params);
 
         $product_after = $api2cart->findSimpleProduct(self::SAMPLE_PRODUCT['model']);
 
-        $this->assertEquals($product_before->price + 1, $product_after->price);
+        $this->assertEquals($product_before["price"] + 1, $product_after["price"]);
 
     }
 }

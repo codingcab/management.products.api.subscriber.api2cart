@@ -3,11 +3,14 @@
 namespace App\Jobs;
 
 use App\Api2cart\Products;
+use Exception;
+use Hamcrest\Thingy;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -29,6 +32,11 @@ class VerifyProductSyncJob implements ShouldQueue
     private $_product_data = null;
 
     /**
+     * @var array
+     */
+    private $_results = [];
+
+    /**
      * Create a new job instance.
      *
      * @param string $store_key
@@ -44,16 +52,37 @@ class VerifyProductSyncJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle()
     {
-        $product = Products::find($this->_store_key, $this->_product_data["sku"]);
+        $keys_to_verify = [
+            "price",
+            "special_price",
+            "quantity"
+        ];
 
-        if($product) {
-            info('Verify Product Sync', ["expected" => $this->_product_data, "actual" => $product]);
+        $product_now = Products::getProductInfo($this->_store_key, $this->_product_data["sku"]);
+
+        $this->_results["expected"]    = Arr::only($this->_product_data, $keys_to_verify);
+        $this->_results["actual"]      = Arr::only($product_now, $keys_to_verify);
+        $this->_results["difference"]  = array_diff($this->_results["expected"], $this->_results["actual"]);
+        $this->_results["matching"]    = empty($this->_results["difference"]);
+
+        if($product_now) {
+            info('Verify Product Sync', $this->_results);
         } else {
-            Log::alert("Verify Product Sync", ["expected" => $this->_product_data, "actual" => "Not found!!!"]);
+            Log::alert("Verify Product Sync", $this->_results);
         }
+
     }
+
+    /**
+     * @return array
+     */
+    public function getResults()
+    {
+        return $this->_results;
+    }
+
 }

@@ -52,14 +52,6 @@ class RequestResponse
     }
 
     /**
-     * @return mixed
-     */
-    public function jsonContent()
-    {
-        return json_decode($this->response_content, false);
-    }
-
-    /**
      * @return array
      */
     public function content()
@@ -72,7 +64,7 @@ class RequestResponse
      */
     public function returnCode()
     {
-        return $this->jsonContent()->return_code;
+        return $this->content()["return_code"];
     }
 
     /**
