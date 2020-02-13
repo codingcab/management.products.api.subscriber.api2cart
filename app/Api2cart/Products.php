@@ -33,7 +33,7 @@ class Products extends Entity
     /**
      * @param string $store_key
      * @param string $sku
-     * @return mixed|null
+     * @return array|null
      * @throws Exception
      */
     static function find(string $store_key, string $sku)
