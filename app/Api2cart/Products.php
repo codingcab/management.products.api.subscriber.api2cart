@@ -211,17 +211,20 @@ class Products extends Entity
 
     /**
      * This will only update variant product, will not update simple product
+     * @param string $store_key
      * @param array $variant_data
      * @return RequestResponse
      * @throws Exception
      */
-    public function updateVariant(array $variant_data)
+    static function updateVariant(string $store_key, array $variant_data)
     {
+        $client = new Client($store_key);
+
         $properties = Arr::only($variant_data, self::PRODUCT_ALLOWED_KEYS);
 
         $properties = Arr::except($properties, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        $response = $this->client()->post('product.variant.update.json', $properties);
+        $response = $client->post('product.variant.update.json', $properties);
 
         if($response->isNotSuccess()) {
             Log::error('Variant update failed', $response->content());
@@ -251,7 +254,7 @@ class Products extends Entity
 
         if(!empty($variant)) {
             $properties = array_merge($product_data, ['id' => $variant["id"]]);
-            return $this->updateVariant($properties);
+            return Products::updateVariant($store_key, $properties);
         }
 
         return Products::createSimpleProduct($store_key, $product_data);
