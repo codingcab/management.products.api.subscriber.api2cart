@@ -55,6 +55,28 @@ class Products extends Entity
         return null;
     }
 
+    static function getProductInfo(string $store_key, string $sku)
+    {
+        $product = self::find($store_key, $sku);
+
+        if(empty($product)) {
+            return null;
+        }
+
+        $manager = new static($store_key);
+
+        $response =  $manager->client()->get('product.info.json', [
+            'id' => $product["id"],
+            'params' => "force_all"
+        ]);
+
+        if($response->isSuccess()) {
+            return $response->content()['result'];
+        }
+
+        return null;
+
+    }
     /**
      * @param string $sku
      * @return int|null
