@@ -44,8 +44,6 @@ class Api2CartControllerTest extends TestCase
      */
     public function test_successfull_product_create()
     {
-        $api2cart = new Products(self::API2CART_DEMO_STORE_KEY, false);
-
         $product_id = Products::getSimpleProductID(self::API2CART_DEMO_STORE_KEY, self::SAMPLE_PRODUCT['model']);
 
         if (!empty($product_id)) {
