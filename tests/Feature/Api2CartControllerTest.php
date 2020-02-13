@@ -64,16 +64,12 @@ class Api2CartControllerTest extends TestCase
      */
     public function test_successful_product_update()
     {
-        $api2cart = new Products(self::API2CART_DEMO_STORE_KEY, false);
-
         $product_id = Products::getSimpleProductID(self::API2CART_DEMO_STORE_KEY, self::SAMPLE_PRODUCT['model']);
 
         if(empty($product_id)) {
             $response = Products::createSimpleProduct(self::API2CART_DEMO_STORE_KEY, self::SAMPLE_PRODUCT);
 
             $this->assertEquals(0, $response->returnCode());
-
-            $product_id = $response->content()["result"]["product_id"];
         }
 
 
@@ -84,7 +80,7 @@ class Api2CartControllerTest extends TestCase
             "price" => $product_before["price"] + 1,
         ];
 
-        $api2cart->updateSimpleProduct($update_params);
+        Products::updateSimpleProduct(self::API2CART_DEMO_STORE_KEY, $update_params);
 
         $product_after = Products::findSimpleProduct(self::API2CART_DEMO_STORE_KEY, self::SAMPLE_PRODUCT['model']);
 

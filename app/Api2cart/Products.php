@@ -186,17 +186,20 @@ class Products extends Entity
     }
 
     /**
+     * @param string $store_key
      * @param array $product_data
      * @return RequestResponse
      * @throws Exception
      */
-    public function updateSimpleProduct(array $product_data)
+    static function updateSimpleProduct(string $store_key, array $product_data)
     {
+        $client = new Client($store_key);
+
         $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
         $product = Arr::except($product, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        $response = $this->client()->post('product.update.json', $product);
+        $response = $client->post('product.update.json', $product);
 
         if($response->isNotSuccess()) {
             Log::error('Product update failed', $response->content());
@@ -241,7 +244,7 @@ class Products extends Entity
 
         if(!empty($product)) {
             $properties = array_merge($product_data, ['id' => $product["id"]]);
-            return $this->updateSimpleProduct($properties);
+            return Products::updateSimpleProduct($store_key, $properties);
         }
 
         $variant = Products::findVariant($store_key, $product_data['sku']);
