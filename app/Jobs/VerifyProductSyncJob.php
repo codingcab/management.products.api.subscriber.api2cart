@@ -48,12 +48,18 @@ class VerifyProductSyncJob implements ShouldQueue
      */
     public function handle()
     {
-        $product = Products::find($this->_store_key, $this->_product_data["sku"]);
+        $product = Products::getProductInfo($this->_store_key, $this->_product_data["sku"]);
+
+        $context = [
+            "expected" => $this->_product_data,
+            "actual" => $product
+        ];
 
         if($product) {
-            info('Verify Product Sync', ["expected" => $this->_product_data, "actual" => $product]);
+            info('Verify Product Sync', $context);
         } else {
-            Log::alert("Verify Product Sync", ["expected" => $this->_product_data, "actual" => "Not found!!!"]);
+            Log::alert("Verify Product Sync", $context);
         }
+
     }
 }
