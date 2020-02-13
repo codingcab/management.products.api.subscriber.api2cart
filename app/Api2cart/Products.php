@@ -68,12 +68,12 @@ class Products extends Entity
             return null;
         }
 
-        return $product->id;
+        return $product["id"];
     }
 
     /**
      * @param string $sku
-     * @return mixed|null
+     * @return array|null
      * @throws Exception
      */
     public function findSimpleProduct(string $sku)
@@ -89,7 +89,7 @@ class Products extends Entity
             ]);
 
         if($response->isSuccess()) {
-            return $response->jsonContent()->result->product[0];
+            return $response->content()['result']['product'][0];
         }
 
         return null;
@@ -210,7 +210,7 @@ class Products extends Entity
         $product = $this->findSimpleProduct($product_data['sku']);
 
         if(!empty($product)) {
-            $properties = array_merge($product_data, ['id' => $product->id]);
+            $properties = array_merge($product_data, ['id' => $product["id"]]);
             return $this->updateSimpleProduct($properties);
         }
 
