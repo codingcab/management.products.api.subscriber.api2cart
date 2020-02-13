@@ -40,7 +40,7 @@ class Products extends Entity
     {
         $productClient = new static($store_key);
 
-        $product = $productClient->findSimpleProduct($sku);
+        $product = $productClient->findSimpleProduct($store_key, $sku);
 
         if($product) {
             return $product;
