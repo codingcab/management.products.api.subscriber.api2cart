@@ -77,9 +77,9 @@ class VerifyProductSyncJob implements ShouldQueue
         $context = Arr::dot($this->getResults());
 
         if($this->getResults()["matching"]) {
-            info('Verify Product Sync', $context);
+            info('Product Sync Verification', $context);
         } else {
-            Log::alert("Verify Product Sync", $context);
+            Log::alert("Product Sync Verification", $context);
         }
 
     }
