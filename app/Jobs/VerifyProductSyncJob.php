@@ -74,10 +74,12 @@ class VerifyProductSyncJob implements ShouldQueue
         $this->_results["difference"]  = array_diff($this->_results["expected"], $this->_results["actual"]);
         $this->_results["matching"]    = empty($this->_results["difference"]);
 
-        if($product_now) {
-            info('Verify Product Sync', $this->_results);
+        $context = Arr::dot($this->getResults());
+
+        if($this->getResults()["matching"]) {
+            info('Verify Product Sync', $context);
         } else {
-            Log::alert("Verify Product Sync", $this->_results);
+            Log::alert("Verify Product Sync", $context);
         }
 
     }
