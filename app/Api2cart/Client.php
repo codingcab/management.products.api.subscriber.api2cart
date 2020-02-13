@@ -4,6 +4,7 @@
 namespace App\Api2cart;
 
 use GuzzleHttp\Client as GuzzleClient;
+use Mockery\Exception;
 
 class Client
 {
@@ -34,6 +35,11 @@ class Client
      */
     public function __construct(string $store_key, bool $exceptions = true)
     {
+        if(empty($store_key))
+        {
+            throw new Exception('API key not provided');
+        }
+
         $this->_exceptions = $exceptions;
         $this->_api_key = env('API2CART_API_KEY', '');
         $this->_store_key = $store_key;
