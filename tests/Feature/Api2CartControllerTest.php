@@ -24,12 +24,10 @@ class Api2CartControllerTest extends TestCase
      */
     public function test_successfull_product_delete()
     {
-        $api2cart = new Products(self::API2CART_DEMO_STORE_KEY, false);
-
         $product_id = Products::getSimpleProductID(self::API2CART_DEMO_STORE_KEY, self::SAMPLE_PRODUCT['model']);
 
         if(empty($product_id)) {
-            $response = $api2cart->createSimpleProduct(self::SAMPLE_PRODUCT);
+            $response = Products::createSimpleProduct(self::API2CART_DEMO_STORE_KEY, self::SAMPLE_PRODUCT);
 
             $this->assertEquals(0, $response->returnCode());
 
@@ -56,7 +54,7 @@ class Api2CartControllerTest extends TestCase
             $this->assertEquals(0, $response->returnCode());
         }
 
-        $product = $api2cart->createSimpleProduct(self::SAMPLE_PRODUCT);
+        $product = Products::createSimpleProduct(self::API2CART_DEMO_STORE_KEY, self::SAMPLE_PRODUCT);
 
         $this->assertEquals(0, $product->returnCode());
     }
@@ -71,7 +69,7 @@ class Api2CartControllerTest extends TestCase
         $product_id = Products::getSimpleProductID(self::API2CART_DEMO_STORE_KEY, self::SAMPLE_PRODUCT['model']);
 
         if(empty($product_id)) {
-            $response = $api2cart->createSimpleProduct(self::SAMPLE_PRODUCT);
+            $response = Products::createSimpleProduct(self::API2CART_DEMO_STORE_KEY, self::SAMPLE_PRODUCT);
 
             $this->assertEquals(0, $response->returnCode());
 

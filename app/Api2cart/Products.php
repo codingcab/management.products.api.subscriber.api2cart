@@ -160,19 +160,22 @@ class Products extends Entity
     }
 
     /**
+     * @param string $store_key
      * @param array $product_data
      * @return RequestResponse
      * @throws Exception
      */
-    public function createSimpleProduct(array $product_data)
+    static function createSimpleProduct(string $store_key, array $product_data)
     {
+        $client = new Client($store_key);
+
         $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
         // disable new products
         $product["available_for_view"] = false;
         $product["available_for_sale"] = false;
 
-        $response = $this->client()->post('product.add.json', $product);
+        $response = $client->post('product.add.json', $product);
 
         if($response->isNotSuccess()) {
             Log::error('Product create failed', $response->content());
@@ -248,7 +251,7 @@ class Products extends Entity
             return $this->updateVariant($properties);
         }
 
-        return $this->createSimpleProduct($product_data);
+        return Products::createSimpleProduct($store_key, $product_data);
     }
 
 }
