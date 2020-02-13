@@ -24,11 +24,6 @@ class Client
     private $_store_key = null;
 
     /**
-     * @var string|null
-     */
-    private $_api_key = null;
-
-    /**
      * Client constructor.
      * @param string $store_key
      * @param bool $exceptions
@@ -38,13 +33,6 @@ class Client
         $this->_store_key = $store_key;
 
         if(empty($this->_store_key))
-        {
-            throw new Exception('API key not provided');
-        }
-
-        $this->_api_key = env('API2CART_API_KEY', '');
-
-        if(empty($this->_api_key))
         {
             throw new Exception('API key not provided');
         }
@@ -59,20 +47,21 @@ class Client
     }
 
     /**
+     * @param string $store_key
      * @param string $uri
      * @param array $params
      * @return RequestResponse
      */
-    public function get(string $uri, array $params)
+    static function GET(string $store_key, string $uri, array $params)
     {
         $query = [
-            'api_key' => $this->_api_key,
-            'store_key' => $this->_store_key
+            'api_key' => self::getApiKey(),
+            'store_key' => $store_key
         ];
 
         $query = array_merge($query, $params);
 
-        $response = $this->_guzzle->get($uri, ['query' => $query]);
+        $response = self::client()->get($uri, ['query' => $query]);
 
         return new RequestResponse($response);
     }
@@ -85,7 +74,7 @@ class Client
     public function post(string $uri, array $data)
     {
         $query = [
-            'api_key' => $this->_api_key,
+            'api_key' => self::getApiKey(),
             'store_key' => $this->_store_key
         ];
 
@@ -105,7 +94,7 @@ class Client
     public function delete(string $uri, array $params)
     {
         $query = [
-            'api_key' => $this->_api_key,
+            'api_key' => self::getApiKey(),
             'store_key' => $this->_store_key
         ];
 
@@ -123,6 +112,11 @@ class Client
             'timeout' => 60,
             'exceptions' => true,
         ]);
+    }
+
+    static function getApiKey()
+    {
+        return env('API2CART_API_KEY', '');
     }
 
 }

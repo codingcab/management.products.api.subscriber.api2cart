@@ -61,9 +61,7 @@ class Products extends Entity
             return null;
         }
 
-        $client = new Client($store_key);
-
-        $response =  $client->get('product.info.json', [
+        $response =  Client::GET($store_key,'product.info.json', [
             'id' => $product_id,
             'params' => "force_all"
         ]);
@@ -89,9 +87,7 @@ class Products extends Entity
      */
     static function getSimpleProductID(string $store_key, string $sku)
     {
-        $client = new Client($store_key);
-
-        $response =  $client->get('product.find.json', [
+        $response =  Client::GET($store_key,'product.find.json', [
             'find_where' => "model",
             'find_value' => $sku
         ]);
@@ -110,9 +106,7 @@ class Products extends Entity
      */
     static function findSimpleProduct(string $store_key, string $sku)
     {
-        $client = new Client($store_key);
-
-        $response =  $client->get('product.find.json', [
+        $response =  Client::GET($store_key,'product.find.json', [
                 'find_where' => "model",
                 'find_value' => $sku,
 //                'store_id' => 0
@@ -132,9 +126,7 @@ class Products extends Entity
      */
     static function findVariant(string $store_key, string $sku)
     {
-        $client = new Client($store_key);
-
-        $response = $client->get('product.child_item.find.json', [
+        $response = Client::GET($store_key,'product.child_item.find.json', [
             'find_where' => 'sku',
             'find_value' => $sku,
 //            'store_id' => 0
