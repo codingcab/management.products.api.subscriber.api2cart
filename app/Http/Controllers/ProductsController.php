@@ -75,7 +75,7 @@ class ProductsController extends SnsController
         // 1,100 will execute more less on 1% jobs
         // 1,500 will execute more less on 0.2% jobs
         // 1,1000 will execute more less on 0.1% jobs
-        $random_int = random_int(1,100);
+        $random_int = random_int(1,10);
 
         if($random_int <> 1) {
             SyncProductJob::dispatch($store_key, $product_data);

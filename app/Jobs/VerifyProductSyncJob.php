@@ -2,11 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Api2cart\Products;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class VerifyProductSyncJob
@@ -42,9 +44,16 @@ class VerifyProductSyncJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws \Exception
      */
     public function handle()
     {
-        info('We should verify product update here', $this->_product_data);
+        $product = Products::find($this->_store_key, $this->_product_data["sku"]);
+
+        if($product) {
+            info('Verify Product Sync', ["expected" => $this->_product_data, "actual" => $product]);
+        } else {
+            Log::alert("Verify Product Sync", ["expected" => $this->_product_data, "actual" => "Not found!!!"]);
+        }
     }
 }
