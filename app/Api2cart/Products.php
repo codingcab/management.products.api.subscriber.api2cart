@@ -53,9 +53,9 @@ class Products extends Entity
         return null;
     }
 
-    static function getProductInfo(string $store_key, string $sku)
+    static function getSimpleProductInfo(string $store_key, string $sku)
     {
-        $product_id = Products::getSimpleProductID($store_key, $sku);;
+        $product_id = Products::getSimpleProductID($store_key, $sku);
 
         if(empty($product_id)) {
             return null;
@@ -77,7 +77,49 @@ class Products extends Entity
         $product["special_price"]   = $product["special_price"]["value"];
 
         return $product;
+    }
 
+    static function getVariantInfo(string $store_key, string $sku)
+    {
+        $variant_id = Products::getVariantID($store_key, $sku);
+
+        if(empty($variant_id)) {
+            return null;
+        }
+
+        $response =  Client::GET($store_key,'product.variant.info.json', [
+            'id' => $variant_id,
+            'params' => "force_all"
+        ]);
+
+        if($response->isNotSuccess()) {
+            return null;
+        }
+
+        $variant = $response->content()['result'];
+
+        $variant["sku"]             = empty($variant["u_sku"]) ? $variant["u_model"] : $variant["u_sku"];
+        $variant["model"]           = $variant["u_model"];
+        $variant["special_price"]   = $variant["special_price"]["value"];
+
+        return $variant;
+    }
+
+    static function getProductInfo(string $store_key, string $sku)
+    {
+        $product = Products::getSimpleProductInfo($store_key, $sku);
+
+        if($product) {
+            return $product;
+        }
+
+        $variant = Products::getVariantInfo($store_key, $sku);
+
+        if($variant) {
+            return $variant;
+        }
+
+        return null;
     }
 
     /**
@@ -97,6 +139,25 @@ class Products extends Entity
         }
 
         return $response->content()['result']['product'][0]["id"];
+    }
+
+    /**
+     * @param string $store_key
+     * @param string $sku
+     * @return int|null
+     */
+    static function getVariantID(string $store_key, string $sku)
+    {
+        $response =  Client::GET($store_key,'product.child_item.find.json', [
+            'find_where' => "sku",
+            'find_value' => $sku
+        ]);
+
+        if($response->isNotSuccess()) {
+            return null;
+        }
+
+        return $response->content()['result']['children'][0]["id"];
     }
 
     /**
