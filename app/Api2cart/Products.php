@@ -38,15 +38,13 @@ class Products extends Entity
      */
     static function find(string $store_key, string $sku)
     {
-        $productClient = new static($store_key);
-
         $product = Products::findSimpleProduct($store_key, $sku);
 
         if($product) {
             return $product;
         }
 
-        $variant = $productClient->findVariant($sku);
+        $variant = Products::findVariant($store_key, $sku);
 
         if($variant) {
             return $variant;
@@ -128,13 +126,15 @@ class Products extends Entity
     }
 
     /**
+     * @param string $store_key
      * @param string $sku
      * @return array|null
-     * @throws Exception
      */
-    public function findVariant(string $sku)
+    static function findVariant(string $store_key, string $sku)
     {
-        $response = $this->client()->get('product.child_item.find.json', [
+        $client = new Client($store_key);
+
+        $response = $client->get('product.child_item.find.json', [
             'find_where' => 'sku',
             'find_value' => $sku,
 //            'store_id' => 0
@@ -243,7 +243,7 @@ class Products extends Entity
             return $this->updateSimpleProduct($properties);
         }
 
-        $variant = $this->findVariant($product_data['sku']);
+        $variant = Products::findVariant($store_key, $product_data['sku']);
 
         if(!empty($variant)) {
             $properties = array_merge($product_data, ['id' => $variant["id"]]);
