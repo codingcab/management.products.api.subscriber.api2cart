@@ -77,10 +77,10 @@ class Products extends Entity
      */
     public function findSimpleProduct(string $sku)
     {
-        $response =  $this->client()->get('product.find.json', [
-                'find_value' => $sku,
-                'find_where' => 'model',
-                'store_id' => 0
+        $response =  $this->client()->get('product.list.json', [
+                'sku' => $sku,
+                'params' => 'force_all',
+//                'store_id' => 0
             ]);
 
         if($response->isSuccess()) {
