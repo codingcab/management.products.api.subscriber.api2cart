@@ -70,11 +70,17 @@ class Products extends Entity
             'params' => "force_all"
         ]);
 
-        if($response->isSuccess()) {
-            return $response->content()['result'];
+        if($response->isNotSuccess()) {
+            return null;
         }
 
-        return null;
+        $product = $response->content()['result'];
+
+        $product["sku"]             = empty($product["u_sku"]) ? $product["u_model"] : $product["u_sku"];
+        $product["model"]           = $product["u_model"];
+        $product["special_price"]   = $product["special_price"]["value"];
+
+        return $product;
 
     }
     /**
