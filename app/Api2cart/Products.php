@@ -31,6 +31,31 @@ class Products extends Entity
     ];
 
     /**
+     * @param string $store_key
+     * @param string $sku
+     * @return mixed|null
+     * @throws Exception
+     */
+    static function find(string $store_key, string $sku)
+    {
+        $productClient = new static($store_key);
+
+        $product = $productClient->findSimpleProduct($sku);
+
+        if($product) {
+            return $product;
+        }
+
+        $variant = $productClient->findVariant($sku);
+
+        if($variant) {
+            return $variant;
+        }
+
+        return null;
+    }
+
+    /**
      * @param string $sku
      * @return int|null
      * @throws Exception
