@@ -93,7 +93,7 @@ class Products extends Entity
 
     /**
      * @param string $sku
-     * @return mixed|null
+     * @return array|null
      * @throws Exception
      */
     public function findVariant(string $sku)
@@ -109,7 +109,7 @@ class Products extends Entity
         ]);
 
         if($response->isSuccess()) {
-            return $response->jsonContent()->result->children[0];
+            return $response->content()['result']['children'][0];
         }
 
         return null;
@@ -213,7 +213,7 @@ class Products extends Entity
         $variant = $this->findVariant($product_data['sku']);
 
         if(!empty($variant)) {
-            $properties = array_merge($product_data, ['id' => $variant->id]);
+            $properties = array_merge($product_data, ['id' => $variant["id"]]);
             return $this->updateVariant($properties);
         }
 
