@@ -61,4 +61,19 @@ class VerifyProductSyncJobTest extends TestCase
 
         $this->assertFalse($job->getResults()["matching"]);
     }
+
+    public function test_when_multiple_not_matching()
+    {
+        $product_data = Products::getProductInfo(self::API2CART_DEMO_STORE_KEY, "123456");
+
+        $product_data["price"]          = $product_data["price"] + 1;
+        $product_data["special_price"]  = $product_data["special_price"] + 1;
+        $product_data["quantity"]       = $product_data["quantity"] + 1;
+
+        $job = new VerifyProductSyncJob(self::API2CART_DEMO_STORE_KEY, $product_data);
+
+        $job->handle();
+
+        $this->assertFalse($job->getResults()["matching"]);
+    }
 }

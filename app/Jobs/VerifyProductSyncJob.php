@@ -12,6 +12,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use function Aws\map;
 
 /**
  * Class VerifyProductSyncJob
@@ -56,12 +58,6 @@ class VerifyProductSyncJob implements ShouldQueue
      */
     public function handle()
     {
-        $keys_to_verify = [
-            "price",
-            "special_price",
-            "quantity"
-        ];
-
         $product_now = Products::getProductInfo($this->_store_key, $this->_product_data["sku"]);
 
         if(empty($product_now)) {
@@ -69,17 +65,14 @@ class VerifyProductSyncJob implements ShouldQueue
             return;
         };
 
-        $this->_results["expected"]    = Arr::only($this->_product_data, $keys_to_verify);
-        $this->_results["actual"]      = Arr::only($product_now, $keys_to_verify);
-        $this->_results["difference"]  = array_diff($this->_results["expected"], $this->_results["actual"]);
-        $this->_results["matching"]    = empty($this->_results["difference"]);
+        $this->_results = $this->compareValues($this->_product_data, $product_now);
 
-        $context = Arr::dot($this->getResults());
+        dd($this->_results);
 
         if($this->getResults()["matching"]) {
-            info('Product Sync Verification OK', $context);
+            info('Product Sync Verification OK', $this->_results);
         } else {
-            Log::alert("Product Sync Verification Failed", $context);
+            Log::alert("Product Sync Verification Failed", $this->_results);
         }
 
     }
@@ -90,6 +83,48 @@ class VerifyProductSyncJob implements ShouldQueue
     public function getResults()
     {
         return $this->_results;
+    }
+
+    /**
+     * @param array $expected
+     * @param array $actual
+     * @return array
+     */
+    private function compareValues(array $expected, array $actual): array
+    {
+        $keys_to_verify = [
+            "price",
+            "special_price",
+            "quantity"
+        ];
+
+        $expected_data = Arr::only($expected, $keys_to_verify);
+
+        $actual_data = Arr::only($actual, $keys_to_verify);;
+
+        $difference = array_diff($expected_data, $actual_data);
+
+        // reverse arrays so it looks like this
+        // [
+        //  "price" => [
+        //      "actual"   => 4,
+        //      "expected" => 3
+        //      ]
+        // ]
+        array_walk($expected_data, function (&$a, $b) {
+            $a = ["expected" => $a];
+        });
+
+        array_walk($actual_data, function (&$a, $b) {
+            $a = ["actual" => $a];
+        });
+
+        return array_merge(
+            Arr::dot($expected_data),
+            Arr::dot($actual_data),
+            Arr::dot(["difference" => array_keys($difference)]),
+            ["matching" => empty($difference)]
+        );
     }
 
 }
