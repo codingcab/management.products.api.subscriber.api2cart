@@ -31,7 +31,7 @@ class Api2CartControllerTest extends TestCase
 
             $this->assertEquals(0, $response->getReturnCode());
 
-            $product_id = $response->content()["result"]["product_id"];
+            $product_id = $response->getResult()["product_id"];
         }
 
         $result = Products::deleteProduct(self::API2CART_DEMO_STORE_KEY, $product_id);

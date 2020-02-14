@@ -75,7 +75,7 @@ class Products extends Entity
             return null;
         }
 
-        $product = $response->content()['result'];
+        $product = $response->getResult();
 
         $product["sku"]             = empty($product["u_sku"]) ? $product["u_model"] : $product["u_sku"];
         $product["model"]           = $product["u_model"];
@@ -106,7 +106,7 @@ class Products extends Entity
             return null;
         }
 
-        $variant = $response->content()['result']["variant"];
+        $variant = $response->getResult()["variant"];
 
         $variant["sku"]             = empty($variant["u_sku"]) ? $variant["u_model"] : $variant["u_sku"];
         $variant["model"]           = $variant["u_model"];
@@ -153,7 +153,7 @@ class Products extends Entity
             return null;
         }
 
-        return $response->content()['result']['product'][0]["id"];
+        return $response->getResult()['product'][0]["id"];
     }
 
     /**
@@ -172,7 +172,7 @@ class Products extends Entity
             return null;
         }
 
-        return $response->content()['result']['children'][0]["id"];
+        return $response->getResult()['children'][0]["id"];
     }
 
     /**
@@ -189,7 +189,7 @@ class Products extends Entity
             ]);
 
         if($response->isSuccess()) {
-            return $response->content()['result']['product'][0];
+            return $response->getResult()['product'][0];
         }
 
         return null;
@@ -209,7 +209,7 @@ class Products extends Entity
         ]);
 
         if($response->isSuccess()) {
-            return $response->content()['result']['children'][0];
+            return $response->getResult()['children'][0];
         }
 
         return null;
