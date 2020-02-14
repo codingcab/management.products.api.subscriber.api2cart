@@ -45,9 +45,7 @@ class SyncProductJob implements ShouldQueue
      */
     public function handle()
     {
-        $api2cart_new = new Products($this->_store_key);
-
-        $response = $api2cart_new->updateOrCreate($this->_product_data);
+        $response = Products::updateOrCreate($this->_store_key, $this->_product_data);
 
         if($response->isNotSuccess()) {
             Log::error('Could not update Product', $this->_product_data);

@@ -38,15 +38,13 @@ class Products extends Entity
      */
     static function find(string $store_key, string $sku)
     {
-        $productClient = new static($store_key);
-
-        $product = $productClient->findSimpleProduct($sku);
+        $product = Products::findSimpleProduct($store_key, $sku);
 
         if($product) {
             return $product;
         }
 
-        $variant = $productClient->findVariant($sku);
+        $variant = Products::findVariant($store_key, $sku);
 
         if($variant) {
             return $variant;
@@ -55,18 +53,21 @@ class Products extends Entity
         return null;
     }
 
-    static function getProductInfo(string $store_key, string $sku)
+    /**
+     * @param string $store_key
+     * @param string $sku
+     * @return array|null
+     */
+    static function getSimpleProductInfo(string $store_key, string $sku)
     {
-        $product = self::find($store_key, $sku);
+        $product_id = Products::getSimpleProductID($store_key, $sku);
 
-        if(empty($product)) {
+        if(empty($product_id)) {
             return null;
         }
 
-        $manager = new static($store_key);
-
-        $response =  $manager->client()->get('product.info.json', [
-            'id' => $product["id"],
+        $response =  Client::GET($store_key,'product.info.json', [
+            'id' => $product_id,
             'params' => "force_all"
         ]);
 
@@ -81,31 +82,107 @@ class Products extends Entity
         $product["special_price"]   = $product["special_price"]["value"];
 
         return $product;
-
-    }
-    /**
-     * @param string $sku
-     * @return int|null
-     * @throws Exception
-     */
-    public function findProductId(string $sku)
-    {
-        $product = $this->findSimpleProduct($sku);
-
-        if(empty($product)) {
-            return null;
-        }
-
-        return $product["id"];
     }
 
     /**
+     * @param string $store_key
      * @param string $sku
      * @return array|null
      */
-    public function findSimpleProduct(string $sku)
+    static function getVariantInfo(string $store_key, string $sku)
     {
-        $response =  $this->client()->get('product.find.json', [
+        $variant_id = Products::getVariantID($store_key, $sku);
+
+        if(empty($variant_id)) {
+            return null;
+        }
+
+        $response =  Client::GET($store_key,'product.variant.info.json', [
+            'id' => $variant_id,
+            'params' => "force_all"
+        ]);
+
+        if($response->isNotSuccess()) {
+            return null;
+        }
+
+        $variant = $response->content()['result'];
+
+        $variant["sku"]             = empty($variant["u_sku"]) ? $variant["u_model"] : $variant["u_sku"];
+        $variant["model"]           = $variant["u_model"];
+        $variant["special_price"]   = $variant["special_price"]["value"];
+
+        return $variant;
+    }
+
+    /**
+     * @param string $store_key
+     * @param string $sku
+     * @return array|null
+     */
+    static function getProductInfo(string $store_key, string $sku)
+    {
+        $product = Products::getSimpleProductInfo($store_key, $sku);
+
+        if($product) {
+            return $product;
+        }
+
+        $variant = Products::getVariantInfo($store_key, $sku);
+
+        if($variant) {
+            return $variant;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $store_key
+     * @param string $sku
+     * @return int|null
+     */
+    static function getSimpleProductID(string $store_key, string $sku)
+    {
+        $response =  Client::GET($store_key,'product.find.json', [
+            'find_where' => "model",
+            'find_value' => $sku
+        ]);
+
+        if($response->isNotSuccess()) {
+            return null;
+        }
+
+        return $response->content()['result']['product'][0]["id"];
+    }
+
+    /**
+     * @param string $store_key
+     * @param string $sku
+     * @return int|null
+     */
+    static function getVariantID(string $store_key, string $sku)
+    {
+        $response =  Client::GET($store_key,'product.child_item.find.json', [
+            'find_where' => "sku",
+            'find_value' => $sku
+        ]);
+
+        if($response->isNotSuccess()) {
+            return null;
+        }
+
+        return $response->content()['result']['children'][0]["id"];
+    }
+
+    /**
+     * @param string $store_key
+     * @param string $sku
+     * @return array|null
+     */
+    static function findSimpleProduct(string $store_key, string $sku)
+    {
+        $response =  Client::GET($store_key,'product.find.json', [
                 'find_where' => "model",
                 'find_value' => $sku,
 //                'store_id' => 0
@@ -119,17 +196,13 @@ class Products extends Entity
     }
 
     /**
+     * @param string $store_key
      * @param string $sku
      * @return array|null
-     * @throws Exception
      */
-    public function findVariant(string $sku)
+    static function findVariant(string $store_key, string $sku)
     {
-        if(empty($sku)) {
-            throw new Exception('SKU not specified');
-        }
-
-        $response = $this->client()->get('product.child_item.find.json', [
+        $response = Client::GET($store_key,'product.child_item.find.json', [
             'find_where' => 'sku',
             'find_value' => $sku,
 //            'store_id' => 0
@@ -143,25 +216,22 @@ class Products extends Entity
     }
 
     /**
+     * @param string $store_key
      * @param int $product_id
      * @return RequestResponse
-     * @throws Exception
      */
-    public function deleteProduct(int $product_id)
+    static function deleteProduct(string $store_key, int $product_id)
     {
-        if(empty($product_id)) {
-            throw new Exception('Product_id not specified');
-        }
-
-        return $this->client()->delete('product.delete.json', ['id' => $product_id]);
+        return Client::DELETE($store_key,'product.delete.json', ['id' => $product_id]);
     }
 
     /**
+     * @param string $store_key
      * @param array $product_data
      * @return RequestResponse
      * @throws Exception
      */
-    public function createSimpleProduct(array $product_data)
+    static function createSimpleProduct(string $store_key, array $product_data)
     {
         $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
@@ -169,7 +239,7 @@ class Products extends Entity
         $product["available_for_view"] = false;
         $product["available_for_sale"] = false;
 
-        $response = $this->client()->post('product.add.json', $product);
+        $response = Client::POST($store_key,'product.add.json', $product);
 
         if($response->isNotSuccess()) {
             Log::error('Product create failed', $response->content());
@@ -180,17 +250,18 @@ class Products extends Entity
     }
 
     /**
+     * @param string $store_key
      * @param array $product_data
      * @return RequestResponse
      * @throws Exception
      */
-    public function updateSimpleProduct(array $product_data)
+    static function updateSimpleProduct(string $store_key, array $product_data)
     {
         $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
 
         $product = Arr::except($product, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        $response = $this->client()->post('product.update.json', $product);
+        $response = Client::POST($store_key, 'product.update.json', $product);
 
         if($response->isNotSuccess()) {
             Log::error('Product update failed', $response->content());
@@ -202,17 +273,18 @@ class Products extends Entity
 
     /**
      * This will only update variant product, will not update simple product
+     * @param string $store_key
      * @param array $variant_data
      * @return RequestResponse
      * @throws Exception
      */
-    public function updateVariant(array $variant_data)
+    static function updateVariant(string $store_key, array $variant_data)
     {
         $properties = Arr::only($variant_data, self::PRODUCT_ALLOWED_KEYS);
 
         $properties = Arr::except($properties, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        $response = $this->client()->post('product.variant.update.json', $properties);
+        $response = Client::POST($store_key,'product.variant.update.json', $properties);
 
         if($response->isNotSuccess()) {
             Log::error('Variant update failed', $response->content());
@@ -224,27 +296,28 @@ class Products extends Entity
     }
 
     /**
+     * @param string $store_key
      * @param array $product_data
      * @return RequestResponse
      * @throws Exception
      */
-    public function updateOrCreate(array $product_data)
+    static function updateOrCreate(string $store_key, array $product_data)
     {
-        $product = $this->findSimpleProduct($product_data['sku']);
+        $product_id = Products::getSimpleProductID($store_key, $product_data['sku']);
 
-        if(!empty($product)) {
-            $properties = array_merge($product_data, ['id' => $product["id"]]);
-            return $this->updateSimpleProduct($properties);
+        if(!empty($product_id)) {
+            $properties = array_merge($product_data, ['id' => $product_id]);
+            return Products::updateSimpleProduct($store_key, $properties);
         }
 
-        $variant = $this->findVariant($product_data['sku']);
+        $variant = Products::findVariant($store_key, $product_data['sku']);
 
         if(!empty($variant)) {
             $properties = array_merge($product_data, ['id' => $variant["id"]]);
-            return $this->updateVariant($properties);
+            return Products::updateVariant($store_key, $properties);
         }
 
-        return $this->createSimpleProduct($product_data);
+        return Products::createSimpleProduct($store_key, $product_data);
     }
 
 }

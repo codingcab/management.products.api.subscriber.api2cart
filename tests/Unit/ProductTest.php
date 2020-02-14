@@ -20,15 +20,6 @@ class ProductTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function test_if_findSimpleProduct_returns_array()
-    {
-        $manager = new Products(self::API2CART_DEMO_STORE_KEY);
-
-        $product = $manager->findSimpleProduct("123456");
-
-        $this->assertIsArray($product);
-    }
-
     public function test_getProductInfo_method()
     {
         $product = Products::getProductInfo(self::API2CART_DEMO_STORE_KEY, "123456");
