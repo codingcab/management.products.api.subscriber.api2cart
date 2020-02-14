@@ -247,6 +247,8 @@ class Products extends Entity
             throw new Exception("Request failed - $return_message", $response->getReturnCode());
         }
 
+        Log::info('Product created', $product_data);
+
         return $response;
     }
 
@@ -268,6 +270,8 @@ class Products extends Entity
             Log::error('Product update failed', $response->asArray());
             throw new Exception('Product update failed', $response->getReturnCode());
         }
+
+        Log::info('Product updated', $product_data);
 
         return $response;
     }
@@ -291,6 +295,8 @@ class Products extends Entity
             Log::error('Variant update failed', $response->asArray());
             throw new Exception('Variant update failed', $response->getReturnCode());
         }
+
+        Log::info("Variant updated", $variant_data);
 
         return $response;
 
