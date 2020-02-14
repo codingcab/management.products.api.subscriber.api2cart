@@ -53,6 +53,11 @@ class Products extends Entity
         return null;
     }
 
+    /**
+     * @param string $store_key
+     * @param string $sku
+     * @return array|null
+     */
     static function getSimpleProductInfo(string $store_key, string $sku)
     {
         $product_id = Products::getSimpleProductID($store_key, $sku);
@@ -79,6 +84,11 @@ class Products extends Entity
         return $product;
     }
 
+    /**
+     * @param string $store_key
+     * @param string $sku
+     * @return array|null
+     */
     static function getVariantInfo(string $store_key, string $sku)
     {
         $variant_id = Products::getVariantID($store_key, $sku);
@@ -105,6 +115,11 @@ class Products extends Entity
         return $variant;
     }
 
+    /**
+     * @param string $store_key
+     * @param string $sku
+     * @return array|null
+     */
     static function getProductInfo(string $store_key, string $sku)
     {
         $product = Products::getSimpleProductInfo($store_key, $sku);
