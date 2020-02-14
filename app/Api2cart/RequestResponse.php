@@ -77,6 +77,14 @@ class RequestResponse
     }
 
     /**
+     * @return array
+     */
+    public function getResult()
+    {
+        return $this->content()["result"];
+    }
+
+    /**
      * @param int $return_code
      * @return bool
      */
