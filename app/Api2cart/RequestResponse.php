@@ -82,7 +82,7 @@ class RequestResponse
      */
     public function isReturnCode_OK()
     {
-        return $this->returnCode() == self::RETURN_CODE_OK;
+        return $this->isReturnCode(self::RETURN_CODE_OK);
     }
 
     /**
@@ -90,7 +90,7 @@ class RequestResponse
      */
     public function isReturnCode_ModelNotFound()
     {
-        return $this->returnCode() == self::RETURN_CODE_MODEL_NOT_FOUND;
+        return $this->isReturnCode(self::RETURN_CODE_MODEL_NOT_FOUND);
     }
 
     /**
@@ -98,6 +98,6 @@ class RequestResponse
      */
     public function isReturnCode_ProductSkuMustBeUnique()
     {
-        return $this->returnCode() == self::RETURN_CODE_PRODUCT_SKU_MUST_BE_UNIQUE;
+        return $this->isReturnCode(self::RETURN_CODE_PRODUCT_SKU_MUST_BE_UNIQUE);
     }
 }
