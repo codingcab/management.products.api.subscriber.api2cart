@@ -106,7 +106,7 @@ class Products extends Entity
             return null;
         }
 
-        $variant = $response->content()['result'];
+        $variant = $response->content()['result']["variant"];
 
         $variant["sku"]             = empty($variant["u_sku"]) ? $variant["u_model"] : $variant["u_sku"];
         $variant["model"]           = $variant["u_model"];
