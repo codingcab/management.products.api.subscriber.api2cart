@@ -69,6 +69,14 @@ class RequestResponse
     }
 
     /**
+     * @return string
+     */
+    public function getReturnMessage()
+    {
+        return $this->content()["return_message"];
+    }
+
+    /**
      * @param int $return_code
      * @return bool
      */
