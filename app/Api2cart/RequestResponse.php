@@ -10,6 +10,7 @@ class RequestResponse
 {
 
     const RETURN_CODE_OK = 0;
+    const RETURN_CODE_INCORRECT_API_KEY_OR_IP_ADDRESS = 2;
     const RETURN_CODE_MODEL_NOT_FOUND = 112;
     const RETURN_CODE_PRODUCT_SKU_MUST_BE_UNIQUE = 113;
 
