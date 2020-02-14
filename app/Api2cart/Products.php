@@ -243,7 +243,7 @@ class Products extends Entity
 
         if($response->isNotSuccess()) {
             $return_message = $response->getReturnMessage();
-            Log::error("Request failed - $return_message", $response->content());
+            Log::error("Request failed - $return_message", $response->asArray());
             throw new Exception("Request failed - $return_message", $response->getReturnCode());
         }
 
@@ -265,7 +265,7 @@ class Products extends Entity
         $response = Client::POST($store_key, 'product.update.json', $product);
 
         if($response->isNotSuccess()) {
-            Log::error('Product update failed', $response->content());
+            Log::error('Product update failed', $response->asArray());
             throw new Exception('Product update failed', $response->getReturnCode());
         }
 
@@ -288,7 +288,7 @@ class Products extends Entity
         $response = Client::POST($store_key,'product.variant.update.json', $properties);
 
         if($response->isNotSuccess()) {
-            Log::error('Variant update failed', $response->content());
+            Log::error('Variant update failed', $response->asArray());
             throw new Exception('Variant update failed', $response->getReturnCode());
         }
 

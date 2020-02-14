@@ -55,7 +55,7 @@ class RequestResponse
     /**
      * @return array
      */
-    public function content()
+    public function asArray()
     {
         return json_decode($this->response_content, true);
     }
@@ -65,7 +65,7 @@ class RequestResponse
      */
     public function getReturnCode()
     {
-        return $this->content()["return_code"];
+        return $this->asArray()["return_code"];
     }
 
     /**
@@ -73,7 +73,7 @@ class RequestResponse
      */
     public function getReturnMessage()
     {
-        return $this->content()["return_message"];
+        return $this->asArray()["return_message"];
     }
 
     /**
@@ -81,7 +81,7 @@ class RequestResponse
      */
     public function getResult()
     {
-        return $this->content()["result"];
+        return $this->asArray()["result"];
     }
 
     /**
