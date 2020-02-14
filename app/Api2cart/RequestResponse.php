@@ -69,6 +69,15 @@ class RequestResponse
     }
 
     /**
+     * @param int $return_code
+     * @return bool
+     */
+    public function isReturnCode(int $return_code)
+    {
+        return $this->returnCode() == $return_code;
+    }
+
+    /**
      * @return bool
      */
     public function isReturnCode_OK()
