@@ -49,7 +49,7 @@ class SyncProductJob implements ShouldQueue
 
         if($response->isNotSuccess()) {
             Log::error('Could not update Product', $this->_product_data);
-            Log::error('Received API2CART Response', $response->content());
+            Log::error('Received API2CART Response', $response->asArray());
             throw new Exception('Could not update Product');
         }
 

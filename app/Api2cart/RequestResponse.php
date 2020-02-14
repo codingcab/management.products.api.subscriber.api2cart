@@ -10,6 +10,7 @@ class RequestResponse
 {
 
     const RETURN_CODE_OK = 0;
+    const RETURN_CODE_INCORRECT_API_KEY_OR_IP_ADDRESS = 2;
     const RETURN_CODE_MODEL_NOT_FOUND = 112;
     const RETURN_CODE_PRODUCT_SKU_MUST_BE_UNIQUE = 113;
 
@@ -54,7 +55,7 @@ class RequestResponse
     /**
      * @return array
      */
-    public function content()
+    public function asArray()
     {
         return json_decode($this->response_content, true);
     }
@@ -62,9 +63,34 @@ class RequestResponse
     /**
      * @return int
      */
-    public function returnCode()
+    public function getReturnCode()
     {
-        return $this->content()["return_code"];
+        return $this->asArray()["return_code"];
+    }
+
+    /**
+     * @return string
+     */
+    public function getReturnMessage()
+    {
+        return $this->asArray()["return_message"];
+    }
+
+    /**
+     * @return array
+     */
+    public function getResult()
+    {
+        return $this->asArray()["result"];
+    }
+
+    /**
+     * @param int $return_code
+     * @return bool
+     */
+    public function isReturnCode(int $return_code)
+    {
+        return $this->getReturnCode() == $return_code;
     }
 
     /**
@@ -72,7 +98,7 @@ class RequestResponse
      */
     public function isReturnCode_OK()
     {
-        return $this->returnCode() == self::RETURN_CODE_OK;
+        return $this->isReturnCode(self::RETURN_CODE_OK);
     }
 
     /**
@@ -80,7 +106,7 @@ class RequestResponse
      */
     public function isReturnCode_ModelNotFound()
     {
-        return $this->returnCode() == self::RETURN_CODE_MODEL_NOT_FOUND;
+        return $this->isReturnCode(self::RETURN_CODE_MODEL_NOT_FOUND);
     }
 
     /**
@@ -88,6 +114,6 @@ class RequestResponse
      */
     public function isReturnCode_ProductSkuMustBeUnique()
     {
-        return $this->returnCode() == self::RETURN_CODE_PRODUCT_SKU_MUST_BE_UNIQUE;
+        return $this->isReturnCode(self::RETURN_CODE_PRODUCT_SKU_MUST_BE_UNIQUE);
     }
 }

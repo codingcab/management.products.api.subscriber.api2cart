@@ -23,7 +23,7 @@ class Client
 
         $query = array_merge($query, $params);
 
-        $response = self::client()->get($uri, ['query' => $query]);
+        $response = self::getGuzzleClient()->get($uri, ['query' => $query]);
 
         return new RequestResponse($response);
     }
@@ -41,7 +41,7 @@ class Client
             'store_key' => $store_key
         ];
 
-        $response = self::client()->post($uri, [
+        $response = self::getGuzzleClient()->post($uri, [
             'query' => $query,
             'json' => $data
         ]);
@@ -64,12 +64,12 @@ class Client
 
         $query = array_merge($query, $params);
 
-        $response =  self::client()->delete($uri, ['query' => $query]);
+        $response =  self::getGuzzleClient()->delete($uri, ['query' => $query]);
 
         return new RequestResponse($response);
     }
 
-    static function client()
+    static function getGuzzleClient()
     {
         return new GuzzleClient([
             'base_uri' =>  'https://api.api2cart.com/v1.1/',
