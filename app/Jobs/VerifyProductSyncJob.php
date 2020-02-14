@@ -66,6 +66,7 @@ class VerifyProductSyncJob implements ShouldQueue
         };
 
         $this->_results = $this->compareValues($this->_product_data, $product_now);
+        $this->_results['sku'] = $this->_product_data["sku"];
 
         if($this->getResults()["matching"]) {
             info('Product Sync Verification OK', $this->_results);
