@@ -242,8 +242,9 @@ class Products extends Entity
         $response = Client::POST($store_key,'product.add.json', $product);
 
         if($response->isNotSuccess()) {
-            Log::error('Product create failed', $response->content());
-            throw new Exception('Product create failed', $response->returnCode());
+            $return_message = $response->getReturnMessage();
+            Log::error("Request failed - $return_message", $response->content());
+            throw new Exception("Request failed - $return_message", $response->returnCode());
         }
 
         return $response;
