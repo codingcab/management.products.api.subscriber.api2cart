@@ -244,7 +244,7 @@ class Products extends Entity
         if($response->isNotSuccess()) {
             $return_message = $response->getReturnMessage();
             Log::error("Request failed - $return_message", $response->content());
-            throw new Exception("Request failed - $return_message", $response->returnCode());
+            throw new Exception("Request failed - $return_message", $response->getReturnCode());
         }
 
         return $response;
@@ -266,7 +266,7 @@ class Products extends Entity
 
         if($response->isNotSuccess()) {
             Log::error('Product update failed', $response->content());
-            throw new Exception('Product update failed', $response->returnCode());
+            throw new Exception('Product update failed', $response->getReturnCode());
         }
 
         return $response;
@@ -289,7 +289,7 @@ class Products extends Entity
 
         if($response->isNotSuccess()) {
             Log::error('Variant update failed', $response->content());
-            throw new Exception('Variant update failed', $response->returnCode());
+            throw new Exception('Variant update failed', $response->getReturnCode());
         }
 
         return $response;

@@ -63,7 +63,7 @@ class RequestResponse
     /**
      * @return int
      */
-    public function returnCode()
+    public function getReturnCode()
     {
         return $this->content()["return_code"];
     }
@@ -82,7 +82,7 @@ class RequestResponse
      */
     public function isReturnCode(int $return_code)
     {
-        return $this->returnCode() == $return_code;
+        return $this->getReturnCode() == $return_code;
     }
 
     /**
