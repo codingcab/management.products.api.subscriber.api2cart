@@ -9,6 +9,8 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class SyncProductJob implements ShouldQueue
@@ -45,6 +47,14 @@ class SyncProductJob implements ShouldQueue
      */
     public function handle()
     {
+        $cache_key = $this->_store_key.'.'.$this->_product_data["sku"];
+
+        $checksum = md5(Arr::query($this->_product_data));
+
+        if(Cache::get($cache_key) === $checksum) {
+            Log::info("Same update already pushed before, could be skipped but well... continue", $this->_product_data);
+        }
+
         $response = Products::updateOrCreate($this->_store_key, $this->_product_data);
 
         if($response->isNotSuccess()) {
@@ -52,10 +62,13 @@ class SyncProductJob implements ShouldQueue
             Log::error('Received API2CART Response', $response->asArray());
             throw new Exception('Could not update Product');
         }
+
+        Cache::put($cache_key, $checksum, 1440);
     }
 
     public function failed(Exception $exception)
     {
         Log::error('Job failed', $this->_product_data);
     }
+
 }
