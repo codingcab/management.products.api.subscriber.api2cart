@@ -56,9 +56,10 @@ class Products extends Entity
     /**
      * @param string $store_key
      * @param string $sku
+     * @param int|null $store_id
      * @return array|null
      */
-    static function getSimpleProductInfo(string $store_key, string $sku)
+    static function getSimpleProductInfo(string $store_key, string $sku, int $store_id = null)
     {
         $product_id = Products::getSimpleProductID($store_key, $sku);
 
@@ -66,10 +67,16 @@ class Products extends Entity
             return null;
         }
 
-        $response =  Client::GET($store_key,'product.info.json', [
-            'id' => $product_id,
-            'params' => "force_all"
-        ]);
+        $params = [
+            "id" => $product_id,
+            "params" => "force_all",
+        ];
+
+        if($store_id) {
+            $params["store_id"] = $store_id;
+        }
+
+        $response =  Client::GET($store_key,'product.info.json', $params);
 
         if($response->isNotSuccess()) {
             return null;
@@ -88,9 +95,10 @@ class Products extends Entity
     /**
      * @param string $store_key
      * @param string $sku
+     * @param int|null $store_id
      * @return array|null
      */
-    static function getVariantInfo(string $store_key, string $sku)
+    static function getVariantInfo(string $store_key, string $sku, int $store_id = null)
     {
         $variant_id = Products::getVariantID($store_key, $sku);
 
@@ -98,10 +106,16 @@ class Products extends Entity
             return null;
         }
 
-        $response =  Client::GET($store_key,'product.variant.info.json', [
-            'id' => $variant_id,
-            'params' => "force_all"
-        ]);
+        $params = [
+            "id" => $variant_id,
+            "params" => "force_all",
+        ];
+
+        if($store_id) {
+            $params["store_id"] = $store_id;
+        }
+
+        $response =  Client::GET($store_key,'product.variant.info.json', $params);
 
         if($response->isNotSuccess()) {
             return null;
@@ -120,17 +134,18 @@ class Products extends Entity
     /**
      * @param string $store_key
      * @param string $sku
+     * @param int|null $store_id
      * @return array|null
      */
-    static function getProductInfo(string $store_key, string $sku)
+    static function getProductInfo(string $store_key, string $sku, int $store_id = null)
     {
-        $product = Products::getSimpleProductInfo($store_key, $sku);
+        $product = Products::getSimpleProductInfo($store_key, $sku, $store_id);
 
         if($product) {
             return $product;
         }
 
-        $variant = Products::getVariantInfo($store_key, $sku);
+        $variant = Products::getVariantInfo($store_key, $sku, $store_id);
 
         if($variant) {
             return $variant;
