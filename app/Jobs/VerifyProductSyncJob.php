@@ -61,17 +61,22 @@ class VerifyProductSyncJob implements ShouldQueue
         $product_now = Products::getProductInfo($this->_store_key, $this->_product_data["sku"]);
 
         if(empty($product_now)) {
-            Log::alert("Verify Product Failed - could not find product", ["sku" => $this->_product_data["sku"]]);
+            Log::alert("Update Check FAILED - Could not find product", ["sku" => $this->_product_data["sku"]]);
             return;
         };
 
         $this->_results = $this->compareValues($this->_product_data, $product_now);
         $this->_results['sku'] = $this->_product_data["sku"];
 
+        $context = [
+            "type" => $product_now["type"],
+            "sku" => $product_now["sku"],
+        ];
+
         if($this->getResults()["matching"]) {
-            info('Product Sync Verification OK', $this->_results);
+            info('Update Check OK', $context);
         } else {
-            Log::alert("Product Sync Verification Failed", $this->_results);
+            Log::alert("Update Check FAILED", array_merge($context, $this->_results));
         }
 
     }

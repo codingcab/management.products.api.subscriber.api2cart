@@ -77,6 +77,7 @@ class Products extends Entity
 
         $product = $response->getResult();
 
+        $product["type"]            = "product";
         $product["sku"]             = empty($product["u_sku"]) ? $product["u_model"] : $product["u_sku"];
         $product["model"]           = $product["u_model"];
         $product["special_price"]   = $product["special_price"]["value"];
@@ -108,6 +109,7 @@ class Products extends Entity
 
         $variant = $response->getResult()["variant"];
 
+        $variant['type']            = "variant";
         $variant["sku"]             = empty($variant["u_sku"]) ? $variant["u_model"] : $variant["u_sku"];
         $variant["model"]           = $variant["u_model"];
         $variant["special_price"]   = $variant["special_price"]["value"];
