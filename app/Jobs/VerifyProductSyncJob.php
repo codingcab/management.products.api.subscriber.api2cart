@@ -68,10 +68,15 @@ class VerifyProductSyncJob implements ShouldQueue
         $this->_results = $this->compareValues($this->_product_data, $product_now);
         $this->_results['sku'] = $this->_product_data["sku"];
 
+        $context = [
+            "type" => $product_now["type"],
+            "sku" => $product_now["sku"],
+        ];
+
         if($this->getResults()["matching"]) {
-            info('Update Check OK', $this->_results);
+            info('Update Check OK', $context);
         } else {
-            Log::alert("Update Check FAILED", $this->_results);
+            Log::alert("Update Check FAILED", array_merge($context, $this->_results));
         }
 
     }
