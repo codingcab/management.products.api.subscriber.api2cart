@@ -72,6 +72,7 @@ class VerifyProductSyncJob implements ShouldQueue
         $context = [
             "type" => $product_now["type"],
             "sku" => $product_now["sku"],
+            "store_id" => $store_id,
         ];
 
         if($this->getResults()["matching"]) {
