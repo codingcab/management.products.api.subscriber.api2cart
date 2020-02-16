@@ -20,7 +20,7 @@ class VerifyProductSyncJobTest extends TestCase
 
         $job->handle();
 
-        $this->assertTrue($job->getResults()["matching"]);
+        $this->assertTrue(empty($job->getResults()["differences"]));
     }
 
     public function test_when_price_not_matching()
@@ -33,7 +33,7 @@ class VerifyProductSyncJobTest extends TestCase
 
         $job->handle();
 
-        $this->assertFalse($job->getResults()["matching"]);
+        $this->assertFalse(empty($job->getResults()["differences"]));
     }
 
     public function test_when_special_price_not_matching()
@@ -46,7 +46,7 @@ class VerifyProductSyncJobTest extends TestCase
 
         $job->handle();
 
-        $this->assertFalse($job->getResults()["matching"]);
+        $this->assertFalse(empty($job->getResults()["differences"]));
     }
 
     public function test_when_quantity_not_matching()
@@ -59,7 +59,7 @@ class VerifyProductSyncJobTest extends TestCase
 
         $job->handle();
 
-        $this->assertFalse($job->getResults()["matching"]);
+        $this->assertFalse(empty($job->getResults()["differences"]));
     }
 
     public function test_when_multiple_not_matching()
@@ -74,6 +74,6 @@ class VerifyProductSyncJobTest extends TestCase
 
         $job->handle();
 
-        $this->assertFalse($job->getResults()["matching"]);
+        $this->assertFalse(empty($job->getResults()["differences"]));
     }
 }

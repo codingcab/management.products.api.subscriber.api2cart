@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Api2cart\Products;
+use App\Http\Kernel;
 use Exception;
 use Hamcrest\Thingy;
 use Illuminate\Bus\Queueable;
@@ -67,18 +68,17 @@ class VerifyProductSyncJob implements ShouldQueue
             return;
         };
 
-        $this->_results = $this->compareValues($this->_product_data, $product_now);
-
-        $context = [
+        $this->_results = [
             "type" => $product_now["type"],
             "sku" => $product_now["sku"],
             "store_id" => $store_id,
+            "differences" => $this->getDifferences($this->_product_data, $product_now)
         ];
 
-        if($this->getResults()["matching"]) {
-            info('Update Check OK', $context);
+        if(empty($this->_results["differences"])) {
+            info('Update Check OK', $this->_results);
         } else {
-            Log::alert("Update Check FAILED", array_merge($context, $this->_results));
+            Log::alert("Update Check FAILED", $this->_results);
         }
 
     }
@@ -96,7 +96,7 @@ class VerifyProductSyncJob implements ShouldQueue
      * @param array $actual
      * @return array
      */
-    private function compareValues(array $expected, array $actual): array
+    private function getDifferences(array $expected, array $actual): array
     {
         $keys_to_verify = [
             "price",
@@ -106,31 +106,18 @@ class VerifyProductSyncJob implements ShouldQueue
 
         $expected_data = Arr::only($expected, $keys_to_verify);
 
-        $actual_data = Arr::only($actual, $keys_to_verify);;
+        $differences = [];
 
-        $difference = array_diff($expected_data, $actual_data);
+        foreach (array_keys($expected_data) as $key ) {
+            if((!Arr::has($actual, $key)) or ($expected_data[$key] != $actual[$key])) {
+                $differences[$key] = [
+                    "expected" => $expected_data[$key],
+                    "actual" => $actual[$key]
+                ];
+            }
+        }
 
-        // reverse arrays so it looks like this
-        // [
-        //  "price" => [
-        //      "actual"   => 4,
-        //      "expected" => 3
-        //      ]
-        // ]
-        array_walk($expected_data, function (&$a, $b) {
-            $a = ["expected" => $a];
-        });
-
-        array_walk($actual_data, function (&$a, $b) {
-            $a = ["actual" => $a];
-        });
-
-        return array_merge(
-            Arr::dot($expected_data),
-            Arr::dot($actual_data),
-            Arr::dot(["difference" => array_keys($difference)]),
-            ["matching" => empty($difference)]
-        );
+        return Arr::dot($differences);
     }
 
 }
