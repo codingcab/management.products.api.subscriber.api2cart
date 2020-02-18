@@ -27,7 +27,7 @@ class ProductsController extends SnsController
             $product_data['store_id'] = $store_id;
         }
 
-        $this->dispatchSyncProductJob($store_key, $product_data);
+        SyncProductJob::dispatch($store_key, $product_data);
 
         return $this->respond_200_OK();
     }
@@ -60,30 +60,5 @@ class ProductsController extends SnsController
         }
 
         return $product;
-    }
-
-    /**
-     * This function will randomly dispatch VerifyProductSyncJob with chain
-     * idea is to verify some product updates
-     *
-     * @param string $store_key
-     * @param array $product_data
-     * @throws Exception
-     */
-    private function dispatchSyncProductJob(string $store_key, array $product_data): void
-    {
-        // 1,100 will execute more less on 1% jobs
-        // 1,500 will execute more less on 0.2% jobs
-        // 1,1000 will execute more less on 0.1% jobs
-        $random_int = random_int(1,10);
-
-        if($random_int <> 1) {
-            SyncProductJob::dispatch($store_key, $product_data);
-        } else {
-            SyncProductJob::withChain([
-                (new VerifyProductSyncJob($store_key, $product_data))->onConnection('sync')
-            ])->dispatch($store_key, $product_data);
-        }
-
     }
 }

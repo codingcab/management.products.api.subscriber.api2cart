@@ -64,6 +64,16 @@ class SyncProductJob implements ShouldQueue
         }
 
         Cache::put($cache_key, $checksum, 1440);
+
+        // 1,10 will execute more less on 10% jobs
+        // 1,100 will execute more less on 1% jobs
+        // 1,500 will execute more less on 0.2% jobs
+        // 1,1000 will execute more less on 0.1% jobs
+        $random_int = random_int(1,10);
+
+        if($random_int <> 1) {
+            VerifyProductSyncJob::dispatchNow($this->_store_key, $this->_product_data);
+        }
     }
 
     public function failed(Exception $exception)
