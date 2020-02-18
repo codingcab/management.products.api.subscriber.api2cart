@@ -260,8 +260,8 @@ class Products extends Entity
 
         if($response->isNotSuccess()) {
             $return_message = $response->getReturnMessage();
-            Log::error("Request failed - $return_message", $response->asArray());
-            throw new Exception("Request failed - $return_message", $response->getReturnCode());
+            Log::error("product.add.json failed - $return_message", $response->asArray());
+            throw new Exception("product.add.json - $return_message", $response->getReturnCode());
         }
 
         Log::info('Product created', $product_data);
@@ -284,8 +284,8 @@ class Products extends Entity
         $response = Client::POST($store_key, 'product.update.json', $product);
 
         if($response->isNotSuccess()) {
-            Log::error('Product update failed', $response->asArray());
-            throw new Exception('Product update failed', $response->getReturnCode());
+            Log::error('product.update.json failed', $response->asArray());
+            throw new Exception('product.update.json failed', $response->getReturnCode());
         }
 
         Log::info('Product updated', $product_data);
@@ -309,8 +309,8 @@ class Products extends Entity
         $response = Client::POST($store_key,'product.variant.update.json', $properties);
 
         if($response->isNotSuccess()) {
-            Log::error('Variant update failed', $response->asArray());
-            throw new Exception('Variant update failed', $response->getReturnCode());
+            Log::error('product.variant.update.json failed', $response->asArray());
+            throw new Exception('product.variant.update.json failed', $response->getReturnCode());
         }
 
         Log::info("Variant updated", $variant_data);
@@ -341,7 +341,11 @@ class Products extends Entity
             return Products::updateVariant($store_key, $properties);
         }
 
-        return Products::createSimpleProduct($store_key, $product_data);
+        $response = Products::createSimpleProduct($store_key, $product_data);
+
+        if($response->isSuccess()) {
+            return $response;
+        }
     }
 
 }
