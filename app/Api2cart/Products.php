@@ -85,7 +85,7 @@ class Products extends Entity
         $product = $response->getResult();
 
         $product["type"]            = "product";
-        $product["sku"]             = & empty($product["u_sku"]) ? $product["u_model"] : $product["u_sku"];
+        $product["sku"]             = empty($product["u_sku"]) ? $product["u_model"] : $product["u_sku"];
         $product["model"]           = $product["u_model"];
         $product["special_price"]   = $product["special_price"]["value"];
         $product["sprice_create"]   = $product["special_price"]["created_at"]["value"];
