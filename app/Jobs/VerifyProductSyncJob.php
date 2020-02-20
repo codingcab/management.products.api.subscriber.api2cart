@@ -101,6 +101,8 @@ class VerifyProductSyncJob implements ShouldQueue
         $keys_to_verify = [
             "price",
             "special_price",
+            "sprice_create",
+            "sprice_expire",
             "quantity"
         ];
 
