@@ -88,8 +88,9 @@ class Products extends Entity
         $product["type"]            = "product";
         $product["sku"]             = empty($product["u_sku"]) ? $product["u_model"] : $product["u_sku"];
         $product["model"]           = $product["u_model"];
-        $product["sprice_create"]   = $product["special_price"]["created_at"]["value"];
-        $product["sprice_expire"]   = $product["special_price"]["expired_at"]["value"];
+        $product["sprice_create"]   = empty($product["sprice_create"])? "2000-01-01 00:00:00":$product["special_price"]["created_at"]["value"];
+        $product["sprice_expire"]   = empty($product["sprice_expire"])? "2000-01-01 00:00:00":$product["special_price"]["expired_at"]["value"];
+
         $product["special_price"]   = $product["special_price"]["value"];
 
         return $product;
