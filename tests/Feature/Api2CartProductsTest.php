@@ -10,7 +10,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class Api2CartProductsTest extends TestCase
 {
     const API2CART_DEMO_STORE_KEY = "ed58a22dfecb405a50ea3ea56979360d";
-//    const API2CART_DEMO_STORE_KEY = "0e3019747ee35c4a298a2f519e216688";
 
     const SAMPLE_PRODUCT = [
         "sku" => "123456",
