@@ -84,12 +84,13 @@ class Products extends Entity
 
         $product = $response->getResult();
 
+
         $product["type"]            = "product";
         $product["sku"]             = empty($product["u_sku"]) ? $product["u_model"] : $product["u_sku"];
         $product["model"]           = $product["u_model"];
-        $product["special_price"]   = $product["special_price"]["value"];
         $product["sprice_create"]   = $product["special_price"]["created_at"]["value"];
         $product["sprice_expire"]   = $product["special_price"]["expired_at"]["value"];
+        $product["special_price"]   = $product["special_price"]["value"];
 
         return $product;
     }
@@ -253,6 +254,11 @@ class Products extends Entity
     static function createSimpleProduct(string $store_key, array $product_data)
     {
         $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
+
+        if(!Arr::has($product_data, "model"))
+        {
+            $product["model"] = $product_data["sku"];
+        }
 
         // disable new products
         $product["available_for_view"] = false;
