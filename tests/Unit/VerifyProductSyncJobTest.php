@@ -12,6 +12,39 @@ class VerifyProductSyncJobTest extends TestCase
 {
     const API2CART_DEMO_STORE_KEY = "ed58a22dfecb405a50ea3ea56979360d";
 
+    public function test_active_sale_dates_comparison()
+    {
+        Products::updateOrCreate(self::API2CART_DEMO_STORE_KEY, [
+            "sku" => "123456",
+            "price" => 10,
+            "special_price" => 5,
+            "sprice_create" => "2019-05-06 00:00:00",
+            "sprice_expire" => "2030-05-10 00:00:00"
+        ]);
+
+        $product_data = Products::getProductInfo(self::API2CART_DEMO_STORE_KEY, "123456");
+
+        $job = new VerifyProductSyncJob(self::API2CART_DEMO_STORE_KEY, $product_data);
+
+        $job->handle();
+
+        $this->assertTrue(empty($job->getResults()["differences"]));
+    }
+
+    public function test_inactive_sale_dates_comparison()
+    {
+        $product_data = Products::getProductInfo(self::API2CART_DEMO_STORE_KEY, "123456");
+
+        $product_data["sprice_create"] = "2019-05-06 00:00:00";
+        $product_data["sprice_expire"] = "2019-05-10 00:00:00";
+
+        $job = new VerifyProductSyncJob(self::API2CART_DEMO_STORE_KEY, $product_data);
+
+        $job->handle();
+
+        $this->assertTrue(empty($job->getResults()["differences"]));
+    }
+
     public function test_when_all_matching()
     {
         $product_data = Products::getProductInfo(self::API2CART_DEMO_STORE_KEY, "123456");
