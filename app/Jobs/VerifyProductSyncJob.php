@@ -109,7 +109,8 @@ class VerifyProductSyncJob implements ShouldQueue
         ];
 
 
-        if(Carbon::createFromTimeString($expected["sprice_expire"])->isFuture()) {
+        if ((Arr::has($expected, "sprice_expire")) &&
+            (Carbon::createFromTimeString($expected["sprice_expire"])->isFuture())) {
 
             $keys_to_verify = array_merge($keys_to_verify, [
                 "sprice_create",
