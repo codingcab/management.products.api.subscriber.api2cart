@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Api2cart\Products;
 use App\Http\Kernel;
+use Carbon\Carbon;
 use Exception;
 use Hamcrest\Thingy;
 use Illuminate\Bus\Queueable;
@@ -98,23 +99,33 @@ class VerifyProductSyncJob implements ShouldQueue
      */
     private function getDifferences(array $expected, array $actual): array
     {
+        // initialize variables
+        $differences = [];
+
         $keys_to_verify = [
             "price",
             "special_price",
-            "sprice_create",
-            "sprice_expire",
             "quantity"
         ];
 
-        $expected_data = Arr::only($expected, $keys_to_verify);
 
-        $differences = [];
+        if(Carbon::createFromTimeString($expected["sprice_expire"])->isFuture()) {
+
+            $keys_to_verify = array_merge($keys_to_verify, [
+                "sprice_create",
+                "sprice_expire",
+            ]);
+
+        }
+
+        $expected_data = Arr::only($expected, $keys_to_verify);
+        $actual_data   = Arr::only($actual, $keys_to_verify);
 
         foreach (array_keys($expected_data) as $key ) {
-            if((!Arr::has($actual, $key)) or ($expected_data[$key] != $actual[$key])) {
+            if((!Arr::has($actual_data, $key)) or ($expected_data[$key] != $actual_data[$key])) {
                 $differences[$key] = [
                     "expected" => $expected_data[$key],
-                    "actual" => $actual[$key]
+                    "actual" => $actual_data[$key]
                 ];
             }
         }
