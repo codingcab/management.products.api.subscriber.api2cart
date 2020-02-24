@@ -37,6 +37,14 @@ class RequestResponse
     }
 
     /**
+     * @return string
+     */
+    public function getAsJson()
+    {
+        return $this->response_content;
+    }
+
+    /**
      * @return ResponseInterface
      */
     public function getResponseRaw()
