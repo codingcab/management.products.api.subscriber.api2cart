@@ -5,6 +5,7 @@ namespace App\Api2cart;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class Products extends Entity
@@ -186,6 +187,14 @@ class Products extends Entity
      */
     static function getSimpleProductID(string $store_key, string $sku)
     {
+        $cache_key = $store_key."_".$sku."_product_id";
+
+        $id = Cache::get($cache_key);
+
+        if($id) {
+            return $id;
+        }
+
         $response =  Client::GET($store_key,'product.find.json', [
             'find_where' => "model",
             'find_value' => $sku
@@ -195,7 +204,11 @@ class Products extends Entity
             return null;
         }
 
-        return $response->getResult()['product'][0]["id"];
+        $id = $response->getResult()['product'][0]["id"];
+
+        Cache::put($cache_key, $id, 60 * 24 * 7);
+
+        return $id;
     }
 
     /**
@@ -205,6 +218,14 @@ class Products extends Entity
      */
     static function getVariantID(string $store_key, string $sku)
     {
+        $cache_key = $store_key."_".$sku."_variant_id";
+
+        $id = Cache::get($cache_key);
+
+        if($id) {
+            return $id;
+        }
+
         $response =  Client::GET($store_key,'product.child_item.find.json', [
             'find_where' => "sku",
             'find_value' => $sku
@@ -214,7 +235,11 @@ class Products extends Entity
             return null;
         }
 
-        return $response->getResult()['children'][0]["id"];
+        $id = $response->getResult()['children'][0]["id"];
+
+        Cache::put($cache_key, $id, 60 * 24 * 7);
+
+        return $id;
     }
 
     /**
@@ -364,10 +389,10 @@ class Products extends Entity
             return Products::updateSimpleProduct($store_key, $properties);
         }
 
-        $variant = Products::findVariant($store_key, $product_data['sku']);
+        $variant_id = Products::getVariantID($store_key, $product_data['sku']);
 
-        if(!empty($variant)) {
-            $properties = array_merge($product_data, ['id' => $variant["id"]]);
+        if(!empty($variant_id)) {
+            $properties = array_merge($product_data, ['id' => $variant_id]);
             return Products::updateVariant($store_key, $properties);
         }
 
