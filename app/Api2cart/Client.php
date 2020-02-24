@@ -32,7 +32,7 @@ class Client
            "query" => $query,
            "response" => [
                 "status_code" => $response->getResponseRaw()->getStatusCode(),
-                "body" => $response->getAsJson()
+                "body" => $response->asArray()
            ]
         ]);
 
