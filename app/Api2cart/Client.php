@@ -23,9 +23,20 @@ class Client
 
         $query = array_merge($query, $params);
 
-        $response = self::getGuzzleClient()->get($uri, ['query' => $query]);
+        $response = new RequestResponse(
+            self::getGuzzleClient()->get($uri, ['query' => $query])
+        );
 
-        return new RequestResponse($response);
+        logger("GET", [
+           "uri" => $uri,
+           "query" => $query,
+           "response" => [
+                "status_code" => $response->getResponseRaw()->getStatusCode(),
+                "body" => $response->getAsJson()
+           ]
+        ]);
+
+        return $response;
     }
 
     /**
