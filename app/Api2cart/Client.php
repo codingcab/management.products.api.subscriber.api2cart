@@ -52,12 +52,24 @@ class Client
             'store_key' => $store_key
         ];
 
-        $response = self::getGuzzleClient()->post($uri, [
-            'query' => $query,
-            'json' => $data
+        $response = new RequestResponse(
+            self::getGuzzleClient()->post($uri, [
+                'query' => $query,
+                'json' => $data
+            ])
+        );
+
+        logger("POST", [
+            "uri" => $uri,
+            "query" => $query,
+            "json" => $data,
+            "response" => [
+                "status_code" => $response->getResponseRaw()->getStatusCode(),
+                "body" => $response->asArray()
+            ]
         ]);
 
-        return new RequestResponse($response);
+        return $response;
     }
 
     /**
