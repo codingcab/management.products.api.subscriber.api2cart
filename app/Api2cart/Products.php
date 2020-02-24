@@ -377,10 +377,10 @@ class Products extends Entity
             return Products::updateSimpleProduct($store_key, $properties);
         }
 
-        $variant = Products::findVariant($store_key, $product_data['sku']);
+        $variant_id = Products::getVariantID($store_key, $product_data['sku']);
 
-        if(!empty($variant)) {
-            $properties = array_merge($product_data, ['id' => $variant["id"]]);
+        if(!empty($variant_id)) {
+            $properties = array_merge($product_data, ['id' => $variant_id]);
             return Products::updateVariant($store_key, $properties);
         }
 
