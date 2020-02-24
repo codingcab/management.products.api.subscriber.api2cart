@@ -69,7 +69,17 @@ class Products extends Entity
 
         $params = [
             "id" => $product_id,
-            "params" => "force_all",
+            "params" => implode(",",[
+                "id",
+                "model",
+                "u_model",
+                "sku",
+                "u_sku",
+                "price",
+                "special_price",
+                "stores_ids",
+                "quantity"
+            ]),
         ];
 
         if($store_id) {
