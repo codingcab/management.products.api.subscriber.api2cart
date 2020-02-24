@@ -37,6 +37,14 @@ class RequestResponse
     }
 
     /**
+     * @return ResponseInterface
+     */
+    public function getResponseRaw()
+    {
+        return $this->response;
+    }
+
+    /**
      * @return bool
      */
     public function isSuccess()
