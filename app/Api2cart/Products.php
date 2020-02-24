@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use function GuzzleHttp\Psr7\_caseless_remove;
 
 class Products extends Entity
 {
@@ -382,25 +383,74 @@ class Products extends Entity
      */
     static function updateOrCreate(string $store_key, array $product_data)
     {
-        $product_id = Products::getSimpleProductID($store_key, $product_data['sku']);
+        $product = Products::getProductTypeAndId($store_key, $product_data['sku']);
 
-        if(!empty($product_id)) {
-            $properties = array_merge($product_data, ['id' => $product_id]);
-            return Products::updateSimpleProduct($store_key, $properties);
+        switch ($product["type"]) {
+            case "product":
+                $properties = array_merge($product_data, ['id' => $product["id"]]);
+                return Products::updateSimpleProduct($store_key, $properties);
+                break;
+            case "variant":
+                $properties = array_merge($product_data, ['id' => $product["id"]]);
+                return Products::updateVariant($store_key, $properties);
+                break;
+            default:
+                return Products::createSimpleProduct($store_key, $product_data);
+                break;
         }
 
-        $variant_id = Products::getVariantID($store_key, $product_data['sku']);
 
-        if(!empty($variant_id)) {
-            $properties = array_merge($product_data, ['id' => $variant_id]);
-            return Products::updateVariant($store_key, $properties);
+    }
+
+    /**
+     * @param string $store_key
+     * @param string $sku
+     * @return array
+     */
+    private static function getProductTypeAndId(string $store_key, string $sku)
+    {
+        $cache_key = $store_key."_".$sku."_getProductTypeAndId";
+
+        $cached_product = Cache::get($cache_key);
+
+        if($cached_product) {
+            return $cached_product;
         }
 
-        $response = Products::createSimpleProduct($store_key, $product_data);
+        $product_id = Products::getSimpleProductID($store_key, $sku);
 
-        if($response->isSuccess()) {
-            return $response;
+        if (!empty($product_id)) {
+
+            $product = [
+                "type" => "product",
+                "id" => $product_id
+            ];
+
+            Cache::put($cache_key, $product, 60 * 24 * 7);
+
+            return $product;
         }
+
+        $variant_id = Products::getVariantID($store_key, $sku);
+
+        if (!empty($variant_id)) {
+
+            $product = [
+                "type" => "variant",
+                "id" => $variant_id
+            ];
+
+            Cache::put($cache_key, $product, 60 * 24 * 7);
+
+            return $product;
+
+        }
+
+        return [
+            "type" => null,
+            "id" => null
+        ];
+
     }
 
 }
