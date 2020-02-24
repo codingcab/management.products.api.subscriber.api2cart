@@ -5,6 +5,7 @@ namespace App\Api2cart;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class Products extends Entity
@@ -186,6 +187,14 @@ class Products extends Entity
      */
     static function getSimpleProductID(string $store_key, string $sku)
     {
+        $cache_key = $store_key."_".$sku."_product_id";
+
+        $id = Cache::get($cache_key);
+
+        if($id) {
+            return $id;
+        }
+
         $response =  Client::GET($store_key,'product.find.json', [
             'find_where' => "model",
             'find_value' => $sku
@@ -195,7 +204,11 @@ class Products extends Entity
             return null;
         }
 
-        return $response->getResult()['product'][0]["id"];
+        $id = $response->getResult()['product'][0]["id"];
+
+        Cache::put($cache_key, $id, 60 * 24 * 7);
+
+        return $id;
     }
 
     /**
