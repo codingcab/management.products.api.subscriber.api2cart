@@ -409,30 +409,48 @@ class Products extends Entity
      */
     private static function getProductTypeAndId(string $store_key, string $sku)
     {
-        $product = [
-            "type" => null,
-            "id" => null
-        ];
+        $cache_key = $store_key."_".$sku."_getProductTypeAndId";
+
+        $cached_product = Cache::get($cache_key);
+
+        if($cached_product) {
+            return $cached_product;
+        }
 
         $product_id = Products::getSimpleProductID($store_key, $sku);
 
         if (!empty($product_id)) {
+
             $product = [
                 "type" => "product",
                 "id" => $product_id
             ];
+
+            Cache::put($cache_key, $product, 60 * 24 * 7);
+
+            return $product;
         }
 
         $variant_id = Products::getVariantID($store_key, $sku);
 
         if (!empty($variant_id)) {
+
             $product = [
                 "type" => "variant",
                 "id" => $variant_id
             ];
+
+            Cache::put($cache_key, $product, 60 * 24 * 7);
+
+            return $product;
+
         }
 
-        return $product;
+        return [
+            "type" => null,
+            "id" => null
+        ];
+
     }
 
 }
