@@ -218,6 +218,14 @@ class Products extends Entity
      */
     static function getVariantID(string $store_key, string $sku)
     {
+        $cache_key = $store_key."_".$sku."_variant_id";
+
+        $id = Cache::get($cache_key);
+
+        if($id) {
+            return $id;
+        }
+
         $response =  Client::GET($store_key,'product.child_item.find.json', [
             'find_where' => "sku",
             'find_value' => $sku
@@ -227,7 +235,11 @@ class Products extends Entity
             return null;
         }
 
-        return $response->getResult()['children'][0]["id"];
+        $id = $response->getResult()['children'][0]["id"];
+
+        Cache::put($cache_key, $id, 60 * 24 * 7);
+
+        return $id;
     }
 
     /**
