@@ -98,8 +98,8 @@ class Products extends Entity
         $product["type"]            = "product";
         $product["sku"]             = empty($product["u_sku"]) ? $product["u_model"] : $product["u_sku"];
         $product["model"]           = $product["u_model"];
-        $product["sprice_create"]   = empty($product["sprice_create"])? "1900-01-01 00:00:00":$product["special_price"]["created_at"]["value"];
-        $product["sprice_expire"]   = empty($product["sprice_expire"])? "1900-01-01 00:00:00":$product["special_price"]["expired_at"]["value"];
+        $product["sprice_create"]   = empty($product["special_price"]["created_at"]) ? "1900-01-01 00:00:00" : $product["special_price"]["created_at"]["value"];
+        $product["sprice_expire"]   = empty($product["special_price"]["expired_at"]) ? "1900-01-01 00:00:00" : $product["special_price"]["expired_at"]["value"];
 
         $product["special_price"]   = $product["special_price"]["value"];
 
@@ -140,9 +140,8 @@ class Products extends Entity
         $variant['type']            = "variant";
         $variant["sku"]             = empty($variant["u_sku"]) ? $variant["u_model"] : $variant["u_sku"];
         $variant["model"]           = $variant["u_model"];
-
-        $variant["sprice_create"]   = empty($variant["sprice_create"])? "1900-01-01 00:00:00":$variant["special_price"]["created_at"]["value"];
-        $variant["sprice_expire"]   = empty($variant["sprice_expire"])? "1900-01-01 00:00:00":$variant["special_price"]["expired_at"]["value"];
+        $variant["sprice_create"]   = empty($variant["special_price"]["created_at"]) ? "1900-01-01 00:00:00":$variant["special_price"]["created_at"]["value"];
+        $variant["sprice_expire"]   = empty($variant["special_price"]["expired_at"]) ? "1900-01-01 00:00:00":$variant["special_price"]["expired_at"]["value"];
 
         $variant["special_price"]   = $variant["special_price"]["value"];
 
