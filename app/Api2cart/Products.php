@@ -7,7 +7,7 @@ use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use function GuzzleHttp\Psr7\_caseless_remove;
+use App\Api2cart\RequestResponse;
 
 class Products extends Entity
 {
@@ -340,14 +340,51 @@ class Products extends Entity
 
         $response = Client::POST($store_key, 'product.update.json', $product);
 
+        if($response->isSuccess()) {
+            Log::info('Product updated', $product_data);
+            return $response;
+        }
+
+        switch ($response->getReturnCode()) {
+            case RequestResponse::RETURN_CODE_MODEL_NOT_FOUND:
+                Products::assignStore($store_key, $product_data['id'], $product_data['store_id']);
+                return self::updateSimpleProduct($store_key, $product_data);
+                break;
+        }
+
         if($response->isNotSuccess()) {
             Log::error('product.update.json failed', $response->asArray());
             throw new Exception('product.update.json failed', $response->getReturnCode());
         }
 
-        Log::info('Product updated', $product_data);
-
         return $response;
+    }
+
+    /**
+     * @param string $store_key
+     * @param int $product_id
+     * @param int $store_id
+     * @return RequestResponse
+     * @throws Exception
+     */
+    static function assignStore(string $store_key, int $product_id, int $store_id)
+    {
+        $data = [
+            "product_id" => $product_id,
+            "store_id" => $store_id
+        ];
+
+        $response = Client::POST($store_key, 'product.store.assign.json', $data);
+
+        if($response->isNotSuccess()) {
+            Log::error('product.store.assign.json failed', $response->asArray());
+            throw new Exception('product.store.assign.json failed', $response->getReturnCode());
+        }
+
+        if($response->isSuccess()) {
+            Log::info('Store assigned', $data);
+            return $response;
+        }
     }
 
     /**
