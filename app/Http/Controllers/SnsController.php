@@ -24,26 +24,6 @@ abstract class SnsController extends BaseController
     abstract public function handleIncomingNotification(array $notification, string $store_key, int $store_id);
 
     /**
-     * @param Request $request
-     * @param string $store_key
-     * @param int $store_id
-     * @return JsonResponse
-     */
-    public function store(Request $request, string $store_key, int $store_id =  0)
-    {
-        $notification = json_decode($request->getContent(), true);
-
-        logger("SNS Notification Received", $notification);
-
-        if ($this->isSubscriptionConfirmation($notification)) {
-            return $this->subscribe($notification);
-        }
-
-        return $this->handleIncomingNotification($notification, $store_key, $store_id);
-    }
-
-
-    /**
      * @param array $notification
      * @return JsonResponse
      */

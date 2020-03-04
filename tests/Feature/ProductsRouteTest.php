@@ -19,6 +19,6 @@ class ProductsRouteTest extends TestCase
 
         $response = $this->json('POST',"/api/api2cart/$api2cart_store_key/products/store/0",[]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(422);
     }
 }
