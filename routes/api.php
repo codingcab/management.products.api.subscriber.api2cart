@@ -20,5 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('store/{store_key}/products', 'ProductsController@store');
 Route::post('store/{store_key}/products/view/{store_id}', 'ProductsController@store');
 
+Route::post('api2cart/{store_key}/products/store/{store_id}', 'ProductsController@store');
+
 Route::get('store/{store_key}/orders', 'OrdersController@index');
 
