@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\Log;
 
 class ProductsController extends SnsController
 {
+    const ALLOWED_KEYS = [
+        "sku",
+        "name",
+        "price",
+        "sale_price",
+        "sale_price_start_date",
+        "sale_price_end_date"
+    ];
+
     /**
      * @param ProductsPostRequest $request
      * @param string $store_key
@@ -43,16 +52,7 @@ class ProductsController extends SnsController
      */
     public function handleIncomingNotification(array $notification, string $store_key, int $store_id)
     {
-        $allowed_values = [
-            "sku",
-            "name",
-            "price",
-            "sale_price",
-            "sale_price_start_date",
-            "sale_price_end_date"
-        ];
-
-        $product_data =  Arr::only($notification, $allowed_values);
+        $product_data =  Arr::only($notification, self::ALLOWED_KEYS);
 
         $product_data['store_id'] = $store_id;
 
