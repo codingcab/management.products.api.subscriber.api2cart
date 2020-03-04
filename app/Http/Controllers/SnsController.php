@@ -24,30 +24,10 @@ abstract class SnsController extends BaseController
     abstract public function handleIncomingNotification(array $notification, string $store_key, int $store_id);
 
     /**
-     * @param Request $request
-     * @param string $store_key
-     * @param int $store_id
-     * @return JsonResponse
-     */
-    public function store(Request $request, string $store_key, int $store_id =  0)
-    {
-        $notification = json_decode($request->getContent(), true);
-
-        logger("SNS Notification Received", $notification);
-
-        if ($this->isSubscriptionConfirmation($notification)) {
-            return $this->subscribe($notification);
-        }
-
-        return $this->handleIncomingNotification($notification, $store_key, $store_id);
-    }
-
-
-    /**
      * @param array $notification
      * @return JsonResponse
      */
-    private function subscribe(array $notification)
+    public function subscribe(array $notification)
     {
         info("Subscribing to topic");
 
@@ -62,7 +42,7 @@ abstract class SnsController extends BaseController
      * @param array $notification
      * @return bool
      */
-    private function isSubscriptionConfirmation(array $notification): bool
+    public function isSubscriptionConfirmation(array $notification): bool
     {
         return Arr::has($notification, 'Type') && ($notification['Type'] == 'SubscriptionConfirmation');
     }
