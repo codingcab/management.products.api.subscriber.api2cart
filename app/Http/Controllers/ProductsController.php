@@ -25,7 +25,7 @@ class ProductsController extends SnsController
     {
         $notification = json_decode($request->getContent(), true);
 
-        logger("SNS Notification Received", $notification);
+        info("Product Update Request Received", $notification);
 
         if ($this->isSubscriptionConfirmation($notification)) {
             return $this->subscribe($notification);
