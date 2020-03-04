@@ -45,9 +45,7 @@ class ProductsController extends SnsController
     {
         $product_data = $this->generateProductData($notification);
 
-        if (isset($store_id) && ($store_id != 0)) {
-            $product_data['store_id'] = $store_id;
-        }
+        $product_data['store_id'] = $store_id;
 
         SyncProductJob::dispatch($store_key, $product_data);
 
