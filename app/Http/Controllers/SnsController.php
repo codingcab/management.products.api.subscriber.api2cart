@@ -17,14 +17,6 @@ abstract class SnsController extends BaseController
 
     /**
      * @param array $notification
-     * @param string $store_key
-     * @param int $store_id
-     * @return JsonResponse
-     */
-    abstract public function handleIncomingNotification(array $notification, string $store_key, int $store_id);
-
-    /**
-     * @param array $notification
      * @return JsonResponse
      */
     public function subscribe(array $notification)
