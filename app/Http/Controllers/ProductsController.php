@@ -32,27 +32,13 @@ class ProductsController extends SnsController
      */
     public function store(ProductsPostRequest $request, string $store_key, int $store_id =  0)
     {
-        info("Product Update Request Received", $request->all());
+        info("SKU Update Request", $request->all());
 
         if ($this->isSubscriptionConfirmation($request->all())) {
             return $this->subscribe($request->all());
         }
 
-        return $this->handleIncomingNotification($request->all(), $store_key, $store_id);
-    }
-
-    /**
-     * @param array $notification
-     * @param string $store_key
-     * @param int $store_id
-     * @return JsonResponse
-     * @throws Exception
-     */
-    public function handleIncomingNotification(array $notification, string $store_key, int $store_id)
-    {
-        $product_data =  Arr::only($notification, self::ALLOWED_KEYS);
-
-        $product_data['store_id'] = $store_id;
+        $product_data =  $request->only( self::ALLOWED_KEYS);
 
         SyncProductJob::dispatch($store_key, $product_data);
 
