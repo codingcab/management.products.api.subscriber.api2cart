@@ -63,6 +63,8 @@ class SyncProductJob implements ShouldQueue
             throw new Exception('Could not update Product');
         }
 
+        info("SKU updated", $this->_product_data);
+
         Cache::put($cache_key, $checksum, 1440);
 
         // 1,10 will execute more less on 10% jobs

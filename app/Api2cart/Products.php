@@ -338,10 +338,10 @@ class Products extends Entity
 
         $product = Arr::except($product, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        $response = Client::POST($store_key, 'product.update.json', $product);
+//        $response = Client::POST($store_key, 'product.update.json', $product);
+        $response = Client::GET($store_key, 'product.update.json', $product);
 
         if($response->isSuccess()) {
-            Log::info('Product updated', $product_data);
             return $response;
         }
 
@@ -400,14 +400,12 @@ class Products extends Entity
 
         $properties = Arr::except($properties, self::PRODUCT_DONT_UPDATE_KEYS);
 
-        $response = Client::POST($store_key,'product.variant.update.json', $properties);
+        $response = Client::GET($store_key,'product.variant.update.json', $properties);
 
         if($response->isNotSuccess()) {
             Log::error('product.variant.update.json failed', $response->asArray());
             throw new Exception('product.variant.update.json failed', $response->getReturnCode());
         }
-
-        Log::info("Variant updated", $variant_data);
 
         return $response;
 
