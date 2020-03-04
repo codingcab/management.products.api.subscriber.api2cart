@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Jobs\SyncProductJob;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -38,7 +40,7 @@ class ProductsRouteTest extends TestCase
 
     public function test_successful_request()
     {
-        Queue::fake();
+        Bus::fake();
 
         $api2cart_store_key = 'abc123';
 
@@ -55,5 +57,7 @@ class ProductsRouteTest extends TestCase
         $response = $this->json('POST',"/api/api2cart/$api2cart_store_key/products/store/0", $data);
 
         $response->assertStatus(200);
+
+        Bus::assertDispatched(SyncProductJob::class);
     }
 }
