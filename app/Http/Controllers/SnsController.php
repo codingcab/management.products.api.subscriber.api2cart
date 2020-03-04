@@ -27,7 +27,7 @@ abstract class SnsController extends BaseController
      * @param array $notification
      * @return JsonResponse
      */
-    private function subscribe(array $notification)
+    public function subscribe(array $notification)
     {
         info("Subscribing to topic");
 
@@ -42,7 +42,7 @@ abstract class SnsController extends BaseController
      * @param array $notification
      * @return bool
      */
-    private function isSubscriptionConfirmation(array $notification): bool
+    public function isSubscriptionConfirmation(array $notification): bool
     {
         return Arr::has($notification, 'Type') && ($notification['Type'] == 'SubscriptionConfirmation');
     }
