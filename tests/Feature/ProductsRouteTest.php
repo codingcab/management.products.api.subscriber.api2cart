@@ -17,7 +17,7 @@ class ProductsRouteTest extends TestCase
     {
         $api2cart_store_key = 'abc123';
 
-        $response = $this->json('POST',"/api/api2cart/$api2cart_store_key/products/store/0",null);
+        $response = $this->json('POST',"/api/api2cart/$api2cart_store_key/products/store/0",[]);
 
         $response->assertStatus(200);
     }
