@@ -55,7 +55,9 @@ class SyncProductJob implements ShouldQueue
             Log::info("Same update already pushed before, could be skipped but well... continue", $this->_product_data);
         }
 
-        $response = Products::updateOrCreate($this->_store_key, $this->_product_data);
+        $api2cart_parameters = $this->convert($this->_product_data);
+
+        $response = Products::updateOrCreate($this->_store_key, $api2cart_parameters);
 
         if($response->isNotSuccess()) {
             Log::error('Could not update Product', $this->_product_data);
@@ -81,6 +83,33 @@ class SyncProductJob implements ShouldQueue
     public function failed(Exception $exception)
     {
         Log::error('Job failed', $this->_product_data);
+    }
+
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function convert(array $data)
+    {
+        $product = [];
+
+        $product["sku"]             = $data["sku"];
+        $product["model"]           = $data["sku"];
+        $product["name"]            = $data["name"];
+        $product["description"]     = $data["name"];
+        $product["price"]           = $data["price"];
+        $product["special_price"]   = $data["sale_price"];
+        $product["sprice_create"]   = $data["sale_price_start_date"];
+        $product["sprice_expire"]   = $data["sale_price_end_date"];
+        $product["quantity"]        = intval($data["quantity_available"]);
+        $product["store_id"]        = $data["store_id"];
+
+        if ($product["quantity"] > 0) {
+            $product["in_stock"] = "True";
+        }
+
+        return $product;
     }
 
 }
