@@ -33,6 +33,10 @@ class ProductsController extends SnsController
      */
     public function store(Request $request, string $store_key, int $store_id =  0)
     {
+        $notification = json_decode($request->getContent(), true);
+
+        logger("SNS Notification Received", $notification);
+
         if ($this->isSubscriptionConfirmation($request->all())) {
             info("Received subscription confirmation");
             return $this->subscribe($request->all());
