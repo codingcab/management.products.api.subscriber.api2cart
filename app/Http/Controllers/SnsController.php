@@ -21,13 +21,16 @@ abstract class SnsController extends BaseController
      */
     public function subscribe(array $notification)
     {
-        $guzzleClient = new \GuzzleHttp\Client();
+        $guzzleClient = new \GuzzleHttp\Client([
+            'exceptions' => true
+        ]);
 
         $guzzleResponse = $guzzleClient->get($notification['SubscribeURL']);
 
-        info("Subscribed to topic");
-
-        return $this->respond_200_OK('Subscribed to topic successfully');
+        if($guzzleResponse->getStatusCode() ==  200) {
+            info("Subscribed to topic");
+            return $this->respond_200_OK('Subscribed to topic successfully');
+        }
     }
 
     /**
