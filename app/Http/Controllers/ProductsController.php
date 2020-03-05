@@ -20,7 +20,8 @@ class ProductsController extends SnsController
         "price",
         "sale_price",
         "sale_price_start_date",
-        "sale_price_end_date"
+        "sale_price_end_date",
+        "quantity_available"
     ];
 
     /**
