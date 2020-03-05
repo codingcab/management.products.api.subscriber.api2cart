@@ -13,10 +13,13 @@ class SyncProductJobTest extends TestCase
 
     const SAMPLE_PRODUCT = [
         "sku" => "123456",
-        "model" => "123456",
         "name" => "Sample product name",
-        "description" => "Sample product description",
-        "price" => 1
+        "price" => 2,
+        "sale_price" => 1,
+        "sale_price_start_date" => "2020-01-01 00:00:00",
+        "sale_price_end_date" => "2030-01-01 00:00:00",
+        "quantity_available" => 10,
+        "store_id" => 0
     ];
 
     public function test_if_job_runs()
