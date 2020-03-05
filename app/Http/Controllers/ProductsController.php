@@ -39,7 +39,9 @@ class ProductsController extends SnsController
             return $this->subscribe($request->all());
         }
 
-        $product_data =  $request->only( self::ALLOWED_KEYS);
+        $product_data = $request->only( self::ALLOWED_KEYS);
+
+        $product_data["store_id"] = $store_id;
 
         SyncProductJob::dispatch($store_key, $product_data);
 
