@@ -33,11 +33,12 @@ class ProductsController extends SnsController
      */
     public function store(ProductsPostRequest $request, string $store_key, int $store_id =  0)
     {
-        info("SKU Update Request", $request->all());
-
         if ($this->isSubscriptionConfirmation($request->all())) {
+            info("Received subscription confirmation");
             return $this->subscribe($request->all());
         }
+
+        info("SKU Update Request", $request->all());
 
         $product_data = $request->only( self::ALLOWED_KEYS);
 

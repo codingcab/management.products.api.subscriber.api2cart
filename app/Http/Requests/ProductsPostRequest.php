@@ -24,13 +24,13 @@ class ProductsPostRequest extends FormRequest
     public function rules()
     {
         return [
-            "sku" => "required",
-            "name" => "required",
-            "price" => "required",
-            "sale_price" => "required",
-            "sale_price_start_date" => "required",
-            "sale_price_end_date" => "required",
-            "quantity_available" => "required",
+//            "sku" => "required",
+//            "name" => "required",
+//            "price" => "required",
+//            "sale_price" => "required",
+//            "sale_price_start_date" => "required",
+//            "sale_price_end_date" => "required",
+//            "quantity_available" => "required",
         ];
     }
 }
