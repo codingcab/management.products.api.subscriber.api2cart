@@ -25,13 +25,13 @@ class ProductsController extends SnsController
     ];
 
     /**
-     * @param ProductsPostRequest $request
+     * @param Request $request
      * @param string $store_key
      * @param int $store_id
      * @return JsonResponse
      * @throws Exception
      */
-    public function store(ProductsPostRequest $request, string $store_key, int $store_id =  0)
+    public function store(Request $request, string $store_key, int $store_id =  0)
     {
         if ($this->isSubscriptionConfirmation($request->all())) {
             info("Received subscription confirmation");
