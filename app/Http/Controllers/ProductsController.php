@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class ProductsController extends SnsController
 {
@@ -36,6 +37,10 @@ class ProductsController extends SnsController
         $content = json_decode($request->getContent(), true);
 
         logger("Product Request Received", $content);
+
+        Validator::make($content, [
+            "sku" => "required"
+        ])->validate();
 
         if ($this->isSubscriptionConfirmation($content)) {
             return $this->subscribe($content);
