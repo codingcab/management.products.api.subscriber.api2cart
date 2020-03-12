@@ -302,7 +302,15 @@ class Products extends Entity
      */
     static function createSimpleProduct(string $store_key, array $product_data)
     {
-        $product = Arr::only($product_data, self::PRODUCT_ALLOWED_KEYS);
+        $fields = [
+            "sku",
+            "model",
+            "name",
+            "description",
+            "price"
+        ];
+
+        $product = Arr::only($product_data, $fields);
 
         if(!Arr::has($product_data, "model"))
         {
