@@ -36,29 +36,6 @@ class Products extends Entity
     /**
      * @param string $store_key
      * @param string $sku
-     * @return array|null
-     * @throws Exception
-     */
-    static function find(string $store_key, string $sku)
-    {
-        $product = Products::findSimpleProduct($store_key, $sku);
-
-        if($product) {
-            return $product;
-        }
-
-        $variant = Products::findVariant($store_key, $sku);
-
-        if($variant) {
-            return $variant;
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string $store_key
-     * @param string $sku
      * @param int|null $store_id
      * @return array|null
      */
@@ -246,46 +223,6 @@ class Products extends Entity
 
     /**
      * @param string $store_key
-     * @param string $sku
-     * @return array|null
-     */
-    static function findSimpleProduct(string $store_key, string $sku)
-    {
-        $response =  Client::GET($store_key,'product.find.json', [
-                'find_where' => "model",
-                'find_value' => $sku,
-//                'store_id' => 0
-            ]);
-
-        if($response->isSuccess()) {
-            return $response->getResult()['product'][0];
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string $store_key
-     * @param string $sku
-     * @return array|null
-     */
-    static function findVariant(string $store_key, string $sku)
-    {
-        $response = Client::GET($store_key,'product.child_item.find.json', [
-            'find_where' => 'sku',
-            'find_value' => $sku,
-//            'store_id' => 0
-        ]);
-
-        if($response->isSuccess()) {
-            return $response->getResult()['children'][0];
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string $store_key
      * @param int $product_id
      * @return RequestResponse
      */
@@ -323,15 +260,14 @@ class Products extends Entity
 
         $response = Client::POST($store_key,'product.add.json', $product);
 
-        if($response->isNotSuccess()) {
-            $return_message = $response->getReturnMessage();
-            Log::error("product.add.json failed - $return_message", $response->asArray());
-            throw new Exception("product.add.json - $return_message", $response->getReturnCode());
+        if($response->isSuccess()) {
+            Log::info('Product created', $product_data);
+            return $response;
         }
 
-        Log::info('Product created', $product_data);
-
+        Log::error("product.add.json failed", $response->asArray());
         return $response;
+
     }
 
     /**
@@ -346,10 +282,10 @@ class Products extends Entity
 
         $product = Arr::except($product, self::PRODUCT_DONT_UPDATE_KEYS);
 
-//        $response = Client::POST($store_key, 'product.update.json', $product);
         $response = Client::GET($store_key, 'product.update.json', $product);
 
         if($response->isSuccess()) {
+            info("Product updated", $product);
             return $response;
         }
 
@@ -360,11 +296,7 @@ class Products extends Entity
                 break;
         }
 
-        if($response->isNotSuccess()) {
-            Log::error('product.update.json failed', $response->asArray());
-            throw new Exception('product.update.json failed', $response->getReturnCode());
-        }
-
+        Log::error('product.update.json failed', $response->asArray());
         return $response;
     }
 
@@ -384,15 +316,13 @@ class Products extends Entity
 
         $response = Client::POST($store_key, 'product.store.assign.json', $data);
 
-        if($response->isNotSuccess()) {
-            Log::error('product.store.assign.json failed', $response->asArray());
-            throw new Exception('product.store.assign.json failed', $response->getReturnCode());
-        }
-
         if($response->isSuccess()) {
             Log::info('Store assigned', $data);
             return $response;
         }
+
+        Log::error('product.store.assign.json failed', $response->asArray());
+        return $response;
     }
 
     /**
@@ -410,13 +340,13 @@ class Products extends Entity
 
         $response = Client::GET($store_key,'product.variant.update.json', $properties);
 
-        if($response->isNotSuccess()) {
-            Log::error('product.variant.update.json failed', $response->asArray());
-            throw new Exception('product.variant.update.json failed', $response->getReturnCode());
+        if($response->isSuccess()) {
+            info("Variant updated", $properties);
+            return $response;
         }
 
+        Log::error('product.variant.update.json failed', $response->asArray());
         return $response;
-
     }
 
     /**

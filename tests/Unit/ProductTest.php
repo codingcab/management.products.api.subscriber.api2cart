@@ -11,15 +11,6 @@ class ProductTest extends TestCase
 {
     const API2CART_DEMO_STORE_KEY = "ed58a22dfecb405a50ea3ea56979360d";
 
-    public function test_Product_find_static_method()
-    {
-        $product = Products::find(self::API2CART_DEMO_STORE_KEY, "123456");
-
-        // test should pass if no exceptions occurred
-        // regardless of the result
-        $this->assertTrue(true);
-    }
-
     public function test_getProductInfo_method()
     {
         $product = Products::getProductInfo(self::API2CART_DEMO_STORE_KEY, "123456");
