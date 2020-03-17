@@ -86,7 +86,7 @@ class SyncProductJob implements ShouldQueue
         // 1,1000 will execute more less on 0.1% jobs
         $random_int = random_int(1, env("PRODUCT_CHECK_THRESHOLD", 100));
 
-        if($random_int <> 1) {
+        if($random_int == 1) {
             VerifyProductSyncJob::dispatchNow($this->_store_key, $this->_product_data);
         }
     }
