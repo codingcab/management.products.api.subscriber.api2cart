@@ -61,33 +61,30 @@ class SyncProductJob implements ShouldQueue
 
         $response = Products::updateOrCreate($this->_store_key, $api2cart_parameters);
 
-        if($response->isNotSuccess()) {
+        if($response->isSuccess()) {
+            info("SKU updated", $this->_product_data);
 
-            switch ($response->getReturnCode()) {
-                case RequestResponse::RETURN_CODE_EXCEEDED_CONCURRENT_API_REQUESTS_PER_STORE:
-                    info('Exceeded concurrent API requests, pausing queue for 60 seconds');
-                    cache()->set('queue-paused', true, 60);
-                    break;
-            }
+            Cache::put($cache_key, $checksum, 1440);
 
-            Log::error('Could not update Product', $this->_product_data);
-            Log::error('Received API2CART Response', $response->asArray());
+            $this->verifyUpdate();
 
-            throw new Exception('Could not update Product');
+            return;
         }
 
-        info("SKU updated", $this->_product_data);
 
-        Cache::put($cache_key, $checksum, 1440);
+        switch ($response->getReturnCode()) {
+            case RequestResponse::RETURN_CODE_EXCEEDED_CONCURRENT_API_REQUESTS_PER_STORE:
+                info('Exceeded concurrent API requests, pausing queue for 60 seconds');
+                cache()->set('queue-paused', true, 60);
+                break;
 
-        // 1,10 will execute more less on 10% jobs
-        // 1,100 will execute more less on 1% jobs
-        // 1,500 will execute more less on 0.2% jobs
-        // 1,1000 will execute more less on 0.1% jobs
-        $random_int = random_int(1, env("PRODUCT_CHECK_THRESHOLD", 100));
-
-        if($random_int == 1) {
-            VerifyProductSyncJob::dispatchNow($this->_store_key, $this->_product_data);
+            default:
+                Log::error('Update failed', [
+                    'response' => $response->asArray(),
+                    'data' => $this->_product_data
+                ]);
+                throw new Exception('Could not update Product');
+                break;
         }
     }
 
@@ -96,6 +93,23 @@ class SyncProductJob implements ShouldQueue
         Log::error('Job failed', $this->_product_data);
     }
 
+    public function verifyUpdate()
+    {
+        if($this->shouldVerify()) {
+            VerifyProductSyncJob::dispatchNow($this->_store_key, $this->_product_data);
+        }
+    }
+
+    public function shouldVerify()
+    {
+        // 1,10 will execute more less on 10% jobs
+        // 1,100 will execute more less on 1% jobs
+        // 1,500 will execute more less on 0.2% jobs
+        // 1,1000 will execute more less on 0.1% jobs
+        $random_int = random_int(1, env("PRODUCT_CHECK_THRESHOLD", 100));
+
+        return $random_int == 1;
+    }
 
     /**
      * @param array $data
