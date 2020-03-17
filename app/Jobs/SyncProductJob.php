@@ -37,7 +37,7 @@ class SyncProductJob implements ShouldQueue
     public function __construct(string $store_key, array $product_data)
     {
         $this->_store_key = $store_key;
-        $this->_product_data = $product_data;
+        $this->_product_data = $this->convert($product_data);
     }
 
     /**
@@ -57,9 +57,7 @@ class SyncProductJob implements ShouldQueue
             Log::info("Same update already pushed before, could be skipped but well... continue", $this->_product_data);
         }
 
-        $api2cart_parameters = $this->convert($this->_product_data);
-
-        $response = Products::updateOrCreate($this->_store_key, $api2cart_parameters);
+        $response = Products::updateOrCreate($this->_store_key, $this->_product_data);
 
         if($response->isSuccess()) {
             info("SKU updated", $this->_product_data);
