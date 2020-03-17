@@ -285,6 +285,7 @@ class Products extends Entity
         $response = Client::GET($store_key, 'product.update.json', $product);
 
         if($response->isSuccess()) {
+            info("Product updated", $product);
             return $response;
         }
 
