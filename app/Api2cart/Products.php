@@ -223,26 +223,6 @@ class Products extends Entity
 
     /**
      * @param string $store_key
-     * @param string $sku
-     * @return array|null
-     */
-    static function findVariant(string $store_key, string $sku)
-    {
-        $response = Client::GET($store_key,'product.child_item.find.json', [
-            'find_where' => 'sku',
-            'find_value' => $sku,
-//            'store_id' => 0
-        ]);
-
-        if($response->isSuccess()) {
-            return $response->getResult()['children'][0];
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string $store_key
      * @param int $product_id
      * @return RequestResponse
      */
