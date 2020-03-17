@@ -326,7 +326,7 @@ class Products extends Entity
         if($response->isNotSuccess()) {
             $return_message = $response->getReturnMessage();
             Log::error("product.add.json failed - $return_message", $response->asArray());
-            throw new Exception("product.add.json - $return_message", $response->getReturnCode());
+            return $response;
         }
 
         Log::info('Product created', $product_data);
@@ -362,7 +362,7 @@ class Products extends Entity
 
         if($response->isNotSuccess()) {
             Log::error('product.update.json failed', $response->asArray());
-            throw new Exception('product.update.json failed', $response->getReturnCode());
+            return $response;
         }
 
         return $response;
@@ -386,13 +386,11 @@ class Products extends Entity
 
         if($response->isNotSuccess()) {
             Log::error('product.store.assign.json failed', $response->asArray());
-            throw new Exception('product.store.assign.json failed', $response->getReturnCode());
-        }
-
-        if($response->isSuccess()) {
-            Log::info('Store assigned', $data);
             return $response;
         }
+
+        Log::info('Store assigned', $data);
+        return $response;
     }
 
     /**
@@ -412,7 +410,7 @@ class Products extends Entity
 
         if($response->isNotSuccess()) {
             Log::error('product.variant.update.json failed', $response->asArray());
-            throw new Exception('product.variant.update.json failed', $response->getReturnCode());
+            return $response;
         }
 
         return $response;
