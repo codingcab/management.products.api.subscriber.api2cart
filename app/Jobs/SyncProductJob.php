@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Api2cart\Products;
+use App\Api2cart\RequestResponse;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -44,6 +45,7 @@ class SyncProductJob implements ShouldQueue
      *
      * @return void
      * @throws Exception
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function handle()
     {
@@ -60,8 +62,17 @@ class SyncProductJob implements ShouldQueue
         $response = Products::updateOrCreate($this->_store_key, $api2cart_parameters);
 
         if($response->isNotSuccess()) {
+
+            switch ($response->getReturnCode()) {
+                case RequestResponse::RETURN_CODE_EXCEEDED_CONCURRENT_API_REQUESTS_PER_STORE:
+                    info('Exceeded concurrent API requests, pausing queue for 60 seconds');
+                    cache()->set('queue-paused', true, 60);
+                    break;
+            }
+
             Log::error('Could not update Product', $this->_product_data);
             Log::error('Received API2CART Response', $response->asArray());
+
             throw new Exception('Could not update Product');
         }
 
