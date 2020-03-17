@@ -49,26 +49,18 @@ class SyncProductJob implements ShouldQueue
      */
     public function handle()
     {
-        $cache_key = $this->_store_key.'.'.$this->_product_data["sku"];
-
-        $checksum = md5(Arr::query($this->_product_data));
-
-        if(Cache::get($cache_key) === $checksum) {
+        if ($this->isRepeatedUpdate()) {
             Log::info("Same update already pushed before, could be skipped but well... continue", $this->_product_data);
-        }
+        };
 
         $response = Products::updateOrCreate($this->_store_key, $this->_product_data);
 
         if($response->isSuccess()) {
             info("SKU updated", $this->_product_data);
-
-            Cache::put($cache_key, $checksum, 1440);
-
+            $this->saveToCache();
             $this->verifyUpdate();
-
             return;
         }
-
 
         switch ($response->getReturnCode()) {
             case RequestResponse::RETURN_CODE_EXCEEDED_CONCURRENT_API_REQUESTS_PER_STORE:
@@ -91,6 +83,9 @@ class SyncProductJob implements ShouldQueue
         Log::error('Job failed', $this->_product_data);
     }
 
+    /**
+     * @throws Exception
+     */
     public function verifyUpdate()
     {
         if($this->shouldVerify()) {
@@ -98,11 +93,13 @@ class SyncProductJob implements ShouldQueue
         }
     }
 
+    /**
+     * @return bool
+     * @throws Exception
+     */
     public function shouldVerify()
     {
         // 1,10 will execute more less on 10% jobs
-        // 1,100 will execute more less on 1% jobs
-        // 1,500 will execute more less on 0.2% jobs
         // 1,1000 will execute more less on 0.1% jobs
         $random_int = random_int(1, env("PRODUCT_CHECK_THRESHOLD", 100));
 
@@ -133,6 +130,45 @@ class SyncProductJob implements ShouldQueue
         }
 
         return $product;
+    }
+
+    /**
+     * @return void
+     */
+    public function saveToCache()
+    {
+        Cache::put($this->getCacheKey(), $this->getChecksum(), 60 * 24 * 7);
+    }
+
+    /**
+     * @return boolean
+     */
+    private function isRepeatedUpdate()
+    {
+        $cache_key = $this->getCacheKey();
+
+        $checksum = $this->getChecksum();
+
+        return (Cache::get($cache_key) === $checksum);
+    }
+
+    /**
+     * @return string
+     */
+    private function getCacheKey()
+    {
+        return implode('.', [
+            $this->_store_key,
+            $this->_product_data['sku']
+        ]);
+    }
+
+    /**
+     * @return string
+     */
+    private function getChecksum(): string
+    {
+        return md5(serialize($this->_product_data));
     }
 
 }
