@@ -315,7 +315,7 @@ class Products extends Entity
 
         $response = Client::POST($store_key, 'product.store.assign.json', $data);
 
-        if($response->isNotSuccess()) {
+        if($response->isSuccess()) {
             Log::info('Store assigned', $data);
             return $response;
         }
@@ -340,6 +340,7 @@ class Products extends Entity
         $response = Client::GET($store_key,'product.variant.update.json', $properties);
 
         if($response->isSuccess()) {
+            info("Variant updated", $properties);
             return $response;
         }
 
