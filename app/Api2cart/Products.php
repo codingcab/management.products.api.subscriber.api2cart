@@ -324,8 +324,7 @@ class Products extends Entity
         $response = Client::POST($store_key,'product.add.json', $product);
 
         if($response->isNotSuccess()) {
-            $return_message = $response->getReturnMessage();
-            Log::error("product.add.json failed - $return_message", $response->asArray());
+            Log::error("product.add.json failed", $response->asArray());
             return $response;
         }
 
@@ -346,7 +345,6 @@ class Products extends Entity
 
         $product = Arr::except($product, self::PRODUCT_DONT_UPDATE_KEYS);
 
-//        $response = Client::POST($store_key, 'product.update.json', $product);
         $response = Client::GET($store_key, 'product.update.json', $product);
 
         if($response->isSuccess()) {
