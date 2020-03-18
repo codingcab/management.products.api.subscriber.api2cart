@@ -120,8 +120,8 @@ class SyncProductJob implements ShouldQueue
         $product["description"]     = $data["name"];
         $product["price"]           = $data["price"];
         $product["special_price"]   = $data["sale_price"];
-        $product["sprice_create"]   = Carbon::createFromTimeString($data["sale_price_start_date"])->toDateString() . ' 00:00:00';
-        $product["sprice_expire"]   = Carbon::createFromTimeString($data["sale_price_end_date"])->toDateString() . ' 00:00:00';
+        $product["sprice_create"]   = Carbon::createFromTimeString($data["sale_price_start_date"])->format('Y-m-d 00:00:00');
+        $product["sprice_expire"]   = Carbon::createFromTimeString($data["sale_price_end_date"])->format('Y-m-d 00:00:00');
         $product["quantity"]        = intval($data["quantity_available"]);
         $product["store_id"]        = $data["store_id"];
 
