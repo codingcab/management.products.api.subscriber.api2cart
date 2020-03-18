@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Api2cart\Products;
 use App\Api2cart\RequestResponse;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -119,8 +120,8 @@ class SyncProductJob implements ShouldQueue
         $product["description"]     = $data["name"];
         $product["price"]           = $data["price"];
         $product["special_price"]   = $data["sale_price"];
-        $product["sprice_create"]   = $data["sale_price_start_date"];
-        $product["sprice_expire"]   = $data["sale_price_end_date"];
+        $product["sprice_create"]   = Carbon::createFromTimeString($data["sale_price_start_date"])->toDateString() . ' 00:00:00';
+        $product["sprice_expire"]   = Carbon::createFromTimeString($data["sale_price_end_date"])->toDateString() . ' 00:00:00';
         $product["quantity"]        = intval($data["quantity_available"]);
         $product["store_id"]        = $data["store_id"];
 
