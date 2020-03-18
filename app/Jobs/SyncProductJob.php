@@ -25,7 +25,7 @@ class SyncProductJob implements ShouldQueue
     /**
      * @var array|null
      */
-    private $_product_data = null;
+    public $_product_data = null;
 
     /**
      * Create a new job instance.
