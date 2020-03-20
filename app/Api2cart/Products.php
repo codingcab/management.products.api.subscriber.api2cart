@@ -321,7 +321,12 @@ class Products extends Entity
             return $response;
         }
 
-        Log::error('product.store.assign.json failed', $response->asArray());
+        Log::error('product.store.assign.json failed', [
+            "product_id" => $product_id,
+            "store_id" => $store_id,
+            "response" => $response->asArray()
+        ]);
+
         return $response;
     }
 
